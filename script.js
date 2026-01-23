@@ -1,13 +1,9 @@
-/* ===============================
-   BASIC INTERACTIONS & VALIDATION
-   =============================== */
-
 function validateForm() {
-  const name = document.getElementById("name").value.trim();
-  const mobile = document.getElementById("mobile").value.trim();
+  const name = document.getElementById("name")?.value.trim();
+  const mobile = document.getElementById("mobile")?.value.trim();
 
-  if (name === "" || mobile === "") {
-    alert("Please fill required fields");
+  if (!name || !mobile) {
+    alert("Please fill all required fields");
     return false;
   }
 
@@ -16,13 +12,13 @@ function validateForm() {
     return false;
   }
 
-  alert("Form submitted successfully (demo)");
-  return true;
+  alert("Form submitted successfully");
+  return false;
 }
 
 /* GALLERY MODAL */
 function openModal(img) {
-  document.getElementById("modal").style.display = "block";
+  document.getElementById("modal").style.display = "flex";
   document.getElementById("modalImg").src = img.src;
 }
 

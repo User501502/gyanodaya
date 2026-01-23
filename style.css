@@ -1,14 +1,9 @@
-/* ===============================
-   GYANODAYA PUBLIC SCHOOL - CSS
-   Author: Senior Full Stack Dev
-   =============================== */
-
 :root {
   --primary: #0b5ed7;
-  --secondary: #f4f6f9;
   --accent: #ffc107;
-  --dark: #222;
-  --light: #fff;
+  --dark: #1e1e1e;
+  --light: #ffffff;
+  --bg: #f4f6f9;
 }
 
 /* RESET */
@@ -19,9 +14,8 @@
   font-family: system-ui, sans-serif;
 }
 
-/* GLOBAL */
 body {
-  background: var(--secondary);
+  background: var(--bg);
   color: var(--dark);
   line-height: 1.6;
 }
@@ -31,136 +25,166 @@ a {
   color: inherit;
 }
 
-/* HEADER */
+/* ================= HEADER ================= */
 header {
   position: sticky;
   top: 0;
   background: var(--primary);
-  color: white;
   z-index: 1000;
 }
 
 .navbar {
   max-width: 1200px;
   margin: auto;
-  padding: 15px;
+  padding: 14px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: white;
 }
 
 .logo {
-  font-size: 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
   font-weight: bold;
 }
 
+.logo img {
+  width: 40px;
+}
+
 nav ul {
+  list-style: none;
   display: flex;
   gap: 18px;
-  list-style: none;
 }
 
 nav ul li a {
-  padding: 6px 8px;
+  padding: 6px 10px;
+  border-radius: 4px;
   transition: 0.3s;
 }
 
 nav ul li a:hover {
   background: var(--accent);
   color: black;
-  border-radius: 4px;
 }
 
-/* HERO */
-.hero {
-  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-              url('https://via.placeholder.com/1600x600') center/cover;
-  color: white;
-  padding: 80px 20px;
-  text-align: center;
-}
-
-.hero h1 {
-  font-size: 36px;
-  margin-bottom: 15px;
-}
-
-.hero p {
-  max-width: 800px;
-  margin: auto;
-}
-
-/* BUTTONS */
-.btn {
-  display: inline-block;
-  margin: 15px 8px;
-  padding: 12px 22px;
-  background: var(--accent);
-  color: black;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btn:hover {
-  background: white;
-}
-
-/* SECTIONS */
+/* ================= SECTIONS ================= */
 .section {
   max-width: 1200px;
   margin: auto;
-  padding: 50px 20px;
+  padding: 60px 20px;
 }
 
 .section h2 {
-  margin-bottom: 20px;
+  text-align: center;
   color: var(--primary);
+  margin-bottom: 40px;
 }
 
-/* CARDS */
+/* ================= GRID & CARDS ================= */
 .grid {
   display: grid;
-  gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
 }
 
 .card {
   background: white;
-  padding: 20px;
-  border-radius: 8px;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.05);
   transition: 0.3s;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
 }
 
-/* FORMS */
-form input, form textarea, form select {
+/* ================= FACULTY ================= */
+.faculty-card img {
   width: 100%;
-  padding: 10px;
-  margin: 10px 0;
+  border-radius: 8px;
+  margin-bottom: 10px;
 }
 
-form button {
-  padding: 10px;
-  background: var(--primary);
-  color: white;
-  border: none;
+/* ================= NOTICE ================= */
+.notice-list li {
+  background: white;
+  padding: 15px;
+  margin-bottom: 12px;
+  border-left: 5px solid var(--primary);
+}
+
+/* ================= GALLERY ================= */
+.gallery img {
+  width: 100%;
+  border-radius: 8px;
   cursor: pointer;
 }
 
-/* FOOTER */
-footer {
-  background: #111;
-  color: white;
-  text-align: center;
-  padding: 20px;
+/* MODAL */
+#modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
-/* RESPONSIVE */
-@media(max-width:768px) {
+#modal img {
+  max-width: 90%;
+  max-height: 90%;
+}
+
+/* ================= FORMS ================= */
+form input,
+form textarea,
+form select {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+form button {
+  background: var(--primary);
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ================= FOOTER ================= */
+footer {
+  background: #0f0f0f;
+  color: white;
+  text-align: center;
+  padding: 25px;
+}
+
+/* ================= WHATSAPP ================= */
+.whatsapp-float {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #25D366;
+  color: white;
+  padding: 15px 17px;
+  border-radius: 50%;
+  font-size: 24px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+  z-index: 9999;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 768px) {
   nav ul {
     flex-wrap: wrap;
     justify-content: center;
