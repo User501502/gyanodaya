@@ -25,3 +25,7 @@ function openModal(img) {
 function closeModal() {
   document.getElementById("modal").style.display = "none";
 }
+
+function toggleMenu() {
+  document.getElementById("navMenu").classList.toggle("active");
+}

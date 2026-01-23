@@ -1,19 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Gyanodaya Public School | Sinhasa</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Gyanodaya Public School | Sinhasa</title>
+
+  <!-- MOBILE FIX -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- NOTICE TICKER CSS -->
+  <style>
+    .notice-ticker {
+      background: #0b5ed7;
+      color: white;
+      padding: 10px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .notice-ticker span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: ticker 18s linear infinite;
+      font-weight: 500;
+    }
+
+    @keyframes ticker {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-100%); }
+    }
+  </style>
 </head>
 <body>
 
+<!-- ================= HEADER ================= -->
 <header>
   <div class="navbar">
     <div class="logo">
       <img src="logo.png" alt="School Logo">
-      Gyanodaya Public School
+      <span>Gyanodaya Public School</span>
     </div>
-    <nav>
+
+    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+    <nav id="navMenu">
       <ul>
         <li><a href="index.html">Home</a></li>
         <li><a href="about.html">About</a></li>
@@ -28,31 +59,111 @@
   </div>
 </header>
 
+<!-- ================= NOTICE TICKER ================= -->
+<div class="notice-ticker">
+  <span>
+    📢 Admission Open for Nursery to Class 12th | 
+    📢 English Medium Education | 
+    📢 Safe & Disciplined Campus | 
+    📢 Contact School Office for Admission Details
+  </span>
+</div>
+
+<!-- ================= HERO SECTION ================= -->
 <section class="hero">
-  <h1>Shaping Future with Knowledge & Values</h1>
+  <h1>Welcome to Gyanodaya Public School, Sinhasa</h1>
   <p>
-    Gyanodaya Public School, Sinhasa is committed to academic excellence,
-    discipline, and holistic development from Nursery to Class 12th.
+    Gyanodaya Public School is committed to providing quality education with
+    strong moral values. We focus on academic excellence, discipline, and
+    overall personality development of every child.
   </p>
+  <br>
   <a href="admissions.html" class="btn">Admission Open</a>
 </section>
 
+<!-- ================= WHY CHOOSE US ================= -->
 <section class="section">
   <h2>Why Choose Us</h2>
+
   <div class="grid">
-    <div class="card">Qualified & Experienced Faculty</div>
-    <div class="card">English Medium Education</div>
-    <div class="card">Safe & Disciplined Environment</div>
+    <div class="card">✔️ Qualified & Caring Teachers</div>
+    <div class="card">✔️ Smart Classrooms</div>
+    <div class="card">✔️ Safe & Disciplined Campus</div>
+    <div class="card">✔️ Affordable Fee Structure</div>
+    <div class="card">✔️ Focus on Academics + Sports</div>
   </div>
 </section>
 
+<!-- ================= FACILITIES ================= -->
+<section class="section">
+  <h2>Our Facilities</h2>
+
+  <div class="grid">
+    <div class="card">
+      <h3>📚 Library</h3>
+      <p>Well-stocked library to build reading habits.</p>
+    </div>
+
+    <div class="card">
+      <h3>💻 Computer Lab</h3>
+      <p>Modern computer education for students.</p>
+    </div>
+
+    <div class="card">
+      <h3>⚽ Sports</h3>
+      <p>Football, Taekwondo & physical training.</p>
+    </div>
+
+    <div class="card">
+      <h3>🎨 Activity Rooms</h3>
+      <p>Creative activities for overall growth.</p>
+    </div>
+
+    <div class="card">
+      <h3>🚰 Clean Drinking Water</h3>
+      <p>Safe and hygienic drinking water facility.</p>
+    </div>
+
+    <div class="card">
+      <h3>🚌 Transport Facility</h3>
+      <p>Safe and reliable school transport.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MAP ================= -->
+<section class="section">
+  <h2>Our Location</h2>
+
+  <iframe
+    src="https://www.google.com/maps?q=Sinhasa%20Dhar%20Road%20Indore%20Madhya%20Pradesh&output=embed"
+    width="100%"
+    height="350"
+    style="border:0;"
+    loading="lazy">
+  </iframe>
+</section>
+
+<!-- ================= FOOTER ================= -->
 <footer>
-  <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
+  <p>
+    📍 Sinhasa Dhar Road, Indore (M.P.)<br>
+    📞 9406613049 | 7000506914 | 9926345555<br>
+    📧 gyanodayapublicschool14@gmail.com
+  </p>
 </footer>
 
-<!-- WhatsApp + JS -->
-<a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
-<script src="script.js"></script>
+<!-- ================= WHATSAPP ================= -->
+<a href="https://wa.me/919406613049?text=Hello%20Gyanodaya%20Public%20School%2C%20Sinhasa.%0AI%20want%20admission%20details%20for%20Nursery%20to%2012th."
+   class="whatsapp-float"
+   target="_blank">💬</a>
+
+<!-- ================= JS ================= -->
+<script>
+function toggleMenu() {
+  document.getElementById("navMenu").classList.toggle("active");
+}
+</script>
 
 </body>
 </html>
