@@ -1,0 +1,66 @@
+# ===============================
+# Node.js
+# ===============================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ===============================
+# Environment variables
+# ===============================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ===============================
+# Vercel
+# ===============================
+.vercel
+.vercelignore
+
+# ===============================
+# Firebase
+# ===============================
+.firebase
+firebase-debug.log
+firestore-debug.log
+ui-debug.log
+
+# ===============================
+# OS files
+# ===============================
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# ===============================
+# Editor / IDE
+# ===============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===============================
+# Logs
+# ===============================
+logs/
+*.log
+
+# ===============================
+# Build / cache
+# ===============================
+dist/
+build/
+.cache/
+
+# ===============================
+# Misc
+# ===============================
+*.pem
+*.key
+*.crt
