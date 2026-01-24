@@ -378,3 +378,28 @@ h2 { color:#0b5ed7; }
     padding-bottom: 60px;
   }
 }
+
+/* ================= FOOTER FIX ================= */
+
+html, body {
+  height: 100%;
+}
+
+#siteContent {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+footer {
+  margin-top: auto;   /* 🔥 THIS fixes footer position */
+  background: #1e293b;
+  color: #fff;
+  padding: 20px 16px;
+}
+
+@media (max-width: 768px) {
+  footer {
+    text-align: center;
+  }
+}
