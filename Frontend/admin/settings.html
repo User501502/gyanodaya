@@ -1,27 +1,10 @@
-<body onload="protect()">
-<div class="admin">
+<h1>Website Settings</h1>
 
-<div class="sidebar">
-  <a href="dashboard.html">Dashboard</a>
-  <a href="sections.html">Sections</a>
-  <a href="settings.html">Settings</a>
-  <button class="logout" onclick="logout()">Logout</button>
-</div>
+<form id="settingsForm">
+  <input id="schoolName" placeholder="School Name" required>
+  <input id="email" placeholder="Email" required>
+  <textarea id="address" placeholder="Address"></textarea>
+  <textarea id="footer" placeholder="Footer text"></textarea>
 
-<div class="content">
-<h2>Website Settings</h2>
-
-<div class="card">
-  <input placeholder="School Name">
-  <input placeholder="Phone Numbers (comma separated)">
-  <input placeholder="Email">
-  <textarea placeholder="Address"></textarea>
-  <button>Save Settings</button>
-</div>
-
-</div>
-</div>
-
-<script type="module" src="firebase.js"></script>
-<script src="admin.js"></script>
-</body>
+  <button>Save</button>
+</form>

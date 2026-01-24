@@ -1,117 +1,170 @@
-:root {
-  --primary:#0b5ed7;
-  --bg:#f4f6f9;
-  --dark:#1e1e1e;
-}
-
 * {
-  box-sizing:border-box;
-  font-family:system-ui,sans-serif;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 body {
-  margin:0;
-  background:var(--bg);
+  margin: 0;
+  background: #f4f6f8;
 }
 
-/* LOGIN */
-.login-page {
-  display:flex;
-  height:100vh;
-  justify-content:center;
-  align-items:center;
+/* ---------- AUTH ---------- */
+.auth-page {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
 }
 
-.login-box {
-  background:white;
-  padding:35px;
-  width:100%;
-  max-width:380px;
-  border-radius:10px;
-  box-shadow:0 10px 30px rgba(0,0,0,.1);
+.auth-card {
+  background: white;
+  padding: 30px;
+  width: 320px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,.1);
 }
 
-.login-box h2 {
-  text-align:center;
-  margin-bottom:20px;
+.auth-card h2 {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.login-box input,
-.login-box button {
-  width:100%;
-  padding:12px;
-  margin-bottom:14px;
+.auth-card input,
+.auth-card button {
+  width: 100%;
+  margin-bottom: 12px;
+  padding: 10px;
 }
 
-.login-box button {
-  background:var(--primary);
-  color:white;
-  border:none;
-  cursor:pointer;
+.auth-card button {
+  background: #1e88e5;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 .error {
-  color:red;
-  text-align:center;
+  color: red;
+  font-size: 14px;
 }
 
-/* LAYOUT */
-.admin {
-  display:flex;
-  min-height:100vh;
+/* ---------- LAYOUT ---------- */
+.layout {
+  display: flex;
+  min-height: 100vh;
 }
 
 .sidebar {
-  width:240px;
-  background:var(--primary);
-  color:white;
-  padding:20px;
+  width: 230px;
+  background: #1e293b;
+  color: white;
+  padding: 20px;
 }
 
 .sidebar h3 {
-  margin-bottom:25px;
+  margin-bottom: 20px;
 }
 
-.sidebar a {
-  display:block;
-  padding:12px;
-  margin-bottom:8px;
-  border-radius:6px;
-  color:white;
+.sidebar a,
+.sidebar button {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 12px;
+  background: none;
+  border: none;
+  text-align: left;
+  cursor: pointer;
 }
 
-.sidebar a:hover {
-  background:rgba(255,255,255,.2);
+.sidebar a:hover,
+.sidebar button:hover {
+  color: #38bdf8;
 }
 
 .content {
-  flex:1;
-  padding:30px;
+  flex: 1;
+  padding: 25px;
+}
+
+/* ---------- DASHBOARD ---------- */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+  gap: 20px;
 }
 
 .card {
-  background:white;
-  padding:25px;
-  border-radius:10px;
-  margin-bottom:20px;
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  font-size: 18px;
+}
+
+/* ---------- FORMS ---------- */
+form {
+  background: white;
+  padding: 20px;
+  border-radius: 6px;
+  max-width: 600px;
 }
 
 input, textarea, select {
-  width:100%;
-  padding:12px;
-  margin-bottom:14px;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
 }
 
 button {
-  background:var(--primary);
-  color:white;
-  padding:10px 16px;
-  border:none;
-  cursor:pointer;
+  padding: 10px 16px;
+  background: #1e88e5;
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
-.logout {
-  background:crimson;
-  width:100%;
-  margin-top:20px;
+/* ---------- TABLE ---------- */
+table {
+  width: 100%;
+  background: white;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #ddd;
+}
+
+/* ---------- MODAL ---------- */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal > div {
+  background: white;
+  padding: 20px;
+  width: 400px;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ---------- TOAST ---------- */
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #323232;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 4px;
 }

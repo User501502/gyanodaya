@@ -1,29 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Admissions</title>
-<link rel="stylesheet" href="admin.css">
-</head>
-<body onload="checkAuth()">
+<h1>Admission Enquiries</h1>
 
-<div class="admin-layout">
-  <div class="sidebar">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="admissions.html">Admissions</a>
-    <button class="btn logout" onclick="logout()">Logout</button>
-  </div>
-
-  <div class="content">
-    <h2>Admission Enquiries</h2>
-
-    <table>
-      <tr><th>Name</th><th>Mobile</th><th>Class</th></tr>
-      <tr><td>Parent Name</td><td>9999999999</td><td>Class 5</td></tr>
-    </table>
-  </div>
-</div>
-
-<script src="admin.js"></script>
-</body>
-</html>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Date</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody id="admissionTable"></tbody>
+</table>

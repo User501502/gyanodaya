@@ -1,34 +1,8 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Manage Notices</title>
-<link rel="stylesheet" href="admin.css">
-</head>
-<body onload="checkAuth()">
+<h1>Notice Board</h1>
 
-<div class="admin-layout">
-  <div class="sidebar">
-    <a href="dashboard.html">Dashboard</a>
-    <a href="notices.html">Notices</a>
-    <button class="btn logout" onclick="logout()">Logout</button>
-  </div>
+<form id="noticeForm">
+  <input id="noticeText" placeholder="Enter notice" required>
+  <button>Add</button>
+</form>
 
-  <div class="content">
-    <h2>Notice Board</h2>
-
-    <div class="card">
-      <input placeholder="Notice Title">
-      <button class="btn">Add Notice</button>
-    </div>
-
-    <table>
-      <tr><th>Date</th><th>Title</th><th>Action</th></tr>
-      <tr><td>01-Apr</td><td>Admission Open</td><td><button>Delete</button></td></tr>
-    </table>
-  </div>
-</div>
-
-<script src="admin.js"></script>
-</body>
-</html>
+<ul id="noticeList"></ul>

@@ -1,55 +1,32 @@
-/* ================= AUTH ================= */
-async function login() {
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const error = document.getElementById("error");
+import { auth, onAuthStateChanged, signOut } from "./firebase.js";
 
-  if (!email || !password) {
-    error.innerText = "All fields are required";
-    return;
-  }
-
-  try {
-    await firebaseAuth.signInWithEmailAndPassword(
-      firebaseAuth.auth,
-      email,
-      password
-    );
-    window.location.href = "dashboard.html";
-  } catch (e) {
-    error.innerText = "Invalid login credentials";
-  }
-}
-
-function protect() {
-  firebaseAuth.onAuthStateChanged(firebaseAuth.auth, user => {
-    if (!user) window.location.href = "login.html";
+export function protectPage() {
+  onAuthStateChanged(auth, user => {
+    if (!user) {
+      location.href = "/admin/login.html";
+    }
   });
 }
 
-function logout() {
-  firebaseAuth.signOut(firebaseAuth.auth).then(() => {
-    window.location.href = "login.html";
-  });
+export async function getToken() {
+  const user = auth.currentUser;
+  return user ? await user.getIdToken() : null;
 }
 
-/* ================= API ================= */
-const API = "/api";
+export async function api(url, options = {}) {
+  const token = await getToken();
+  const headers = {
+    "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
+    ...(options.headers || {})
+  };
 
-async function api(url, method = "GET", body) {
-  const user = firebaseAuth.auth.currentUser;
-  const token = await user.getIdToken();
-
-  const res = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`
-    },
-    body: body ? JSON.stringify(body) : null
-  });
-
+  const res = await fetch(url, { ...options, headers });
   if (!res.ok) throw new Error("API Error");
   return res.json();
 }
 
+document.getElementById("logoutBtn")?.addEventListener("click", async () => {
+  await signOut(auth);
+  location.href = "/admin/login.html";
+});

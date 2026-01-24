@@ -1,45 +1,44 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Admin Login</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8">
+  <title>Admin Login | Gyanodaya Public School</title>
+  <link rel="stylesheet" href="admin.css">
 </head>
-<body class="login-page">
+<body class="auth-page">
 
-<div class="login-box">
-  <h2>School Admin Login</h2>
-  <input id="email" type="email" placeholder="Admin Email">
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-  <p id="error" class="error"></p>
-</div>
+  <form id="loginForm" class="auth-card">
+    <h2>Admin Login</h2>
+
+    <input type="email" id="email" placeholder="Email" required>
+    <input type="password" id="password" placeholder="Password" required>
+
+    <button type="submit">Login</button>
+    <p id="error" class="error"></p>
+  </form>
 
 <script type="module">
-  import {
-    auth,
-    signInWithEmailAndPassword
-  } from "./firebase.js";
+import { auth, signInWithEmailAndPassword } from "./firebase.js";
 
-  window.login = async function () {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
+const form = document.getElementById("loginForm");
+const error = document.getElementById("error");
 
-    if (!email || !password) {
-      document.getElementById("error").innerText = "All fields required";
-      return;
-    }
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+  error.textContent = "";
 
-    try {
-      await signInWithEmailAndPassword(auth, email, password);
-      window.location.href = "dashboard.html";
-    } catch (err) {
-      document.getElementById("error").innerText = "Invalid credentials";
-    }
-  };
+  try {
+    await signInWithEmailAndPassword(
+      auth,
+      email.value,
+      password.value
+    );
+    location.href = "/admin/dashboard.html";
+  } catch (err) {
+    error.textContent = "Invalid email or password";
+  }
+});
 </script>
-<script type="module" src="firebase.js"></script>
-<script src="admin.js"></script>
+
 </body>
 </html>
