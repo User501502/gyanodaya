@@ -236,6 +236,40 @@ section {
 
 h2 { color:#0b5ed7; }
 
+/* ===== SECTION CARDS ===== */
+.section-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 25px;
+}
+
+.section-card {
+  background: #ffffff;
+  padding: 22px;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.section-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+}
+
+.section-card span {
+  font-size: 26px;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.section-card p {
+  margin: 0;
+  font-weight: 500;
+  font-size: 15px;
+}
+
 @media (max-width: 768px) {
   .mobile-call-bar {
     position: fixed;

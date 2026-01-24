@@ -41,22 +41,47 @@ fetch("/api/home")
 fetch("/api/sections")
   .then(res => res.json())
   .then(sections => {
-    const box = document.getElementById("dynamicSections");
+    const container = document.getElementById("dynamicSections");
+    container.innerHTML = "";
 
-    sections.forEach(s => {
-      let html = `<section class="section"><h2>${s.title}</h2>`;
+    sections.forEach(section => {
+      let html = `
+        <section class="section">
+          <h2>${section.title}</h2>
+      `;
 
-      if (s.type === "list") {
-        html += "<ul>";
-        s.content.forEach(i => html += `<li>${i}</li>`);
-        html += "</ul>";
-      } else {
-        html += `<p>${s.content.join(" ")}</p>`;
+      /* ✅ LIST TYPE → SEPARATE CARDS */
+      if (section.type === "list") {
+        html += `<div class="section-cards">`;
+
+        section.content.forEach(item => {
+          html += `
+            <div class="section-card">
+              <span>✔</span>
+              <p>${item}</p>
+            </div>
+          `;
+        });
+
+        html += `</div>`;
       }
 
-      html += "</section>";
-      box.innerHTML += html;
+      /* ✅ TEXT TYPE → NORMAL PARAGRAPH */
+      if (section.type === "text") {
+        html += `
+          <p style="margin-top:15px;">
+            ${section.content.join(" ")}
+          </p>
+        `;
+      }
+
+      html += `</section>`;
+      container.innerHTML += html;
     });
+  })
+  .catch(() => {
+    document.getElementById("dynamicSections").innerHTML =
+      "<p>Content loading failed.</p>";
   });
 
 /* ================= LOAD NOTICES ================= */
