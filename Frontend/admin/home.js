@@ -17,6 +17,7 @@ const footerCopyright = document.getElementById("footerCopyright");
 const logoInput = document.getElementById("logoInput");
 const logoPreview = document.getElementById("logoPreview");
 const saveBtn = document.getElementById("saveHomeBtn");
+const mapLink = document.getElementById("mapLink");
 
 let logoBase64 = "";
 
@@ -76,34 +77,12 @@ saveBtn.onclick = async () => {
         address: footerAddress.value,
         phone: footerPhone.value,
         email: footerEmail.value,
-        copyright: footerCopyright.value
+        copyright: footerCopyright.value,
+        mapLink: mapLink.value,
+        mapEmbed: convertToEmbedMap(mapLink.value)
       }
     })
   });
-
-  const mapLinkInput = document.getElementById("mapLink");
-
-await api("/api/home", {
-  method: "POST",
-  body: JSON.stringify({
-    schoolName: schoolName.value,
-    logo: logoBase64,
-
-    heroTitle: heroTitle.value,
-    heroIntro: heroIntro.value,
-    admissionOpen: admissionOpen.checked,
-
-    footer: {
-      about: footerAbout.value,
-      address: footerAddress.value,
-      phone: footerPhone.value,
-      email: footerEmail.value,
-      copyright: footerCopyright.value,
-      mapLink: mapLink.value,
-      mapEmbed: convertToEmbedMap(mapLink.value)
-    }
-  })
-});
 
   alert("✅ Home page fully updated");
 };

@@ -30,33 +30,62 @@ fetch("/api/settings")
 fetch("/api/home")
   .then(res => res.json())
   .then(data => {
-    document.getElementById("schoolName").innerText = data.schoolName;
-    document.getElementById("heroTitle").innerText = data.heroTitle;
-    document.getElementById("heroIntro").innerText = data.heroIntro;
+    if (!data) return;
 
-    document.getElementById("admissionBadge").style.display =
-      data.admissionOpen ? "block" : "none";
-
-    const container = document.getElementById("dynamicSections");
-    container.innerHTML = "";
-
-    data.sections
-      .filter(s => s.enabled)
-      .sort((a, b) => a.order - b.order)
-      .forEach(s => {
-        const sec = document.createElement("section");
-        sec.className = "section";
-        sec.innerHTML = `<h2>${s.title}</h2><p>${s.content}</p>`;
-        container.appendChild(sec);
-      });
-  });
-
-  fetch("/api/home")
-  .then(res => res.json())
-  .then(data => {
-    if (data.mapEmbed) {
-      document.getElementById("mapFrame").src = data.mapEmbed;
+    /* ================= HEADER ================= */
+    const schoolNameEl = document.getElementById("schoolName");
+    if (schoolNameEl && data.schoolName) {
+      schoolNameEl.innerText = data.schoolName;
     }
+
+    // LOGO
+    if (data.logo) {
+      const logoBox = document.querySelector(".logo");
+      if (logoBox) {
+        logoBox.innerHTML = `<img src="${data.logo}" alt="School Logo">`;
+      }
+    }
+
+    /* ================= HERO ================= */
+    const heroTitle = document.getElementById("heroTitle");
+    const heroIntro = document.getElementById("heroIntro");
+    const admissionBadge = document.getElementById("admissionBadge");
+
+    if (heroTitle) heroTitle.innerText = data.heroTitle || "";
+    if (heroIntro) heroIntro.innerText = data.heroIntro || "";
+
+    if (admissionBadge) {
+      admissionBadge.style.display = data.admissionOpen ? "block" : "none";
+    }
+
+    /* ================= MAP ================= */
+    const mapFrame = document.getElementById("mapFrame");
+    if (mapFrame && data.footer?.mapEmbed) {
+      mapFrame.src = data.footer.mapEmbed;
+    }
+
+    /* ================= FOOTER ================= */
+    const footer = document.getElementById("footer");
+    if (footer && data.footer) {
+      footer.innerHTML = `
+        <div class="footer-content">
+          ${data.footer.about ? `<p>${data.footer.about}</p>` : ""}
+
+          ${data.footer.address ? `<p><strong>📍 Address:</strong> ${data.footer.address}</p>` : ""}
+
+          ${data.footer.phone ? `<p><strong>📞 Phone:</strong> ${data.footer.phone}</p>` : ""}
+
+          ${data.footer.email ? `<p><strong>📧 Email:</strong> ${data.footer.email}</p>` : ""}
+
+          ${data.footer.copyright
+            ? `<small>${data.footer.copyright}</small>`
+            : ""}
+        </div>
+      `;
+    }
+  })
+  .catch(err => {
+    console.error("Home API error:", err);
   });
 
 /* ================= LOAD SECTIONS ================= */
