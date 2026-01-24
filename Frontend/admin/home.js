@@ -39,6 +39,8 @@ async function loadHome() {
   footerEmail.value = data.footer?.email || "";
   footerCopyright.value = data.footer?.copyright || "";
 
+  mapLink.value = data.footer?.mapLink || ""; // ✅ THIS WAS MISSING
+
   if (data.logo) {
     logoBase64 = data.logo;
     logoPreview.src = data.logo;
