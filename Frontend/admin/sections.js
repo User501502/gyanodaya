@@ -1,36 +1,52 @@
 import { api } from "./admin.js";
 
-const list = document.getElementById("sectionsList");
+// DOM references
 const form = document.getElementById("sectionForm");
+const list = document.getElementById("sectionsList");
 
+// Load sections
 async function loadSections() {
   const sections = await api("/api/sections");
   list.innerHTML = "";
 
-  sections.forEach(s => {
+  sections.forEach(sec => {
     const div = document.createElement("div");
-    div.textContent = `${s.title} (${s.type})`;
+    div.innerHTML = `
+      <strong>${sec.title}</strong> (${sec.type})
+    `;
     list.appendChild(div);
   });
 }
 
-form.onsubmit = async (e) => {
-  e.preventDefault();
+// ✅ SAFE form submit (NO crash)
+if (form) {
+  form.onsubmit = async (e) => {
+    e.preventDefault();
 
-  await api("/api/sections", {
-    method: "POST",
-    body: JSON.stringify({
-      title: title.value,
-      type: type.value,
-      content: content.value.split("\n"),
-      position: Date.now(),
-      isActive: true
-    })
-  });
+    const title = document.getElementById("title").value;
+    const type = document.getElementById("type").value;
+    const content = document
+      .getElementById("content")
+      .value
+      .split("\n")
+      .filter(Boolean);
 
-  alert("Section added");
-  form.reset();
-  loadSections();
-};
+    await api("/api/sections", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        type,
+        content,
+        position: Date.now(),
+        isActive: true
+      })
+    });
 
+    alert("Section added successfully");
+    form.reset();
+    loadSections();
+  };
+}
+
+// Init
 loadSections();

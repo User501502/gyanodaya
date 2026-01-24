@@ -1,33 +1,90 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Sections</title>
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <title>Manage Sections | Admin Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
-<div class="layout">
-  <aside class="sidebar">
-    <h3>Admin</h3>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="home.html">Home</a>
-    <a href="sections.html">Sections</a>
-    <a href="notices.html">Notices</a>
-    <a href="admissions.html">Admissions</a>
-    <a href="settings.html">Settings</a>
-    <button id="logoutBtn">Logout</button>
-  </aside>
+  <div class="layout">
 
-  <main class="content">
-    <h1>Homepage Sections</h1>
-    <p>Drag sections to reorder</p>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <h3>Gyanodaya Admin</h3>
 
-    <div id="sectionsList" class="drag-list"></div>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="home.html">Home</a>
+      <a href="sections.html" class="active">Sections</a>
+      <a href="notices.html">Notices</a>
+      <a href="admissions.html">Admissions</a>
+      <a href="settings.html">Settings</a>
 
-    <button id="addSection">+ Add Section</button>
-  </main>
-</div>
+      <button id="logoutBtn">Logout</button>
+    </aside>
 
-<script type="module" src="sections.js"></script>
+    <!-- MAIN CONTENT -->
+    <main class="content">
+      <h1>Homepage Sections</h1>
+      <p>Add and manage dynamic sections shown on the homepage.</p>
+
+      <!-- ADD SECTION FORM -->
+      <form id="sectionForm">
+        <h3>Add New Section</h3>
+
+        <label>
+          Section Title
+          <input
+            type="text"
+            id="title"
+            placeholder="e.g. Why Choose Us"
+            required
+          />
+        </label>
+
+        <label>
+          Section Type
+          <select id="type" required>
+            <option value="list">List</option>
+            <option value="text">Text</option>
+          </select>
+        </label>
+
+        <label>
+          Content  
+          <small>(For list: one item per line)</small>
+          <textarea
+            id="content"
+            rows="5"
+            placeholder="Enter content here"
+            required
+          ></textarea>
+        </label>
+
+        <label style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="isActive" checked />
+          Active (show on website)
+        </label>
+
+        <button type="submit">Add Section</button>
+      </form>
+
+      <hr style="margin:30px 0;" />
+
+      <!-- SECTIONS LIST -->
+      <h3>Existing Sections</h3>
+      <div id="sectionsList">
+        <!-- Sections will load here via JS -->
+      </div>
+    </main>
+
+  </div>
+
+  <!-- SCRIPTS -->
+  <script type="module" src="admin.js"></script>
+  <script type="module" src="sections.js"></script>
+
 </body>
 </html>
