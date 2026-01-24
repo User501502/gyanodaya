@@ -45,5 +45,16 @@
   <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
 </footer>
 <a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
+<script>
+fetch("http://localhost:5000/notice")
+.then(res => res.json())
+.then(data => {
+  const list = document.getElementById("noticeList");
+  list.innerHTML = "";
+  data.forEach(n => {
+    list.innerHTML += `<li>${n.title}</li>`;
+  });
+});
+</script>
 </body>
 </html>

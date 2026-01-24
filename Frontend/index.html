@@ -183,6 +183,12 @@
 function toggleMenu() {
   document.getElementById("navMenu").classList.toggle("active");
 }
+
+fetch("/api/home")
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("introText").innerText = data.intro;
+  });
 </script>
 <!-- MOBILE CALL BAR -->
 <div class="mobile-call-bar">
