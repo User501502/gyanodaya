@@ -100,23 +100,26 @@ window.toggleBlock = function (id) {
 function convertToEmbedMap(url) {
   if (!url) return "";
 
-  // If already embed link, return as is
+  // already embed
   if (url.includes("google.com/maps/embed")) {
     return url;
   }
 
-  // Convert normal Google Maps link to embed
-  const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  // clean long tracking params
+  const cleanUrl = url.split("&")[0];
 
-  if (match) {
-    const lat = match[1];
-    const lng = match[2];
-    return `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+  // extract place name from /place/
+  const placeMatch = cleanUrl.match(/\/place\/([^/]+)/);
+
+  if (placeMatch) {
+    const place = decodeURIComponent(placeMatch[1].replace(/\+/g, " "));
+    return `https://www.google.com/maps?q=${encodeURIComponent(place)}&output=embed`;
   }
 
-  // fallback: place search
-  return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+  // fallback: full url as search query
+  return `https://www.google.com/maps?q=${encodeURIComponent(cleanUrl)}&output=embed`;
 }
+
 
 /* INIT */
 loadHome();

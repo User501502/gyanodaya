@@ -33,18 +33,17 @@ fetch("/api/home")
     if (!data) return;
 
     /* ================= HEADER ================= */
-    const schoolNameEl = document.getElementById("schoolName");
-    if (schoolNameEl && data.schoolName) {
-      schoolNameEl.innerText = data.schoolName;
-    }
+  const logoImg = document.getElementById("schoolLogo");
+const schoolNameEl = document.getElementById("schoolName");
 
-    // LOGO
-    if (data.logo) {
-      const logoBox = document.querySelector(".logo");
-      if (logoBox) {
-        logoBox.innerHTML = `<img src="${data.logo}" alt="School Logo">`;
-      }
-    }
+if (data.logo && logoImg) {
+  logoImg.src = data.logo;
+  logoImg.style.display = "block";
+}
+
+if (schoolNameEl && data.schoolName) {
+  schoolNameEl.innerText = data.schoolName;
+}
 
     /* ================= HERO ================= */
     const heroTitle = document.getElementById("heroTitle");
