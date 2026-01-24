@@ -147,3 +147,85 @@ fetch("/api/notices")
     }
   });
 
+/* ================= INIT PAGE ================= */
+async function initPage() {
+  try {
+    // Load home + sections in parallel
+    const [homeRes, sectionRes] = await Promise.all([
+      fetch("/api/home"),
+      fetch("/api/sections")
+    ]);
+
+    const homeData = await homeRes.json();
+    const sections = await sectionRes.json();
+
+    /* ================= HOME CONTENT ================= */
+    if (homeData) {
+      // School name
+      document.getElementById("schoolName").innerText =
+        homeData.schoolName || "";
+
+      // Logo
+      if (homeData.logo) {
+        const logoImg = document.getElementById("schoolLogo");
+        logoImg.src = homeData.logo;
+        logoImg.style.display = "block";
+      }
+
+      // Hero
+      document.getElementById("heroTitle").innerText =
+        homeData.heroTitle || "";
+
+      document.getElementById("heroIntro").innerText =
+        homeData.heroIntro || "";
+
+      document.getElementById("admissionBadge").style.display =
+        homeData.admissionOpen ? "block" : "none";
+
+      // Map
+      if (homeData.footer?.mapEmbed) {
+        document.getElementById("mapFrame").src =
+          homeData.footer.mapEmbed;
+      }
+
+      // Footer
+      if (homeData.footer) {
+        document.getElementById("footer").innerHTML = `
+          <p>${homeData.footer.about || ""}</p>
+          <p>📍 ${homeData.footer.address || ""}</p>
+          <p>📞 ${homeData.footer.phone || ""}</p>
+          <p>📧 ${homeData.footer.email || ""}</p>
+        `;
+      }
+    }
+
+    /* ================= SECTIONS ================= */
+    const container = document.getElementById("dynamicSections");
+    container.innerHTML = "";
+
+    sections
+      .filter(s => s.isActive)
+      .sort((a, b) => a.position - b.position)
+      .forEach(section => {
+        let html = `<section class="section"><h2>${section.title}</h2>`;
+
+        if (section.type === "list") {
+          html += `<ul>${section.content.map(i => `<li>${i}</li>`).join("")}</ul>`;
+        } else {
+          html += `<p>${section.content.join(" ")}</p>`;
+        }
+
+        html += `</section>`;
+        container.innerHTML += html;
+      });
+
+  } catch (err) {
+    console.error("Page load error:", err);
+  } finally {
+    /* ================= SHOW SITE ================= */
+    document.getElementById("pageLoader").style.display = "none";
+    document.getElementById("siteContent").style.display = "block";
+  }
+}
+
+initPage();

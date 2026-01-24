@@ -1,85 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Gyanodaya Public School | Sinhasa</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- Inline safety fix: no blue links -->
+  <!-- Safety: no blue links -->
   <style>
     a { color: inherit; text-decoration: none; }
   </style>
 </head>
 <body>
 
-<!-- ================= HEADER ================= -->
-<header>
-  <div class="navbar">
-    <div class="logo">
-  <img id="schoolLogo" style="display:none;max-height:60px" />
-  <span id="schoolName"> </span>
+<!-- ================= PAGE LOADER ================= -->
+<div id="pageLoader">
+  <div class="loader-box">
+    <div class="spinner"></div>
+    <p>Loading Gyanodaya Public School…</p>
+  </div>
 </div>
 
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+<!-- ================= SITE CONTENT ================= -->
+<div id="siteContent" style="display:none;">
 
-    <nav id="navMenu">
-      <ul id="navLinks">
-        <!-- dynamically filled -->
-      </ul>
-    </nav>
+  <!-- ================= HEADER ================= -->
+  <header>
+    <div class="navbar">
+      <div class="logo">
+        <img id="schoolLogo" style="display:none;max-height:60px;" />
+        <span id="schoolName"></span>
+      </div>
+
+      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+
+      <nav id="navMenu">
+        <ul id="navLinks">
+          <!-- dynamically filled -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= NOTICE TICKER ================= -->
+  <div class="notice-ticker" id="noticeTicker" style="display:none">
+    <span id="noticeText"></span>
   </div>
-</header>
 
-<!-- ================= NOTICE TICKER ================= -->
-<div class="notice-ticker" id="noticeTicker" style="display:none">
-  <span id="noticeText"></span>
+  <!-- ================= HERO ================= -->
+  <section class="hero">
+    <div class="admission-badge" id="admissionBadge" style="display:none">
+      Admission Open
+    </div>
+
+    <h1 id="heroTitle"></h1>
+
+    <p id="heroIntro"></p>
+
+    <a href="admissions.html" class="btn">Admission Enquiry</a>
+  </section>
+
+  <!-- ================= DYNAMIC SECTIONS ================= -->
+  <div id="dynamicSections"></div>
+
+  <!-- ================= MAP ================= -->
+  <section class="section">
+    <h2>Our Location</h2>
+    <iframe
+      id="mapFrame"
+      width="100%"
+      height="350"
+      style="border:0;"
+      loading="lazy"
+      allowfullscreen>
+    </iframe>
+  </section>
+
+  <!-- ================= FOOTER ================= -->
+  <footer id="footer"></footer>
+
+  <!-- ================= WHATSAPP FLOAT ================= -->
+  <a href="https://wa.me/919406613049"
+     class="whatsapp-float"
+     target="_blank"
+     aria-label="WhatsApp Enquiry">
+     💬
+  </a>
+
 </div>
-
-<!-- ================= HERO ================= -->
-<section class="hero">
-  <div class="admission-badge" id="admissionBadge" style="display:none">
-    Admission Open
-  </div>
-
-  <h1 id="heroTitle"> </h1>
-
-  <p id="heroIntro">
-    Loading content…
-  </p>
-
-  <a href="admissions.html" class="btn">Admission Enquiry</a>
-</section>
-
-<!-- ================= DYNAMIC SECTIONS ================= -->
-<div id="dynamicSections"></div>
-
-<!-- ================= MAP ================= -->
-<section class="section">
-  <h2>Our Location</h2>
-  <iframe
-  id="mapFrame"
-  width="100%"
-  height="350"
-  style="border:0;"
-  loading="lazy"
-  allowfullscreen>
-</iframe>
-</section>
-
-<!-- ================= FOOTER ================= -->
-<footer id="footer">
-  Loading footer…
-</footer>
-
-<!-- ================= WHATSAPP FLOAT ================= -->
-<a href="https://wa.me/919406613049"
-   class="whatsapp-float"
-   target="_blank"
-   aria-label="WhatsApp Enquiry">
-   💬
-</a>
 
 <!-- ================= JS ================= -->
 <script src="script.js"></script>
