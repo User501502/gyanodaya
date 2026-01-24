@@ -1,23 +1,112 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Home CMS</title>
-  <link rel="stylesheet" href="admin.css">
+  <meta charset="UTF-8" />
+  <title>Manage Home Page | Admin</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
+
 <div class="layout">
-  <aside class="sidebar">...</aside>
+
+  <!-- ================= SIDEBAR ================= -->
+  <aside class="sidebar">
+    <h3>Gyanodaya Admin</h3>
+
+    <a href="dashboard.html">Dashboard</a>
+    <a href="home.html" class="active">Home</a>
+    <a href="notices.html">Notices</a>
+    <a href="admissions.html">Admissions</a>
+    <a href="settings.html">Settings</a>
+
+    <button id="logoutBtn">Logout</button>
+  </aside>
+
+  <!-- ================= MAIN ================= -->
   <main class="content">
-    <h1>Home Content</h1>
+
+    <!-- ===== HERO / HEADER CONTROL ===== -->
+    <h1>Home Page Settings</h1>
+
     <form id="homeForm">
-      <textarea id="introText" required></textarea>
+      <h3>Hero Section</h3>
+
       <label>
-        <input type="checkbox" id="admissionOpen"> Admission Open
+        School Name
+        <input type="text" id="schoolName" required />
       </label>
-      <button>Save</button>
+
+      <label>
+        Hero Title
+        <input type="text" id="heroTitle" required />
+      </label>
+
+      <label>
+        Hero Introduction
+        <textarea id="heroIntro" rows="4"></textarea>
+      </label>
+
+      <label style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="admissionOpen" />
+        Admission Open
+      </label>
+
+      <button type="submit">Save Hero Section</button>
     </form>
+
+    <hr style="margin:40px 0;" />
+
+    <!-- ===== HOMEPAGE SECTIONS (REUSED CMS) ===== -->
+    <h2>Homepage Sections</h2>
+    <p style="color:#555">
+      These sections appear below the hero section on the website.
+    </p>
+
+    <!-- SAME FORM AS sections.html -->
+    <form id="sectionForm">
+      <h3>Add / Edit Section</h3>
+
+      <label>
+        Section Title
+        <input type="text" id="title" required />
+      </label>
+
+      <label>
+        Section Type
+        <select id="type">
+          <option value="list">List</option>
+          <option value="text">Text</option>
+        </select>
+      </label>
+
+      <label>
+        Content
+        <small>(For list: one item per line)</small>
+        <textarea id="content" rows="5" required></textarea>
+      </label>
+
+      <label style="display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="isActive" checked />
+        Active (show on website)
+      </label>
+
+      <button type="submit">Save Section</button>
+    </form>
+
+    <!-- SECTIONS LIST -->
+    <div id="sectionsList" class="sections-grid"></div>
+
   </main>
 </div>
+
+<!-- ================= SCRIPTS ================= -->
+<script type="module" src="admin.js"></script>
 <script type="module" src="home.js"></script>
+
+<!-- 🔥 SAME LOGIC, SAME DESIGN, SAME DRAG-DROP -->
+<script type="module" src="sections.js"></script>
+
 </body>
 </html>

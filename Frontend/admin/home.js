@@ -1,29 +1,43 @@
 import { api } from "./admin.js";
 
+/* =========================
+   HERO / HOME SETTINGS
+========================= */
+
 const form = document.getElementById("homeForm");
-const introText = document.getElementById("introText");
+
+const schoolName = document.getElementById("schoolName");
+const heroTitle = document.getElementById("heroTitle");
+const heroIntro = document.getElementById("heroIntro");
 const admissionOpen = document.getElementById("admissionOpen");
 
-async function load() {
+/* LOAD EXISTING HOME DATA */
+async function loadHome() {
   const data = await api("/api/home");
   if (!data) return;
 
-  introText.value = data.intro || "";
+  schoolName.value = data.schoolName || "";
+  heroTitle.value = data.heroTitle || "";
+  heroIntro.value = data.heroIntro || "";
   admissionOpen.checked = data.admissionOpen || false;
 }
 
+/* SAVE HERO DATA */
 form.onsubmit = async (e) => {
   e.preventDefault();
 
   await api("/api/home", {
     method: "POST",
     body: JSON.stringify({
-      intro: introText.value,
+      schoolName: schoolName.value.trim(),
+      heroTitle: heroTitle.value.trim(),
+      heroIntro: heroIntro.value.trim(),
       admissionOpen: admissionOpen.checked
     })
   });
 
-  alert("Home page updated");
+  alert("✅ Hero section updated successfully");
 };
 
-load();
+/* INIT */
+loadHome();

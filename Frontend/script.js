@@ -29,12 +29,26 @@ fetch("/api/settings")
 /* ================= LOAD HOME CONTENT ================= */
 fetch("/api/home")
   .then(res => res.json())
-  .then(h => {
-    document.getElementById("heroIntro").innerText = h.intro;
+  .then(data => {
+    document.getElementById("schoolName").innerText = data.schoolName;
+    document.getElementById("heroTitle").innerText = data.heroTitle;
+    document.getElementById("heroIntro").innerText = data.heroIntro;
 
-    if (h.admissionOpen) {
-      document.getElementById("admissionBadge").style.display = "inline-block";
-    }
+    document.getElementById("admissionBadge").style.display =
+      data.admissionOpen ? "block" : "none";
+
+    const container = document.getElementById("dynamicSections");
+    container.innerHTML = "";
+
+    data.sections
+      .filter(s => s.enabled)
+      .sort((a, b) => a.order - b.order)
+      .forEach(s => {
+        const sec = document.createElement("section");
+        sec.className = "section";
+        sec.innerHTML = `<h2>${s.title}</h2><p>${s.content}</p>`;
+        container.appendChild(sec);
+      });
   });
 
 /* ================= LOAD SECTIONS ================= */
@@ -96,3 +110,4 @@ fetch("/api/notices")
         n.map(x => "📢 " + x.title).join("   |   ");
     }
   });
+
