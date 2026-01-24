@@ -1,10 +1,23 @@
-<h1>Website Settings</h1>
-
-<form id="settingsForm">
-  <input id="schoolName" placeholder="School Name" required>
-  <input id="email" placeholder="Email" required>
-  <textarea id="address" placeholder="Address"></textarea>
-  <textarea id="footer" placeholder="Footer text"></textarea>
-
-  <button>Save</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Settings</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">...</aside>
+  <main class="content">
+    <h1>Settings</h1>
+    <form id="settingsForm">
+      <input id="schoolName" required>
+      <input id="email" required>
+      <textarea id="address"></textarea>
+      <textarea id="footer"></textarea>
+      <button>Save</button>
+    </form>
+  </main>
+</div>
+<script type="module" src="settings.js"></script>
+</body>
+</html>

@@ -1,13 +1,23 @@
-<h1>Home Page Content</h1>
-
-<form id="homeForm">
-  <label>Intro Text</label>
-  <textarea id="introText" required></textarea>
-
-  <label>
-    <input type="checkbox" id="admissionOpen">
-    Admission Open
-  </label>
-
-  <button type="submit">Save</button>
-</form>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Home CMS</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">...</aside>
+  <main class="content">
+    <h1>Home Content</h1>
+    <form id="homeForm">
+      <textarea id="introText" required></textarea>
+      <label>
+        <input type="checkbox" id="admissionOpen"> Admission Open
+      </label>
+      <button>Save</button>
+    </form>
+  </main>
+</div>
+<script type="module" src="home.js"></script>
+</body>
+</html>

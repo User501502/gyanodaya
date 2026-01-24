@@ -14,15 +14,12 @@ export async function getToken() {
 }
 
 export async function api(url, options = {}) {
-  const token = await getToken();
-  const headers = {
-    "Content-Type": "application/json",
-    Authorization: `Bearer ${token}`,
-    ...(options.headers || {})
-  };
+  const res = await fetch(url, {
+    headers: { "Content-Type": "application/json" },
+    ...options
+  });
 
-  const res = await fetch(url, { ...options, headers });
-  if (!res.ok) throw new Error("API Error");
+  if (!res.ok) throw new Error("API error");
   return res.json();
 }
 

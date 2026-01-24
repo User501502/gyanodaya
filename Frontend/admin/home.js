@@ -1,24 +1,29 @@
-import { protectPage, api } from "./admin.js";
-import { toast } from "./toast.js";
+import { api } from "./admin.js";
 
-protectPage();
+const form = document.getElementById("homeForm");
+const introText = document.getElementById("introText");
+const admissionOpen = document.getElementById("admissionOpen");
 
-async function loadHome() {
+async function load() {
   const data = await api("/api/home");
-  introText.value = data.introText;
-  admissionOpen.checked = data.admissionOpen;
+  if (!data) return;
+
+  introText.value = data.intro || "";
+  admissionOpen.checked = data.admissionOpen || false;
 }
 
-homeForm.onsubmit = async e => {
+form.onsubmit = async (e) => {
   e.preventDefault();
+
   await api("/api/home", {
-    method: "PUT",
+    method: "POST",
     body: JSON.stringify({
-      introText: introText.value,
+      intro: introText.value,
       admissionOpen: admissionOpen.checked
     })
   });
-  toast("Home updated");
+
+  alert("Home page updated");
 };
 
-loadHome();
+load();

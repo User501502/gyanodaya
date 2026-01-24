@@ -1,23 +1,33 @@
-<h1>Homepage Sections</h1>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Sections</title>
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
 
-<button id="addSection">+ Add Section</button>
+<div class="layout">
+  <aside class="sidebar">
+    <h3>Admin</h3>
+    <a href="dashboard.html">Dashboard</a>
+    <a href="home.html">Home</a>
+    <a href="sections.html">Sections</a>
+    <a href="notices.html">Notices</a>
+    <a href="admissions.html">Admissions</a>
+    <a href="settings.html">Settings</a>
+    <button id="logoutBtn">Logout</button>
+  </aside>
 
-<div id="sectionsList"></div>
+  <main class="content">
+    <h1>Homepage Sections</h1>
+    <p>Drag sections to reorder</p>
 
-<!-- Modal -->
-<div id="sectionModal" class="modal hidden">
-  <input id="title" placeholder="Title">
-  
-  <select id="type">
-    <option value="text">Text</option>
-    <option value="list">List</option>
-  </select>
+    <div id="sectionsList" class="drag-list"></div>
 
-  <textarea id="content"></textarea>
-
-  <label>
-    <input type="checkbox" id="isActive"> Active
-  </label>
-
-  <button id="saveSection">Save</button>
+    <button id="addSection">+ Add Section</button>
+  </main>
 </div>
+
+<script type="module" src="sections.js"></script>
+</body>
+</html>
