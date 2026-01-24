@@ -200,24 +200,49 @@ async function initPage() {
     }
 
     /* ================= SECTIONS ================= */
-    const container = document.getElementById("dynamicSections");
-    container.innerHTML = "";
+/* ================= SECTIONS ================= */
+const container = document.getElementById("dynamicSections");
+container.innerHTML = "";
 
-    sections
-      .filter(s => s.isActive)
-      .sort((a, b) => a.position - b.position)
-      .forEach(section => {
-        let html = `<section class="section"><h2>${section.title}</h2>`;
+sections
+  .filter(s => s.isActive)
+  .sort((a, b) => a.position - b.position)
+  .forEach(section => {
+    let html = `
+      <section class="section">
+        <h2>${section.title}</h2>
+    `;
 
-        if (section.type === "list") {
-          html += `<ul>${section.content.map(i => `<li>${i}</li>`).join("")}</ul>`;
-        } else {
-          html += `<p>${section.content.join(" ")}</p>`;
-        }
+    /* 🔹 LIST TYPE → MULTIPLE CARDS */
+    if (section.type === "list") {
+      html += `<div class="section-cards">`;
 
-        html += `</section>`;
-        container.innerHTML += html;
+      section.content.forEach(item => {
+        html += `
+          <div class="section-card">
+            <span>✔</span>
+            <p>${item}</p>
+          </div>
+        `;
       });
+
+      html += `</div>`;
+    }
+
+    /* 🔹 TEXT TYPE → SINGLE CARD */
+    if (section.type === "text") {
+      html += `
+        <div class="section-cards">
+          <div class="section-card">
+            <p>${section.content.join(" ")}</p>
+          </div>
+        </div>
+      `;
+    }
+
+    html += `</section>`;
+    container.innerHTML += html;
+  });
 
   } catch (err) {
     console.error("Page load error:", err);
