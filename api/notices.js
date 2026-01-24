@@ -1,4 +1,4 @@
-import connectDB from "./_db";
+import connectDB from "./_db.js";
 import mongoose from "mongoose";
 
 const NoticeSchema = new mongoose.Schema({
