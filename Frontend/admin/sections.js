@@ -1,109 +1,148 @@
 import { api } from "./admin.js";
 
-// DOM references
 const form = document.getElementById("sectionForm");
 const list = document.getElementById("sectionsList");
 
-// Load sections
+let editId = null;
+let draggedCard = null;
+
+/* =========================
+   LOAD SECTIONS
+========================= */
 async function loadSections() {
   const sections = await api("/api/sections");
   list.innerHTML = "";
 
-  sections.forEach(section => {
-    const card = document.createElement("div");
-    card.className = "section-card" + (section.isActive ? "" : " inactive");
+  sections
+    .sort((a, b) => a.position - b.position)
+    .forEach(section => {
+      const card = document.createElement("div");
+      card.className = "section-card";
+      card.draggable = true;
+      card.dataset.id = section._id;
 
-    // Header
-    card.innerHTML = `
-      <h4>${section.title}</h4>
-      <div class="section-meta">
-        Type: ${section.type.toUpperCase()} |
-        Status: ${section.isActive ? "Active" : "Inactive"}
-      </div>
-    `;
+      card.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <strong>${section.title}</strong>
+          <span style="cursor:grab">☰</span>
+        </div>
 
-    // CONTENT RENDERING
-    if (section.type === "list") {
-      section.content.forEach(item => {
-        const itemDiv = document.createElement("div");
-        itemDiv.className = "list-item-card";
-        itemDiv.textContent = item;
-        card.appendChild(itemDiv);
+        <div class="section-meta">
+          ${section.type.toUpperCase()} |
+          ${section.isActive ? "Active" : "Inactive"}
+        </div>
+
+        <div class="section-actions">
+          <button class="btn-edit">Edit</button>
+          <button class="btn-delete">Delete</button>
+        </div>
+      `;
+
+      // EDIT
+      card.querySelector(".btn-edit").onclick = () => {
+        editId = section._id;
+        document.getElementById("title").value = section.title;
+        document.getElementById("type").value = section.type;
+        document.getElementById("content").value = section.content.join("\n");
+        document.getElementById("isActive").checked = section.isActive;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      // DELETE
+      card.querySelector(".btn-delete").onclick = async () => {
+        if (!confirm("Delete this section?")) return;
+        await api(`/api/sections?id=${section._id}`, {
+          method: "DELETE"
+        });
+        loadSections();
+      };
+
+      // DRAG EVENTS
+      card.addEventListener("dragstart", () => {
+        draggedCard = card;
+        card.classList.add("dragging");
       });
+
+      card.addEventListener("dragend", () => {
+        draggedCard = null;
+        card.classList.remove("dragging");
+        saveOrder();
+      });
+
+      card.addEventListener("dragover", e => {
+        e.preventDefault();
+        const after = getAfterElement(list, e.clientY);
+        if (after == null) list.appendChild(draggedCard);
+        else list.insertBefore(draggedCard, after);
+      });
+
+      list.appendChild(card);
+    });
+}
+
+/* =========================
+   ADD / EDIT SECTION
+========================= */
+if (form) {
+  form.onsubmit = async (e) => {
+    e.preventDefault();
+
+    const payload = {
+      title: title.value.trim(),
+      type: type.value,
+      content:
+        type.value === "list"
+          ? content.value.split("\n").map(i => i.trim()).filter(Boolean)
+          : [content.value.trim()],
+      isActive: isActive.checked,
+      position: Date.now()
+    };
+
+    if (editId) {
+      await api(`/api/sections?id=${editId}`, {
+        method: "PUT",
+        body: JSON.stringify(payload)
+      });
+      editId = null;
     } else {
-      const textDiv = document.createElement("div");
-      textDiv.className = "list-item-card";
-      textDiv.textContent = section.content.join(" ");
-      card.appendChild(textDiv);
+      await api("/api/sections", {
+        method: "POST",
+        body: JSON.stringify(payload)
+      });
     }
 
-    list.appendChild(card);
-  });
-}
-
-// FORM SUBMIT (SAFE)
-if (form) {
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-
-    const title = document.getElementById("title").value.trim();
-    const type = document.getElementById("type").value;
-    const contentRaw = document.getElementById("content").value;
-
-    const content =
-      type === "list"
-        ? contentRaw.split("\n").map(i => i.trim()).filter(Boolean)
-        : [contentRaw.trim()];
-
-    await api("/api/sections", {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        type,
-        content,
-        position: Date.now(),
-        isActive: document.getElementById("isActive").checked
-      })
-    });
-
-    alert("Section added successfully");
     form.reset();
     loadSections();
   };
 }
 
-// INIT
-loadSections();
-
-// ✅ SAFE form submit (NO crash)
-if (form) {
-  form.onsubmit = async (e) => {
-    e.preventDefault();
-
-    const title = document.getElementById("title").value;
-    const type = document.getElementById("type").value;
-    const content = document
-      .getElementById("content")
-      .value
-      .split("\n")
-      .filter(Boolean);
-
-    await api("/api/sections", {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        type,
-        content,
-        position: Date.now(),
-        isActive: true
-      })
+/* =========================
+   SAVE DRAG ORDER
+========================= */
+async function saveOrder() {
+  const cards = [...list.children];
+  for (let i = 0; i < cards.length; i++) {
+    await api(`/api/sections?id=${cards[i].dataset.id}`, {
+      method: "PUT",
+      body: JSON.stringify({ position: i })
     });
-
-    alert("Section added successfully");
-    form.reset();
-    loadSections();
-  };
+  }
 }
 
-// Init
+/* =========================
+   DRAG HELPER
+========================= */
+function getAfterElement(container, y) {
+  const els = [...container.querySelectorAll(".section-card:not(.dragging)")];
+  return els.reduce((closest, el) => {
+    const box = el.getBoundingClientRect();
+    const offset = y - box.top - box.height / 2;
+    if (offset < 0 && offset > closest.offset) {
+      return { offset, element: el };
+    }
+    return closest;
+  }, { offset: Number.NEGATIVE_INFINITY }).element;
+}
+
+/* INIT */
 loadSections();
