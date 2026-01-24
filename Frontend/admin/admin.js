@@ -1,18 +1,55 @@
-const API = "/api"; // IMPORTANT (same domain)
+/* ================= AUTH ================= */
+async function login() {
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  const error = document.getElementById("error");
 
-async function saveHome() {
-  const body = {
-    intro: intro.value,
-    whyChooseUs: why.value.split("\n"),
-    facilities: facilities.value.split("\n"),
-    admissionOpen: admissionOpen.checked
-  };
+  if (!email || !password) {
+    error.innerText = "All fields are required";
+    return;
+  }
 
-  await fetch(`${API}/home`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
+  try {
+    await firebaseAuth.signInWithEmailAndPassword(
+      firebaseAuth.auth,
+      email,
+      password
+    );
+    window.location.href = "dashboard.html";
+  } catch (e) {
+    error.innerText = "Invalid login credentials";
+  }
+}
+
+function protect() {
+  firebaseAuth.onAuthStateChanged(firebaseAuth.auth, user => {
+    if (!user) window.location.href = "login.html";
+  });
+}
+
+function logout() {
+  firebaseAuth.signOut(firebaseAuth.auth).then(() => {
+    window.location.href = "login.html";
+  });
+}
+
+/* ================= API ================= */
+const API = "/api";
+
+async function api(url, method = "GET", body) {
+  const user = firebaseAuth.auth.currentUser;
+  const token = await user.getIdToken();
+
+  const res = await fetch(url, {
+    method,
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    body: body ? JSON.stringify(body) : null
   });
 
-  alert("Home page updated");
+  if (!res.ok) throw new Error("API Error");
+  return res.json();
 }
+

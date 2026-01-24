@@ -1,34 +1,38 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Dashboard</title>
-<link rel="stylesheet" href="admin.css">
-</head>
-<body onload="checkAuth()">
+<body onload="protect()">
+<div class="admin">
 
-<div class="admin-layout">
-  <div class="sidebar">
-    <h3>Admin Panel</h3>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="notices.html">Notices</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="admissions.html">Admissions</a>
-    <a href="settings.html">Settings</a>
-    <button class="btn logout" onclick="logout()">Logout</button>
-  </div>
+<div class="sidebar">
+  <h3>Admin Panel</h3>
+  <a href="dashboard.html">Dashboard</a>
+  <a href="sections.html">Sections</a>
+  <a href="settings.html">Settings</a>
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
 
-  <div class="content">
-    <h2>Dashboard Overview</h2>
+<div class="content">
+  <h2>Dashboard</h2>
 
-    <div class="grid">
-      <div class="card">Total Notices: 12</div>
-      <div class="card">Gallery Images: 34</div>
-      <div class="card">Admission Enquiries: 56</div>
-    </div>
+  <div class="card">
+    <p>Welcome Admin 👋</p>
+    <p>Use the sidebar to manage website content.</p>
   </div>
 </div>
 
+</div>
+
+<script type="module">
+  import { auth, onAuthStateChanged, signOut } from "./firebase.js";
+
+  onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = "login.html";
+  });
+
+  window.logout = function () {
+    signOut(auth).then(() => {
+      window.location.href = "login.html";
+    });
+  };
+</script>
+<script type="module" src="firebase.js"></script>
 <script src="admin.js"></script>
 </body>
-</html>

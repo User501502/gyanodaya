@@ -1,0 +1,50 @@
+<body onload="protect()">
+<div class="admin">
+
+<div class="sidebar">
+  <a href="dashboard.html">Dashboard</a>
+  <a href="sections.html">Sections</a>
+  <a href="settings.html">Settings</a>
+  <button class="logout" onclick="logout()">Logout</button>
+</div>
+
+<div class="content">
+<h2>Homepage Sections</h2>
+
+<div class="card">
+  <input id="title" placeholder="Section Title">
+  <select id="type">
+    <option value="list">List</option>
+    <option value="text">Text</option>
+  </select>
+  <textarea id="content" placeholder="One item per line"></textarea>
+  <input id="position" type="number" placeholder="Position (1,2,3)">
+  <label><input type="checkbox" id="active"> Active</label>
+  <button onclick="saveSection()">Save Section</button>
+</div>
+
+</div>
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script src="admin.js"></script>
+
+<script>
+async function saveSection(){
+  if(!title.value || !position.value){
+    alert("Title & position required");
+    return;
+  }
+
+  await api("/api/sections","POST",{
+    title:title.value,
+    type:type.value,
+    content:content.value.split("\n"),
+    position:+position.value,
+    isActive:active.checked
+  });
+
+  alert("Section saved");
+}
+</script>
+</body>
