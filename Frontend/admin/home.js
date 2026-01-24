@@ -81,6 +81,30 @@ saveBtn.onclick = async () => {
     })
   });
 
+  const mapLinkInput = document.getElementById("mapLink");
+
+await api("/api/home", {
+  method: "POST",
+  body: JSON.stringify({
+    schoolName: schoolName.value,
+    logo: logoBase64,
+
+    heroTitle: heroTitle.value,
+    heroIntro: heroIntro.value,
+    admissionOpen: admissionOpen.checked,
+
+    footer: {
+      about: footerAbout.value,
+      address: footerAddress.value,
+      phone: footerPhone.value,
+      email: footerEmail.value,
+      copyright: footerCopyright.value,
+      mapLink: mapLink.value,
+      mapEmbed: convertToEmbedMap(mapLink.value)
+    }
+  })
+});
+
   alert("✅ Home page fully updated");
 };
 
@@ -93,6 +117,27 @@ window.toggleBlock = function (id) {
   block.classList.toggle("hidden");
   icon.textContent = block.classList.contains("hidden") ? "+" : "−";
 };
+
+function convertToEmbedMap(url) {
+  if (!url) return "";
+
+  // If already embed link, return as is
+  if (url.includes("google.com/maps/embed")) {
+    return url;
+  }
+
+  // Convert normal Google Maps link to embed
+  const match = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+
+  if (match) {
+    const lat = match[1];
+    const lng = match[2];
+    return `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
+  }
+
+  // fallback: place search
+  return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+}
 
 /* INIT */
 loadHome();

@@ -1,23 +1,29 @@
 import connectDB from "./_db.js";
 import mongoose from "mongoose";
 
-const SectionSchema = new mongoose.Schema({
-  type: String,          // hero, notice, section, map, footer
-  title: String,
-  content: String,
-  enabled: Boolean,
-  order: Number
+const FooterSchema = new mongoose.Schema({
+  about: String,
+  address: String,
+  phone: String,
+  email: String,
+  copyright: String,
+  mapLink: String,
+  mapEmbed: String
 });
 
 const HomeSchema = new mongoose.Schema({
   schoolName: String,
-  admissionOpen: Boolean,
+  logo: String,
+
   heroTitle: String,
   heroIntro: String,
-  sections: [SectionSchema]
+  admissionOpen: Boolean,
+
+  footer: FooterSchema   // 🔥 THIS WAS MISSING
 });
 
-const Home = mongoose.models.Home || mongoose.model("Home", HomeSchema);
+const Home =
+  mongoose.models.Home || mongoose.model("Home", HomeSchema);
 
 export default async function handler(req, res) {
   await connectDB();
@@ -28,7 +34,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method === "POST") {
-    await Home.deleteMany(); // SINGLE SOURCE OF TRUTH
+    await Home.deleteMany(); // single home document
     const home = new Home(req.body);
     await home.save();
     return res.json(home);

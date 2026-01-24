@@ -51,6 +51,14 @@ fetch("/api/home")
       });
   });
 
+  fetch("/api/home")
+  .then(res => res.json())
+  .then(data => {
+    if (data.mapEmbed) {
+      document.getElementById("mapFrame").src = data.mapEmbed;
+    }
+  });
+
 /* ================= LOAD SECTIONS ================= */
 fetch("/api/sections")
   .then(res => res.json())
