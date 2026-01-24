@@ -3,25 +3,51 @@ import mongoose from "mongoose";
 
 const SectionSchema = new mongoose.Schema({
   title: String,
-  type: String,
+  type: String,           // "list" | "text"
   content: [String],
   position: Number,
   isActive: Boolean
 });
 
-const Section = mongoose.models.Section || mongoose.model("Section", SectionSchema);
+const Section =
+  mongoose.models.Section || mongoose.model("Section", SectionSchema);
 
 export default async function handler(req, res) {
   await connectDB();
 
+  // GET → website + admin (ALL sections)
   if (req.method === "GET") {
-    const sections = await Section.find({ isActive: true }).sort({ position: 1 });
+    const sections = await Section.find().sort({ position: 1 });
     return res.json(sections);
   }
 
+  // POST → add new section
   if (req.method === "POST") {
-    const section = new Section(req.body);
+    const section = new Section({
+      ...req.body,
+      position: req.body.position ?? Date.now()
+    });
     await section.save();
     return res.json(section);
   }
+
+  // PUT → edit section (title/content/type/isActive/position)
+  if (req.method === "PUT") {
+    const { id } = req.query;
+    const updated = await Section.findByIdAndUpdate(
+      id,
+      req.body,
+      { new: true }
+    );
+    return res.json(updated);
+  }
+
+  // DELETE → remove section
+  if (req.method === "DELETE") {
+    const { id } = req.query;
+    await Section.findByIdAndDelete(id);
+    return res.json({ success: true });
+  }
+
+  res.status(405).json({ error: "Method not allowed" });
 }

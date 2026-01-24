@@ -1,11 +1,15 @@
 import admin from "firebase-admin";
 
-admin.initializeApp({
-  credential: admin.credential.cert(JSON.parse(process.env.FIREBASE_ADMIN))
-});
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(
+      JSON.parse(process.env.FIREBASE_ADMIN)
+    )
+  });
+}
 
-export async function verify(req) {
+export async function verifyToken(req) {
   const token = req.headers.authorization?.split(" ")[1];
-  if (!token) throw "Unauthorized";
+  if (!token) throw new Error("Unauthorized");
   return await admin.auth().verifyIdToken(token);
 }
