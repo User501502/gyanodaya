@@ -27,78 +27,82 @@
   <!-- ================= MAIN ================= -->
   <main class="content">
 
-    <!-- ===== HERO / HEADER CONTROL ===== -->
-    <h1>Home Page Settings</h1>
+  <h1>Home Page Manager</h1>
 
-    <form id="homeForm">
-      <h3>Hero Section</h3>
+  <!-- ================= HERO BLOCK ================= -->
+  <div class="cms-block">
 
-      <label>
-        School Name
-        <input type="text" id="schoolName" required />
-      </label>
+    <div class="cms-block-header" onclick="toggleBlock('heroBlock')">
+      <h2>Hero Section</h2>
+      <span id="heroBlockIcon">−</span>
+    </div>
 
-      <label>
-        Hero Title
-        <input type="text" id="heroTitle" required />
-      </label>
+    <div class="cms-block-body" id="heroBlock">
+      <form id="homeForm">
 
-      <label>
-        Hero Introduction
-        <textarea id="heroIntro" rows="4"></textarea>
-      </label>
+        <label>
+          School Name
+          <input type="text" id="schoolName" required />
+        </label>
 
-      <label style="display:flex;align-items:center;gap:8px;">
-        <input type="checkbox" id="admissionOpen" />
-        Admission Open
-      </label>
+        <label>
+          Hero Title
+          <input type="text" id="heroTitle" required />
+        </label>
 
-      <button type="submit">Save Hero Section</button>
-    </form>
+        <label>
+          Hero Introduction
+          <textarea id="heroIntro" rows="4"></textarea>
+        </label>
 
-    <hr style="margin:40px 0;" />
+        <label style="display:flex;align-items:center;gap:8px;">
+          <input type="checkbox" id="admissionOpen" />
+          Admission Open
+        </label>
 
-    <!-- ===== HOMEPAGE SECTIONS (REUSED CMS) ===== -->
-    <h2>Homepage Sections</h2>
-    <p style="color:#555">
-      These sections appear below the hero section on the website.
-    </p>
+        <button type="submit">Save Hero Section</button>
+      </form>
+    </div>
+  </div>
 
-    <!-- SAME FORM AS sections.html -->
-    <form id="sectionForm">
-      <h3>Add / Edit Section</h3>
+  <!-- ================= SECTIONS BLOCK ================= -->
+  <div class="cms-block">
 
-      <label>
-        Section Title
-        <input type="text" id="title" required />
-      </label>
+    <div class="cms-block-header" onclick="toggleBlock('sectionsBlock')">
+      <h2>Homepage Sections</h2>
+      <span id="sectionsBlockIcon">−</span>
+    </div>
 
-      <label>
-        Section Type
+    <div class="cms-block-body" id="sectionsBlock">
+
+      <!-- SAME SECTIONS FORM -->
+      <form id="sectionForm">
+        <h3>Add / Edit Section</h3>
+
+        <input type="text" id="title" placeholder="Section title" required />
+
         <select id="type">
           <option value="list">List</option>
           <option value="text">Text</option>
         </select>
-      </label>
 
-      <label>
-        Content
-        <small>(For list: one item per line)</small>
         <textarea id="content" rows="5" required></textarea>
-      </label>
 
-      <label style="display:flex;align-items:center;gap:8px;">
-        <input type="checkbox" id="isActive" checked />
-        Active (show on website)
-      </label>
+        <label style="display:flex;gap:8px;">
+          <input type="checkbox" id="isActive" checked />
+          Active
+        </label>
 
-      <button type="submit">Save Section</button>
-    </form>
+        <button type="submit">Save Section</button>
+      </form>
 
-    <!-- SECTIONS LIST -->
-    <div id="sectionsList" class="sections-grid"></div>
+      <!-- SAME LIST -->
+      <div id="sectionsList" class="sections-grid"></div>
 
-  </main>
+    </div>
+  </div>
+
+</main>
 </div>
 
 <!-- ================= SCRIPTS ================= -->

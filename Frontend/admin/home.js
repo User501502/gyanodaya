@@ -41,3 +41,15 @@ form.onsubmit = async (e) => {
 
 /* INIT */
 loadHome();
+
+/* =========================
+   COLLAPSIBLE BLOCKS
+========================= */
+
+window.toggleBlock = function (id) {
+  const block = document.getElementById(id);
+  const icon = document.getElementById(id + "Icon");
+
+  block.classList.toggle("hidden");
+  icon.textContent = block.classList.contains("hidden") ? "+" : "−";
+};
