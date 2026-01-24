@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Settings</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body onload="checkAuth()">
+
+<div class="admin-layout">
+  <div class="sidebar">
+    <a href="dashboard.html">Dashboard</a>
+    <a href="settings.html">Settings</a>
+    <button class="btn logout" onclick="logout()">Logout</button>
+  </div>
+
+  <div class="content">
+    <h2>School Settings</h2>
+
+    <div class="card">
+      <input placeholder="School Name">
+      <input placeholder="Contact Number">
+      <button class="btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="admin.js"></script>
+</body>
+</html>
