@@ -50,7 +50,7 @@ fetch("/api/sections")
           <h2>${section.title}</h2>
       `;
 
-      /* ✅ LIST TYPE → SEPARATE CARDS */
+      /* 🔹 LIST TYPE → MULTIPLE CARDS */
       if (section.type === "list") {
         html += `<div class="section-cards">`;
 
@@ -66,12 +66,14 @@ fetch("/api/sections")
         html += `</div>`;
       }
 
-      /* ✅ TEXT TYPE → NORMAL PARAGRAPH */
+      /* 🔹 TEXT TYPE → SINGLE CARD */
       if (section.type === "text") {
         html += `
-          <p style="margin-top:15px;">
-            ${section.content.join(" ")}
-          </p>
+          <div class="section-cards">
+            <div class="section-card">
+              <p>${section.content.join(" ")}</p>
+            </div>
+          </div>
         `;
       }
 
