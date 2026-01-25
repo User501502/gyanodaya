@@ -3,6 +3,9 @@ import { api } from "./admin.js";
 /* ================= GLOBAL STATE ================= */
 window.quickLinks = [];
 window.socials = [];
+window.renderQuickLinks = renderQuickLinks;
+window.renderSocials = renderSocials;
+
 
 /* ================= ELEMENTS ================= */
 const schoolName = document.getElementById("schoolName");
