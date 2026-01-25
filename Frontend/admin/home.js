@@ -68,12 +68,18 @@ logoInput.onchange = e => {
 function convertToEmbedMap(url) {
   if (!url) return "";
 
-  // If already embed link, just return it
-  if (url.includes("google.com/maps/embed")) {
+  // already embed
+  if (url.includes("output=embed")) {
     return url;
   }
 
-  // Try to extract lat, lng from URL
+  // 1️⃣ Extract PLACE ID (cid)
+  const cidMatch = url.match(/!1s([^!]+)/);
+  if (cidMatch) {
+    return `https://www.google.com/maps?cid=${cidMatch[1]}&output=embed`;
+  }
+
+  // 2️⃣ Extract lat,lng (fallback)
   const latLngMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
   if (latLngMatch) {
     const lat = latLngMatch[1];
@@ -81,16 +87,17 @@ function convertToEmbedMap(url) {
     return `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
   }
 
-  // If place format but lat/lng not in string
+  // 3️⃣ Place name fallback
   const placeMatch = url.match(/\/place\/([^/]+)/);
   if (placeMatch) {
     const place = decodeURIComponent(placeMatch[1].replace(/\+/g, " "));
     return `https://www.google.com/maps?q=${encodeURIComponent(place)}&output=embed`;
   }
 
-  // Fallback to search
+  // 4️⃣ Final fallback
   return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
 }
+
 
 /* ================= SAVE ================= */
 saveBtn.onclick = async () => {
