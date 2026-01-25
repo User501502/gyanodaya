@@ -54,14 +54,16 @@ async function loadHome() {
 /* LOGO */
 logoInput.onchange = e => {
   const reader = new FileReader();
-  reader.onload = () => logoPreview.src = logoBase64 = reader.result;
+  reader.onload = () => {
+    logoBase64 = reader.result;
+    logoPreview.src = logoBase64;
+  };
   reader.readAsDataURL(e.target.files[0]);
 };
 
 /* MAP CONVERTER */
 function convertToEmbedMap(url) {
   if (!url) return "";
-  if (url.includes("embed")) return url;
   return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
 }
 
@@ -89,7 +91,7 @@ saveBtn.onclick = async () => {
     })
   });
 
-  alert("✅ Home page saved");
+  alert("✅ Saved successfully");
 };
 
 /* QUICK LINKS */
@@ -103,56 +105,83 @@ function renderQuickLinks() {
   box.innerHTML = "";
   quickLinks.forEach((l, i) => {
     box.innerHTML += `
-      <div>
-        <input value="${l.title}" placeholder="Title"
-          onchange="quickLinks[${i}].title=this.value">
-        <input value="${l.url}" placeholder="URL"
-          onchange="quickLinks[${i}].url=this.value">
-        <button onclick="quickLinks.splice(${i},1);renderQuickLinks()">❌</button>
+      <div class="row">
+        <input placeholder="Title" value="${l.title}"
+          oninput="quickLinks[${i}].title=this.value">
+        <input placeholder="URL" value="${l.url}"
+          oninput="quickLinks[${i}].url=this.value">
+        <button onclick="quickLinks.splice(${i},1);renderQuickLinks()">✕</button>
       </div>`;
   });
 }
 
-/* SOCIALS */
+/* SOCIAL LINKS */
 window.addSocial = () => {
-  socials.push({ name: "", url: "", icon: "" });
+  socials.push({
+    name: "",
+    url: "",
+    icon: "" // will hold base64 or URL
+  });
   renderSocials();
 };
 
 function renderSocials() {
   const box = document.getElementById("socialLinksList");
   box.innerHTML = "";
+
   socials.forEach((s, i) => {
     box.innerHTML += `
-      <div>
-        <input value="${s.name}" placeholder="Name"
-          onchange="socials[${i}].name=this.value">
-        <input value="${s.url}" placeholder="Profile URL"
-          onchange="socials[${i}].url=this.value">
-        <input placeholder="Icon URL"
-          onchange="socials[${i}].icon=this.value">
-        <input type="file" onchange="uploadSocial(event,${i})">
-        ${s.icon ? `<img src="${s.icon}" height="24">` : ""}
+      <div class="social-row">
+        <input
+          placeholder="Social name (Facebook, Instagram)"
+          value="${s.name}"
+          oninput="socials[${i}].name=this.value"
+        >
+
+        <input
+          placeholder="Profile URL"
+          value="${s.url}"
+          oninput="socials[${i}].url=this.value"
+        >
+
+        <input
+          placeholder="Icon image URL (optional)"
+          value="${s.icon.startsWith('http') ? s.icon : ''}"
+          oninput="socials[${i}].icon=this.value"
+        >
+
+        <input
+          type="file"
+          accept="image/*"
+          onchange="uploadSocialIcon(event, ${i})"
+        >
+
+        ${
+          s.icon
+            ? `<img src="${s.icon}" class="social-preview">`
+            : ""
+        }
+
         <button onclick="socials.splice(${i},1);renderSocials()">❌</button>
-      </div>`;
+      </div>
+    `;
   });
 }
 
-window.uploadSocial = (e, i) => {
-  const reader = new FileReader();
-  reader.onload = () => {
-    socials[i].icon = reader.result;
-    renderSocials();
-  };
-  reader.readAsDataURL(e.target.files[0]);
+window.uploadSocialIcon = (e, index) => {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  toBase64(file, base64 => {
+    socials[index].icon = base64; // 🔥 BASE64 SAVED HERE
+    renderSocials();              // re-render with preview
+  });
 };
 
-/* COLLAPSE */
-window.toggleBlock = id => {
-  const b = document.getElementById(id);
-  const i = document.getElementById(id + "Icon");
-  b.classList.toggle("hidden");
-  i.textContent = b.classList.contains("hidden") ? "+" : "−";
-};
+function toBase64(file, cb) {
+  const reader = new FileReader();
+  reader.onload = () => cb(reader.result);
+  reader.readAsDataURL(file);
+}
 
 loadHome();

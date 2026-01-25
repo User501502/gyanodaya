@@ -231,10 +231,37 @@ th, td {
 =============================== */
 
 .cms-block {
-  background: #ffffff;
+  background: #fff;
+  padding: 16px;
   border-radius: 8px;
-  margin-bottom: 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  margin-bottom: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,.08);
+}
+
+.cms-block h3, .cms-block h4 {
+  margin-bottom: 10px;
+}
+
+.cms-block input,
+.cms-block textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 8px;
+}
+
+.preview {
+  max-height: 60px;
+  margin-top: 8px;
+}
+
+.row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.row input {
+  flex: 1;
 }
 
 .cms-block-header {
@@ -265,3 +292,22 @@ th, td {
   display: none;
 }
 
+.social-row {
+  display: grid;
+  grid-template-columns: 1.2fr 2fr 1.5fr auto auto auto;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.social-row input {
+  padding: 6px;
+}
+
+.social-preview {
+  height: 28px;
+  width: 28px;
+  object-fit: contain;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+}
