@@ -3,8 +3,6 @@ import { api } from "./admin.js";
 /* ================= GLOBAL STATE ================= */
 window.quickLinks = [];
 window.socials = [];
-window.renderQuickLinks = renderQuickLinks;
-window.renderSocials = renderSocials;
 
 
 /* ================= ELEMENTS ================= */
@@ -121,6 +119,9 @@ function renderQuickLinks() {
     `;
   });
 }
+
+window.renderQuickLinks = renderQuickLinks;
+window.renderSocials = renderSocials;
 
 /* ================= SOCIAL LINKS ================= */
 window.addSocial = () => {
