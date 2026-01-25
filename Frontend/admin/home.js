@@ -1,6 +1,10 @@
 import { api } from "./admin.js";
 
-/* ELEMENTS */
+/* ================= GLOBAL STATE ================= */
+window.quickLinks = [];
+window.socials = [];
+
+/* ================= ELEMENTS ================= */
 const schoolName = document.getElementById("schoolName");
 const heroTitle = document.getElementById("heroTitle");
 const heroIntro = document.getElementById("heroIntro");
@@ -18,10 +22,8 @@ const logoPreview = document.getElementById("logoPreview");
 const saveBtn = document.getElementById("saveHomeBtn");
 
 let logoBase64 = "";
-let quickLinks = [];
-let socials = [];
 
-/* LOAD */
+/* ================= LOAD ================= */
 async function loadHome() {
   const data = await api("/api/home");
   if (!data) return;
@@ -39,8 +41,8 @@ async function loadHome() {
   footerCopyright.value = f.copyright || "";
   mapLink.value = f.mapLink || "";
 
-  quickLinks = f.quickLinks || [];
-  socials = f.socials || [];
+  window.quickLinks = f.quickLinks || [];
+  window.socials = f.socials || [];
 
   renderQuickLinks();
   renderSocials();
@@ -51,7 +53,7 @@ async function loadHome() {
   }
 }
 
-/* LOGO */
+/* ================= LOGO ================= */
 logoInput.onchange = e => {
   const reader = new FileReader();
   reader.onload = () => {
@@ -61,13 +63,13 @@ logoInput.onchange = e => {
   reader.readAsDataURL(e.target.files[0]);
 };
 
-/* MAP CONVERTER */
+/* ================= MAP ================= */
 function convertToEmbedMap(url) {
   if (!url) return "";
   return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
 }
 
-/* SAVE */
+/* ================= SAVE ================= */
 saveBtn.onclick = async () => {
   await api("/api/home", {
     method: "POST",
@@ -84,44 +86,42 @@ saveBtn.onclick = async () => {
         email: footerEmail.value,
         mapLink: mapLink.value,
         mapEmbed: convertToEmbedMap(mapLink.value),
-        quickLinks,
-        socials,
+        quickLinks: window.quickLinks,
+        socials: window.socials,
         copyright: footerCopyright.value
       }
     })
   });
 
-  alert("✅ Saved successfully");
+  alert("✅ Home page saved successfully");
 };
 
-/* QUICK LINKS */
+/* ================= QUICK LINKS ================= */
 window.addQuickLink = () => {
-  quickLinks.push({ title: "", url: "" });
+  window.quickLinks.push({ title: "", url: "" });
   renderQuickLinks();
 };
 
 function renderQuickLinks() {
   const box = document.getElementById("quickLinksList");
   box.innerHTML = "";
-  quickLinks.forEach((l, i) => {
+
+  window.quickLinks.forEach((l, i) => {
     box.innerHTML += `
       <div class="row">
         <input placeholder="Title" value="${l.title}"
-          oninput="quickLinks[${i}].title=this.value">
+          oninput="window.quickLinks[${i}].title=this.value">
         <input placeholder="URL" value="${l.url}"
-          oninput="quickLinks[${i}].url=this.value">
-        <button onclick="quickLinks.splice(${i},1);renderQuickLinks()">✕</button>
-      </div>`;
+          oninput="window.quickLinks[${i}].url=this.value">
+        <button onclick="window.quickLinks.splice(${i},1);renderQuickLinks()">✕</button>
+      </div>
+    `;
   });
 }
 
-/* SOCIAL LINKS */
+/* ================= SOCIAL LINKS ================= */
 window.addSocial = () => {
-  socials.push({
-    name: "",
-    url: "",
-    icon: "" // will hold base64 or URL
-  });
+  window.socials.push({ name: "", url: "", icon: "" });
   renderSocials();
 };
 
@@ -129,59 +129,45 @@ function renderSocials() {
   const box = document.getElementById("socialLinksList");
   box.innerHTML = "";
 
-  socials.forEach((s, i) => {
+  window.socials.forEach((s, i) => {
     box.innerHTML += `
       <div class="social-row">
-        <input
-          placeholder="Social name (Facebook, Instagram)"
+        <input placeholder="Name"
           value="${s.name}"
-          oninput="socials[${i}].name=this.value"
-        >
+          oninput="window.socials[${i}].name=this.value">
 
-        <input
-          placeholder="Profile URL"
+        <input placeholder="Profile URL"
           value="${s.url}"
-          oninput="socials[${i}].url=this.value"
-        >
+          oninput="window.socials[${i}].url=this.value">
 
-        <input
-          placeholder="Icon image URL (optional)"
+        <input placeholder="Icon URL (optional)"
           value="${s.icon.startsWith('http') ? s.icon : ''}"
-          oninput="socials[${i}].icon=this.value"
-        >
+          oninput="window.socials[${i}].icon=this.value">
 
-        <input
-          type="file"
+        <input type="file"
           accept="image/*"
-          onchange="uploadSocialIcon(event, ${i})"
-        >
+          onchange="uploadSocialIcon(event, ${i})">
 
-        ${
-          s.icon
-            ? `<img src="${s.icon}" class="social-preview">`
-            : ""
-        }
+        ${s.icon ? `<img src="${s.icon}" class="social-preview">` : ""}
 
-        <button onclick="socials.splice(${i},1);renderSocials()">❌</button>
+        <button onclick="window.socials.splice(${i},1);renderSocials()">❌</button>
       </div>
     `;
   });
 }
 
+/* ================= BASE64 UPLOAD ================= */
 window.uploadSocialIcon = (e, index) => {
   const file = e.target.files[0];
   if (!file) return;
 
-  toBase64(file, base64 => {
-    socials[index].icon = base64; // 🔥 BASE64 SAVED HERE
-    renderSocials();              // re-render with preview
-  });
+  const reader = new FileReader();
+  reader.onload = () => {
+    window.socials[index].icon = reader.result;
+    renderSocials();
+  };
+  reader.readAsDataURL(file);
 };
 
-function toBase64(file, cb) {
-  const reader = new FileReader();
-  reader.onload = () => cb(reader.result);
-  reader.readAsDataURL(file);
-}
-
+/* INIT */
 loadHome();
