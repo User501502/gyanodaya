@@ -121,7 +121,6 @@ function renderQuickLinks() {
 }
 
 window.renderQuickLinks = renderQuickLinks;
-window.renderSocials = renderSocials;
 
 /* ================= SOCIAL LINKS ================= */
 window.addSocial = () => {
