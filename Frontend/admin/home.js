@@ -125,27 +125,23 @@ window.addSocial = () => {
   renderSocials();
 };
 
-function renderSocials() {
+window.renderSocials = function () {
   const box = document.getElementById("socialLinksList");
   box.innerHTML = "";
 
   window.socials.forEach((s, i) => {
     box.innerHTML += `
       <div class="social-row">
-        <input placeholder="Name"
-          value="${s.name}"
+        <input value="${s.name}"
           oninput="window.socials[${i}].name=this.value">
 
-        <input placeholder="Profile URL"
-          value="${s.url}"
+        <input value="${s.url}"
           oninput="window.socials[${i}].url=this.value">
 
-        <input placeholder="Icon URL (optional)"
-          value="${s.icon.startsWith('http') ? s.icon : ''}"
+        <input value="${s.icon.startsWith('http') ? s.icon : ''}"
           oninput="window.socials[${i}].icon=this.value">
 
         <input type="file"
-          accept="image/*"
           onchange="uploadSocialIcon(event, ${i})">
 
         ${s.icon ? `<img src="${s.icon}" class="social-preview">` : ""}
@@ -154,7 +150,8 @@ function renderSocials() {
       </div>
     `;
   });
-}
+};
+
 
 /* ================= BASE64 UPLOAD ================= */
 window.uploadSocialIcon = (e, index) => {
