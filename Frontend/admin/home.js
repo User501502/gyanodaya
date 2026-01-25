@@ -1,8 +1,6 @@
 import { api } from "./admin.js";
 
-/* =========================
-   ELEMENTS
-========================= */
+/* ELEMENTS */
 const schoolName = document.getElementById("schoolName");
 const heroTitle = document.getElementById("heroTitle");
 const heroIntro = document.getElementById("heroIntro");
@@ -13,19 +11,17 @@ const footerAddress = document.getElementById("footerAddress");
 const footerPhone = document.getElementById("footerPhone");
 const footerEmail = document.getElementById("footerEmail");
 const footerCopyright = document.getElementById("footerCopyright");
+const mapLink = document.getElementById("mapLink");
 
 const logoInput = document.getElementById("logoInput");
 const logoPreview = document.getElementById("logoPreview");
 const saveBtn = document.getElementById("saveHomeBtn");
-const mapLink = document.getElementById("mapLink");
 
 let logoBase64 = "";
 let quickLinks = [];
 let socials = [];
 
-/* =========================
-   LOAD HOME DATA
-========================= */
+/* LOAD */
 async function loadHome() {
   const data = await api("/api/home");
   if (!data) return;
@@ -35,13 +31,19 @@ async function loadHome() {
   heroIntro.value = data.heroIntro || "";
   admissionOpen.checked = data.admissionOpen || false;
 
-  footerAbout.value = data.footer?.about || "";
-  footerAddress.value = data.footer?.address || "";
-  footerPhone.value = data.footer?.phone || "";
-  footerEmail.value = data.footer?.email || "";
-  footerCopyright.value = data.footer?.copyright || "";
+  const f = data.footer || {};
+  footerAbout.value = f.about || "";
+  footerAddress.value = f.address || "";
+  footerPhone.value = f.phone || "";
+  footerEmail.value = f.email || "";
+  footerCopyright.value = f.copyright || "";
+  mapLink.value = f.mapLink || "";
 
-  mapLink.value = data.footer?.mapLink || ""; // ✅ THIS WAS MISSING
+  quickLinks = f.quickLinks || [];
+  socials = f.socials || [];
+
+  renderQuickLinks();
+  renderSocials();
 
   if (data.logo) {
     logoBase64 = data.logo;
@@ -49,24 +51,21 @@ async function loadHome() {
   }
 }
 
-/* =========================
-   LOGO UPLOAD
-========================= */
-logoInput.onchange = () => {
-  const file = logoInput.files[0];
-  if (!file) return;
-
+/* LOGO */
+logoInput.onchange = e => {
   const reader = new FileReader();
-  reader.onload = () => {
-    logoBase64 = reader.result;
-    logoPreview.src = logoBase64;
-  };
-  reader.readAsDataURL(file);
+  reader.onload = () => logoPreview.src = logoBase64 = reader.result;
+  reader.readAsDataURL(e.target.files[0]);
 };
 
-/* =========================
-   SAVE HOME
-========================= */
+/* MAP CONVERTER */
+function convertToEmbedMap(url) {
+  if (!url) return "";
+  if (url.includes("embed")) return url;
+  return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
+}
+
+/* SAVE */
 saveBtn.onclick = async () => {
   await api("/api/home", {
     method: "POST",
@@ -77,59 +76,23 @@ saveBtn.onclick = async () => {
       heroIntro: heroIntro.value,
       admissionOpen: admissionOpen.checked,
       footer: {
-      about: footerAbout.value,
-      address: footerAddress.value,
-      phone: footerPhone.value,
-      email: footerEmail.value,
-      quickLinks,
-      socials,
-      copyright: footerCopyright.value
-    }
-  })
-});
+        about: footerAbout.value,
+        address: footerAddress.value,
+        phone: footerPhone.value,
+        email: footerEmail.value,
+        mapLink: mapLink.value,
+        mapEmbed: convertToEmbedMap(mapLink.value),
+        quickLinks,
+        socials,
+        copyright: footerCopyright.value
+      }
+    })
+  });
 
-  alert("✅ Home page fully updated");
+  alert("✅ Home page saved");
 };
 
-quickLinks = data.footer?.quickLinks || [];
-socials = data.footer?.socials || [];
-
-renderQuickLinks();
-renderSocials();
-
-/* =========================
-   COLLAPSIBLE BLOCKS
-========================= */
-window.toggleBlock = function (id) {
-  const block = document.getElementById(id);
-  const icon = document.getElementById(id + "Icon");
-  block.classList.toggle("hidden");
-  icon.textContent = block.classList.contains("hidden") ? "+" : "−";
-};
-
-function convertToEmbedMap(url) {
-  if (!url) return "";
-
-  // already embed
-  if (url.includes("google.com/maps/embed")) {
-    return url;
-  }
-
-  // clean long tracking params
-  const cleanUrl = url.split("&")[0];
-
-  // extract place name from /place/
-  const placeMatch = cleanUrl.match(/\/place\/([^/]+)/);
-
-  if (placeMatch) {
-    const place = decodeURIComponent(placeMatch[1].replace(/\+/g, " "));
-    return `https://www.google.com/maps?q=${encodeURIComponent(place)}&output=embed`;
-  }
-
-  // fallback: full url as search query
-  return `https://www.google.com/maps?q=${encodeURIComponent(cleanUrl)}&output=embed`;
-}
-
+/* QUICK LINKS */
 window.addQuickLink = () => {
   quickLinks.push({ title: "", url: "" });
   renderQuickLinks();
@@ -138,20 +101,19 @@ window.addQuickLink = () => {
 function renderQuickLinks() {
   const box = document.getElementById("quickLinksList");
   box.innerHTML = "";
-
   quickLinks.forEach((l, i) => {
     box.innerHTML += `
-      <div style="display:flex;gap:8px;margin-bottom:8px">
-        <input placeholder="Title" value="${l.title}"
+      <div>
+        <input value="${l.title}" placeholder="Title"
           onchange="quickLinks[${i}].title=this.value">
-        <input placeholder="URL" value="${l.url}"
+        <input value="${l.url}" placeholder="URL"
           onchange="quickLinks[${i}].url=this.value">
         <button onclick="quickLinks.splice(${i},1);renderQuickLinks()">❌</button>
-      </div>
-    `;
+      </div>`;
   });
 }
 
+/* SOCIALS */
 window.addSocial = () => {
   socials.push({ name: "", url: "", icon: "" });
   renderSocials();
@@ -160,38 +122,37 @@ window.addSocial = () => {
 function renderSocials() {
   const box = document.getElementById("socialLinksList");
   box.innerHTML = "";
-
   socials.forEach((s, i) => {
     box.innerHTML += `
-      <div style="margin-bottom:10px">
-        <input placeholder="Name" value="${s.name}"
+      <div>
+        <input value="${s.name}" placeholder="Name"
           onchange="socials[${i}].name=this.value">
-
-        <input placeholder="Profile URL" value="${s.url}"
+        <input value="${s.url}" placeholder="Profile URL"
           onchange="socials[${i}].url=this.value">
-
-        <input placeholder="Icon Image URL"
+        <input placeholder="Icon URL"
           onchange="socials[${i}].icon=this.value">
-
-        <input type="file"
-          onchange="uploadSocialIcon(event, ${i})">
-
-        ${s.icon ? `<img src="${s.icon}" height="30">` : ""}
+        <input type="file" onchange="uploadSocial(event,${i})">
+        ${s.icon ? `<img src="${s.icon}" height="24">` : ""}
         <button onclick="socials.splice(${i},1);renderSocials()">❌</button>
-      </div>
-    `;
+      </div>`;
   });
 }
 
-window.uploadSocialIcon = (e, i) => {
-  const file = e.target.files[0];
+window.uploadSocial = (e, i) => {
   const reader = new FileReader();
   reader.onload = () => {
     socials[i].icon = reader.result;
     renderSocials();
   };
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(e.target.files[0]);
 };
 
-/* INIT */
+/* COLLAPSE */
+window.toggleBlock = id => {
+  const b = document.getElementById(id);
+  const i = document.getElementById(id + "Icon");
+  b.classList.toggle("hidden");
+  i.textContent = b.classList.contains("hidden") ? "+" : "−";
+};
+
 loadHome();

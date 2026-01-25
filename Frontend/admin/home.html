@@ -4,14 +4,13 @@
   <meta charset="UTF-8" />
   <title>Home Page Manager | Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
   <link rel="stylesheet" href="admin.css" />
 </head>
 <body>
 
 <div class="layout">
 
-  <!-- ================= SIDEBAR ================= -->
+  <!-- SIDEBAR -->
   <aside class="sidebar">
     <h3>Gyanodaya Admin</h3>
     <a href="dashboard.html">Dashboard</a>
@@ -22,126 +21,73 @@
     <button id="logoutBtn">Logout</button>
   </aside>
 
-  <!-- ================= MAIN ================= -->
+  <!-- MAIN -->
   <main class="content">
     <h1>Home Page Management</h1>
 
-    <!-- ================= HEADER ================= -->
+    <!-- HEADER -->
     <div class="cms-block">
       <div class="cms-block-header" onclick="toggleBlock('headerBlock')">
-        <h2>Header / Logo</h2>
-        <span id="headerBlockIcon">−</span>
+        <h2>Header</h2><span id="headerBlockIcon">−</span>
       </div>
-
       <div class="cms-block-body" id="headerBlock">
-        <label>School Name</label>
-        <input id="schoolName" />
-
-        <label>Upload Logo</label>
-        <input type="file" id="logoInput" accept="image/*" />
-
-        <img id="logoPreview" style="max-height:80px;margin-top:10px;" />
+        <input id="schoolName" placeholder="School Name">
+        <input type="file" id="logoInput" accept="image/*">
+        <img id="logoPreview" style="max-height:70px">
       </div>
     </div>
 
-    <!-- ================= HERO ================= -->
+    <!-- HERO -->
     <div class="cms-block">
       <div class="cms-block-header" onclick="toggleBlock('heroBlock')">
-        <h2>Hero Section</h2>
-        <span id="heroBlockIcon">−</span>
+        <h2>Hero</h2><span id="heroBlockIcon">−</span>
       </div>
-
       <div class="cms-block-body" id="heroBlock">
-        <label>Hero Title</label>
-        <input id="heroTitle" />
-
-        <label>Hero Intro</label>
-        <textarea id="heroIntro" rows="4"></textarea>
-
-        <label style="display:flex;gap:8px;align-items:center">
-          <input type="checkbox" id="admissionOpen" />
-          Admission Open
-        </label>
+        <input id="heroTitle" placeholder="Hero Title">
+        <textarea id="heroIntro" rows="3" placeholder="Hero Intro"></textarea>
+        <label><input type="checkbox" id="admissionOpen"> Admission Open</label>
       </div>
     </div>
 
-    <!-- ================= SECTIONS ================= -->
+    <!-- FOOTER -->
     <div class="cms-block">
-      <div class="cms-block-header" onclick="toggleBlock('sectionsBlock')">
-        <h2>Homepage Sections</h2>
-        <span id="sectionsBlockIcon">−</span>
+      <div class="cms-block-header" onclick="toggleBlock('footerBlock')">
+        <h2>Footer</h2><span id="footerBlockIcon">−</span>
       </div>
 
-      <div class="cms-block-body" id="sectionsBlock">
+      <div class="cms-block-body" id="footerBlock">
+        <textarea id="footerAbout" rows="3" placeholder="About School"></textarea>
 
-        <!-- SAME sections form -->
-        <form id="sectionForm">
-          <input id="title" placeholder="Section title" required />
+        <input id="footerAddress" placeholder="Address">
+        <input id="footerPhone" placeholder="Phone">
+        <input id="footerEmail" placeholder="Email">
 
-          <select id="type">
-            <option value="list">List</option>
-            <option value="text">Text</option>
-          </select>
+        <input id="mapLink" placeholder="Google Maps link">
 
-          <textarea id="content" rows="5" required></textarea>
+        <hr>
 
-          <label style="display:flex;gap:8px">
-            <input type="checkbox" id="isActive" checked />
-            Active
-          </label>
+        <h4>Quick Links</h4>
+        <div id="quickLinksList"></div>
+        <button type="button" onclick="addQuickLink()">➕ Add Link</button>
 
-          <button type="submit">Save Section</button>
-        </form>
+        <hr>
 
-        <div id="sectionsList" class="sections-grid"></div>
+        <h4>Social Links</h4>
+        <div id="socialLinksList"></div>
+        <button type="button" onclick="addSocial()">➕ Add Social</button>
+
+        <hr>
+
+        <input id="footerCopyright"
+          placeholder="© 2026 Gyanodaya Public School">
       </div>
     </div>
 
-<!-- ================= FOOTER ================= -->
-<div class="cms-block">
-  <div class="cms-block-header" onclick="toggleBlock('footerBlock')">
-    <h2>Footer</h2>
-    <span id="footerBlockIcon">−</span>
-  </div>
-
-  <div class="cms-block-body" id="footerBlock">
-
-    <h4>About School</h4>
-    <textarea id="footerAbout" rows="3"></textarea>
-
-    <input id="footerAddress" placeholder="Address">
-    <input id="footerPhone" placeholder="Phone">
-    <input id="footerEmail" placeholder="Email">
-
-    <hr>
-
-    <h4>Quick Links</h4>
-    <div id="quickLinksList"></div>
-    <button type="button" onclick="addQuickLink()">➕ Add Link</button>
-
-    <hr>
-
-    <h4>Social Media</h4>
-    <div id="socialLinksList"></div>
-    <button type="button" onclick="addSocial()">➕ Add Social</button>
-
-    <hr>
-
-    <input id="footerCopyright"
-      placeholder="© 2026 Gyanodaya Public School. All rights reserved">
-  </div>
-</div>
-
-    <button id="saveHomeBtn" style="margin-top:20px">
-      💾 Save Complete Home Page
-    </button>
-
+    <button id="saveHomeBtn">💾 Save Home Page</button>
   </main>
 </div>
 
 <script type="module" src="admin.js"></script>
 <script type="module" src="home.js"></script>
-<script type="module" src="sections.js"></script>
-
 </body>
 </html>
