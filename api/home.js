@@ -6,9 +6,23 @@ const FooterSchema = new mongoose.Schema({
   address: String,
   phone: String,
   email: String,
-  copyright: String,
-  mapLink: String,
-  mapEmbed: String
+
+  quickLinks: [
+    {
+      title: String,
+      url: String
+    }
+  ],
+
+  socials: [
+    {
+      name: String,
+      url: String,
+      icon: String   // image url OR base64
+    }
+  ],
+
+  copyright: String
 });
 
 const HomeSchema = new mongoose.Schema({

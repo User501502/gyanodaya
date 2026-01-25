@@ -20,6 +20,8 @@ const saveBtn = document.getElementById("saveHomeBtn");
 const mapLink = document.getElementById("mapLink");
 
 let logoBase64 = "";
+let quickLinks = [];
+let socials = [];
 
 /* =========================
    LOAD HOME DATA
@@ -75,19 +77,25 @@ saveBtn.onclick = async () => {
       heroIntro: heroIntro.value,
       admissionOpen: admissionOpen.checked,
       footer: {
-        about: footerAbout.value,
-        address: footerAddress.value,
-        phone: footerPhone.value,
-        email: footerEmail.value,
-        copyright: footerCopyright.value,
-        mapLink: mapLink.value,
-        mapEmbed: convertToEmbedMap(mapLink.value)
-      }
-    })
-  });
+      about: footerAbout.value,
+      address: footerAddress.value,
+      phone: footerPhone.value,
+      email: footerEmail.value,
+      quickLinks,
+      socials,
+      copyright: footerCopyright.value
+    }
+  })
+});
 
   alert("✅ Home page fully updated");
 };
+
+quickLinks = data.footer?.quickLinks || [];
+socials = data.footer?.socials || [];
+
+renderQuickLinks();
+renderSocials();
 
 /* =========================
    COLLAPSIBLE BLOCKS
@@ -122,6 +130,68 @@ function convertToEmbedMap(url) {
   return `https://www.google.com/maps?q=${encodeURIComponent(cleanUrl)}&output=embed`;
 }
 
+window.addQuickLink = () => {
+  quickLinks.push({ title: "", url: "" });
+  renderQuickLinks();
+};
+
+function renderQuickLinks() {
+  const box = document.getElementById("quickLinksList");
+  box.innerHTML = "";
+
+  quickLinks.forEach((l, i) => {
+    box.innerHTML += `
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input placeholder="Title" value="${l.title}"
+          onchange="quickLinks[${i}].title=this.value">
+        <input placeholder="URL" value="${l.url}"
+          onchange="quickLinks[${i}].url=this.value">
+        <button onclick="quickLinks.splice(${i},1);renderQuickLinks()">❌</button>
+      </div>
+    `;
+  });
+}
+
+window.addSocial = () => {
+  socials.push({ name: "", url: "", icon: "" });
+  renderSocials();
+};
+
+function renderSocials() {
+  const box = document.getElementById("socialLinksList");
+  box.innerHTML = "";
+
+  socials.forEach((s, i) => {
+    box.innerHTML += `
+      <div style="margin-bottom:10px">
+        <input placeholder="Name" value="${s.name}"
+          onchange="socials[${i}].name=this.value">
+
+        <input placeholder="Profile URL" value="${s.url}"
+          onchange="socials[${i}].url=this.value">
+
+        <input placeholder="Icon Image URL"
+          onchange="socials[${i}].icon=this.value">
+
+        <input type="file"
+          onchange="uploadSocialIcon(event, ${i})">
+
+        ${s.icon ? `<img src="${s.icon}" height="30">` : ""}
+        <button onclick="socials.splice(${i},1);renderSocials()">❌</button>
+      </div>
+    `;
+  });
+}
+
+window.uploadSocialIcon = (e, i) => {
+  const file = e.target.files[0];
+  const reader = new FileReader();
+  reader.onload = () => {
+    socials[i].icon = reader.result;
+    renderSocials();
+  };
+  reader.readAsDataURL(file);
+};
 
 /* INIT */
 loadHome();

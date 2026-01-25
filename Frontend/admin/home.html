@@ -97,33 +97,40 @@
       </div>
     </div>
 
-    <!-- ================= FOOTER ================= -->
-    <div class="cms-block">
-      <div class="cms-block-header" onclick="toggleBlock('footerBlock')">
-        <h2>Footer</h2>
-        <span id="footerBlockIcon">−</span>
-      </div>
+<!-- ================= FOOTER ================= -->
+<div class="cms-block">
+  <div class="cms-block-header" onclick="toggleBlock('footerBlock')">
+    <h2>Footer</h2>
+    <span id="footerBlockIcon">−</span>
+  </div>
 
-      <div class="cms-block-body" id="footerBlock">
-        <label>Footer About Text</label>
-        <textarea id="footerAbout" rows="3"></textarea>
-       
-        <label>Google Maps Location Link</label>
-<input id="mapLink" placeholder="Paste Google Maps link here"/>
+  <div class="cms-block-body" id="footerBlock">
 
-        <label>Address</label>
-        <input id="footerAddress" />
+    <h4>About School</h4>
+    <textarea id="footerAbout" rows="3"></textarea>
 
-        <label>Phone</label>
-        <input id="footerPhone" />
+    <input id="footerAddress" placeholder="Address">
+    <input id="footerPhone" placeholder="Phone">
+    <input id="footerEmail" placeholder="Email">
 
-        <label>Email</label>
-        <input id="footerEmail" />
+    <hr>
 
-        <label>Copyright</label>
-        <input id="footerCopyright" />
-      </div>
-    </div>
+    <h4>Quick Links</h4>
+    <div id="quickLinksList"></div>
+    <button type="button" onclick="addQuickLink()">➕ Add Link</button>
+
+    <hr>
+
+    <h4>Social Media</h4>
+    <div id="socialLinksList"></div>
+    <button type="button" onclick="addSocial()">➕ Add Social</button>
+
+    <hr>
+
+    <input id="footerCopyright"
+      placeholder="© 2026 Gyanodaya Public School. All rights reserved">
+  </div>
+</div>
 
     <button id="saveHomeBtn" style="margin-top:20px">
       💾 Save Complete Home Page

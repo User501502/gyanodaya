@@ -41,15 +41,47 @@ async function initPage() {
     }
 
     /* ===== FOOTER ===== */
-    if (homeData.footer) {
-      document.getElementById("footer").innerHTML = `
-        <p>${homeData.footer.about || ""}</p>
-        <p>📍 ${homeData.footer.address || ""}</p>
-        <p>📞 ${homeData.footer.phone || ""}</p>
-        <p>📧 ${homeData.footer.email || ""}</p>
-        <small>${homeData.footer.copyright || ""}</small>
-      `;
-    }
+if (homeData.footer) {
+  const f = homeData.footer;
+
+  document.getElementById("footer").innerHTML = `
+    <div class="footer-grid">
+
+      <div>
+        <h4>About School</h4>
+        <p>${f.about || ""}</p>
+        <p>📍 ${f.address || ""}</p>
+        <p>📞 ${f.phone || ""}</p>
+        <p>📧 ${f.email || ""}</p>
+      </div>
+
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          ${(f.quickLinks || []).map(l =>
+            `<li><a href="${l.url}">${l.title}</a></li>`
+          ).join("")}
+        </ul>
+      </div>
+
+      <div>
+        <h4>Follow Us</h4>
+        <div class="social-icons">
+          ${(f.socials || []).map(s =>
+            `<a href="${s.url}" target="_blank">
+              <img src="${s.icon}" alt="${s.name}">
+            </a>`
+          ).join("")}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <small>${f.copyright || ""}</small>
+    </div>
+  `;
+}
 
     /* ===== SECTIONS (CARDS) ===== */
     const container = document.getElementById("dynamicSections");

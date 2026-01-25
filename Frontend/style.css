@@ -403,3 +403,14 @@ footer {
     text-align: center;
   }
 }
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
+  gap: 20px;
+}
+
+.social-icons img {
+  height: 28px;
+  margin-right: 8px;
+}
