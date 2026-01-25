@@ -68,27 +68,27 @@ logoInput.onchange = e => {
 function convertToEmbedMap(url) {
   if (!url) return "";
 
-  // already embed
+  // If already embed link, just return it
   if (url.includes("google.com/maps/embed")) {
     return url;
   }
 
-  // /place/ based links (most common)
-  const placeMatch = url.match(/\/place\/([^/]+)/);
-  if (placeMatch) {
-    const placeName = decodeURIComponent(
-      placeMatch[1].replace(/\+/g, " ")
-    );
-    return `https://www.google.com/maps?q=${encodeURIComponent(placeName)}&output=embed`;
-  }
-
-  // lat,lng links
+  // Try to extract lat, lng from URL
   const latLngMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
   if (latLngMatch) {
-    return `https://www.google.com/maps?q=${latLngMatch[1]},${latLngMatch[2]}&output=embed`;
+    const lat = latLngMatch[1];
+    const lng = latLngMatch[2];
+    return `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
   }
 
-  // fallback
+  // If place format but lat/lng not in string
+  const placeMatch = url.match(/\/place\/([^/]+)/);
+  if (placeMatch) {
+    const place = decodeURIComponent(placeMatch[1].replace(/\+/g, " "));
+    return `https://www.google.com/maps?q=${encodeURIComponent(place)}&output=embed`;
+  }
+
+  // Fallback to search
   return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
 }
 
