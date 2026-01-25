@@ -7,6 +7,9 @@ const FooterSchema = new mongoose.Schema({
   phone: String,
   email: String,
 
+  mapLink: String,
+  mapEmbed: String,
+
   quickLinks: [
     {
       title: String,
