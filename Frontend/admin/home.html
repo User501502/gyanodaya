@@ -35,6 +35,33 @@
       <label><input type="checkbox" id="admissionOpen"> Admission Open</label>
     </div>
 
+    <!-- ================= SECTIONS MANAGER ================= -->
+<div class="cms-block">
+  <h3>Sections</h3>
+
+  <form id="sectionForm">
+    <input id="sectionTitle" placeholder="Section Title" required>
+
+    <select id="sectionType">
+      <option value="list">List</option>
+      <option value="text">Text</option>
+    </select>
+
+    <textarea id="sectionContent"
+      placeholder="One item per line (for list)"
+      rows="4"></textarea>
+
+    <label>
+      <input type="checkbox" id="sectionActive" checked>
+      Active
+    </label>
+
+    <button type="submit">Add / Update Section</button>
+  </form>
+
+  <div id="sectionsList" class="drag-list"></div>
+</div>
+
     <!-- FOOTER -->
     <div class="cms-block">
       <h3>Footer</h3>

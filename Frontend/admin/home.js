@@ -67,6 +67,28 @@ logoInput.onchange = e => {
 /* ================= MAP ================= */
 function convertToEmbedMap(url) {
   if (!url) return "";
+
+  // already embed
+  if (url.includes("google.com/maps/embed")) {
+    return url;
+  }
+
+  // /place/ based links (most common)
+  const placeMatch = url.match(/\/place\/([^/]+)/);
+  if (placeMatch) {
+    const placeName = decodeURIComponent(
+      placeMatch[1].replace(/\+/g, " ")
+    );
+    return `https://www.google.com/maps?q=${encodeURIComponent(placeName)}&output=embed`;
+  }
+
+  // lat,lng links
+  const latLngMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
+  if (latLngMatch) {
+    return `https://www.google.com/maps?q=${latLngMatch[1]},${latLngMatch[2]}&output=embed`;
+  }
+
+  // fallback
   return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
 }
 
@@ -168,6 +190,116 @@ window.uploadSocialIcon = (e, index) => {
   };
   reader.readAsDataURL(file);
 };
+
+/* ================= SECTIONS ================= */
+
+let sections = [];
+let editingSectionId = null;
+
+// LOAD sections
+async function loadSections() {
+  sections = await api("/api/sections") || [];
+  renderSections();
+}
+
+// RENDER
+function renderSections() {
+  const box = document.getElementById("sectionsList");
+  box.innerHTML = "";
+
+  sections
+    .sort((a, b) => a.position - b.position)
+    .forEach(sec => {
+      box.innerHTML += `
+        <div class="drag-item" draggable="true" data-id="${sec._id}">
+          <div>
+            <strong>${sec.title}</strong>
+            <div class="section-meta">
+              ${sec.type} • ${sec.isActive ? "Active" : "Inactive"}
+            </div>
+          </div>
+          <div>
+            <button onclick="editSection('${sec._id}')">✏️</button>
+            <button onclick="deleteSection('${sec._id}')">🗑</button>
+          </div>
+        </div>
+      `;
+    });
+
+  enableDrag();
+}
+
+// ADD / UPDATE
+document.getElementById("sectionForm").onsubmit = async e => {
+  e.preventDefault();
+
+  const payload = {
+    title: sectionTitle.value,
+    type: sectionType.value,
+    content: sectionContent.value.split("\n"),
+    isActive: sectionActive.checked
+  };
+
+  if (editingSectionId) {
+    await api(`/api/sections/${editingSectionId}`, {
+      method: "PUT",
+      body: JSON.stringify(payload)
+    });
+  } else {
+    await api("/api/sections", {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+  }
+
+  editingSectionId = null;
+  sectionForm.reset();
+  loadSections();
+};
+
+// EDIT
+window.editSection = id => {
+  const s = sections.find(x => x._id === id);
+  if (!s) return;
+
+  sectionTitle.value = s.title;
+  sectionType.value = s.type;
+  sectionContent.value = s.content.join("\n");
+  sectionActive.checked = s.isActive;
+  editingSectionId = id;
+};
+
+// DELETE
+window.deleteSection = async id => {
+  if (!confirm("Delete section?")) return;
+  await api(`/api/sections/${id}`, { method: "DELETE" });
+  loadSections();
+};
+
+// DRAG REORDER
+function enableDrag() {
+  let dragged;
+
+  document.querySelectorAll(".drag-item").forEach(item => {
+    item.ondragstart = () => dragged = item;
+    item.ondragover = e => e.preventDefault();
+    item.ondrop = () => {
+      if (dragged === item) return;
+      item.before(dragged);
+
+      const ids = [...document.querySelectorAll(".drag-item")]
+        .map((el, i) => ({ id: el.dataset.id, position: i }));
+
+      api("/api/sections/reorder", {
+        method: "POST",
+        body: JSON.stringify(ids)
+      });
+    };
+  });
+}
+
+// INIT
+loadSections();
 
 /* INIT */
 loadHome();
