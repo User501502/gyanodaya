@@ -164,13 +164,13 @@ window.renderSocials = function () {
   window.socials.forEach((s, i) => {
     box.innerHTML += `
       <div class="social-row">
-        <input value="${s.name}"
+        <input value="${s.name}" placeholder="Social Name"
           oninput="window.socials[${i}].name=this.value">
 
-        <input value="${s.url}"
+        <input value="${s.url}" placeholder="Social URL"
           oninput="window.socials[${i}].url=this.value">
 
-        <input value="${s.icon.startsWith('http') ? s.icon : ''}"
+        <input value="${s.icon.startsWith('http') ? s.icon : ''}" placeholder="Icon URL(optional)"
           oninput="window.socials[${i}].icon=this.value">
 
         <input type="file"
