@@ -13,64 +13,22 @@
 </head>
 
 <body>
-  <header>
-    <div class="navbar">
-      <a href="index.html" class="logo">
-        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-        <span id="schoolName">Gyanodaya Public School</span>
-      </a>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="about.html#vision">Vision & Mission</a>
-              <a href="about.html#principal">Principal's Message</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="academics.html#curriculum">Curriculum</a>
-              <a href="faculty.html">Our Faculty</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Information</a>
-            <div class="dropdown-content">
-              <a href="tc-issued.html">TC Issued</a>
-              <a href="disclosure.html">Mandatory Disclosure</a>
-              <a href="notice.html">Notices & News</a>
-            </div>
-          </li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <header></header>
+  <main id="siteContent" style="display:none;">
+    <section class="section" style="text-align:center; padding-bottom:0;">
+      <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Latest Notices</h1>
+      <p style="color:var(--text-muted); margin-top:10px;">Stay updated with school announcements.</p>
+    </section>
 
-  <main id="siteContent">
+    <div id="sectionsContainer"></div>
+
     <section class="section">
-      <div style="text-align:center; margin-bottom:50px;">
-        <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Latest Notices</h1>
-        <p style="color:var(--text-muted); font-size:16px;">Stay updated with the latest announcements and circulars
-          from the school.</p>
-      </div>
-
       <div id="noticeContainer" style="max-width:800px; margin:0 auto;">
-        <!-- Dynamic -->
-        <div style="text-align:center; padding:50px; color:var(--text-muted);">
-          <i class="fas fa-spinner fa-spin fa-2x"></i>
-        </div>
+        <!-- Dynamic Content -->
       </div>
     </section>
   </main>
-
   <footer id="footer"></footer>
-
   <script src="script.js"></script>
   <script>
     async function fetchNotices() {
@@ -79,20 +37,16 @@
         const data = await res.json();
         const container = document.getElementById('noticeContainer');
         container.innerHTML = '';
-
         if (!data || data.length === 0) {
           container.innerHTML = '<div class="card" style="text-align:center;">No notices at the moment.</div>';
           return;
         }
-
         data.forEach(item => {
           const card = document.createElement('div');
           card.className = 'card';
           card.style.marginBottom = '20px';
           card.style.padding = '30px';
           card.style.borderLeft = '6px solid var(--primary)';
-          card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.05)';
-
           card.innerHTML = `
                         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px;">
                             <span style="background:#e0f2fe; color:var(--primary); padding:4px 12px; border-radius:50px; font-size:12px; font-weight:bold; text-transform:uppercase;">Circular</span>
@@ -102,10 +56,7 @@
                     `;
           container.appendChild(card);
         });
-      } catch (error) {
-        console.error(error);
-        document.getElementById('noticeContainer').innerHTML = '<div class="card" style="color:red;">Error loading notices.</div>';
-      }
+      } catch (error) { console.error(error); }
     }
     document.addEventListener('DOMContentLoaded', fetchNotices);
   </script>

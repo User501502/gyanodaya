@@ -55,18 +55,21 @@ export function initSidebar() {
   if (sidebar) {
     sidebar.innerHTML = `
             <h3>Gyanodaya Admin</h3>
-            <a href="dashboard.html">Dashboard</a>
-            <a href="home.html">Home Management</a>
-            <a href="sections.html">Sections</a>
-            <a href="faculty.html">Faculty</a>
-            <a href="notices.html">Notices</a>
-            <a href="admissions.html">Admissions</a>
-            <a href="gallery.html">Gallery</a>
-            <a href="tc.html">TC Issued</a>
-            <a href="disclosure.html">Disclosures</a>
-            <div class="sidebar-bottom">
-                <a href="settings.html">Settings</a>
-                <button id="logoutBtn">Logout</button>
+            <a href="dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+            <hr style="opacity:0.1; margin:10px 0;">
+            <a href="home.html"><i class="fas fa-home"></i> Global Settings</a>
+            <a href="sections.html"><i class="fas fa-align-left"></i> Page Content</a>
+            <hr style="opacity:0.1; margin:10px 0;">
+            <a href="notices.html"><i class="fas fa-bullhorn"></i> News & Notices</a>
+            <a href="faculty.html"><i class="fas fa-users-rectangle"></i> Faculty Members</a>
+            <a href="admissions.html"><i class="fas fa-user-graduate"></i> Admissions</a>
+            <a href="gallery.html"><i class="fas fa-images"></i> School Gallery</a>
+            <a href="tc.html"><i class="fas fa-file-contract"></i> TC Records</a>
+            <a href="disclosure.html"><i class="fas fa-shield-halved"></i> Disclosure Docs</a>
+            
+            <div class="sidebar-bottom" style="margin-top:auto; padding-top:20px;">
+                <a href="settings.html"><i class="fas fa-cog"></i> Security Settings</a>
+                <button id="logoutBtn" style="width:100%; padding:10px; background:rgba(255,255,255,0.1); color:white; border:none; border-radius:6px; cursor:pointer; margin-top:10px;">Logout</button>
             </div>
         `;
   }

@@ -4,7 +4,7 @@ import mongoose from "mongoose";
 const AdmissionSchema = new mongoose.Schema({
   name: String,
   phone: String,
-  classApplied: String,
+  classLevel: String,
   contacted: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });

@@ -58,8 +58,10 @@ async function loadSections() {
 window.showAddSection = () => {
   form.reset();
   document.getElementById("editId").value = "";
-  document.getElementById("sectionPage").value = pageFilter.value;
-  document.getElementById("modalTitle").innerText = "Add New Section";
+  const pageValue = pageFilter.value;
+  document.getElementById("sectionPage").value = pageValue;
+  document.getElementById("sectionPageDisplay").value = pageValue.toUpperCase();
+  document.getElementById("modalTitle").innerText = `Add Section to ${pageValue.toUpperCase()}`;
   toggleContentInputs();
   modal.style.display = "flex";
 };
@@ -108,6 +110,7 @@ window.editSection = async (id) => {
 
     document.getElementById("editId").value = s._id;
     document.getElementById("sectionPage").value = s.page || "home";
+    document.getElementById("sectionPageDisplay").value = (s.page || "home").toUpperCase();
     document.getElementById("sectionTitle").value = s.title;
     document.getElementById("sectionType").value = s.type;
     document.getElementById("sectionActive").value = s.isActive.toString();

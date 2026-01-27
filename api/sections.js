@@ -19,7 +19,12 @@ export default async function handler(req, res) {
   // GET → website + admin (ALL sections)
   if (req.method === "GET") {
     const { page } = req.query;
-    const query = page ? { page } : {};
+    let query = {};
+    if (page === "home") {
+      query = { $or: [{ page: "home" }, { page: { $exists: false } }, { page: "" }, { page: null }] };
+    } else if (page) {
+      query = { page };
+    }
     const sections = await Section.find(query).sort({ position: 1 });
     return res.json(sections);
   }

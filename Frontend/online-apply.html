@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apply Online | Gyanodaya</title>
+    <title>Apply Online | Gyanodaya Public School</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
         rel="stylesheet">
@@ -13,34 +13,18 @@
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-                <span id="schoolName">Gyanodaya Public School</span>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav id="navMenu">
-                <ul id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown">
-                        <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-                        <div class="dropdown-content">
-                            <a href="admission-procedure.html">Procedure</a>
-                            <a href="fees.html">Fee Structure</a>
-                            <a href="online-apply.html">Apply Online</a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <main id="siteContent">
-        <section class="section">
-            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Online Admission
+    <header></header>
+    <main id="siteContent" style="display:none;">
+        <section class="section" style="text-align:center; padding-bottom:0;">
+            <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Online Admission
                 Application</h1>
+            <p style="color:var(--text-muted); margin-top:10px;">Fill the form below to start your child's application.
+            </p>
+        </section>
 
+        <div id="sectionsContainer"></div>
+
+        <section class="section">
             <div class="card" style="max-width:800px; margin:0 auto;">
                 <form id="applyForm"
                     style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
@@ -84,16 +68,14 @@
                     </div>
                     <div style="grid-column: 1 / -1; text-align:center;">
                         <button type="submit" class="btn"
-                            style="padding:15px 50px; background:var(--primary); color:white; font-weight:bold; width:100%;">
-                            Submit Application
-                        </button>
+                            style="padding:15px 50px; background:var(--primary); color:white; font-weight:bold; width:100%;">Submit
+                            Application</button>
                     </div>
                 </form>
                 <div id="status" style="margin-top:20px; text-align:center; display:none;"></div>
             </div>
         </section>
     </main>
-
     <footer id="footer"></footer>
     <script src="script.js"></script>
     <script>
@@ -101,10 +83,8 @@
             e.preventDefault();
             const btn = e.target.querySelector('button');
             const status = document.getElementById('status');
-
             btn.disabled = true;
             btn.innerText = 'Submitting...';
-
             const payload = {
                 name: document.getElementById('name').value,
                 phone: document.getElementById('phone').value,
@@ -112,24 +92,20 @@
                 email: document.getElementById('email').value,
                 message: document.getElementById('message').value
             };
-
             try {
                 const res = await fetch('/api/admissions', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 if (res.ok) {
                     status.style.display = 'block';
                     status.innerHTML = '<div style="color:green; font-weight:bold;"><i class="fas fa-check-circle"></i> Application Submitted Successfully! We will contact you soon.</div>';
                     e.target.reset();
-                } else {
-                    throw new Error('Submission failed');
-                }
+                } else { throw new Error('Submission failed'); }
             } catch (err) {
                 status.style.display = 'block';
-                status.innerHTML = '<div style="color:red;">Error submitting application. Please try again or call use.</div>';
+                status.innerHTML = '<div style="color:red;">Error submitting application. Please try again.</div>';
             } finally {
                 btn.disabled = false;
                 btn.innerText = 'Submit Application';

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admission Procedure | Gyanodaya</title>
+    <title>Admission Procedure | Gyanodaya Public School</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
         rel="stylesheet">
@@ -13,35 +13,17 @@
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-                <span id="schoolName">Gyanodaya Public School</span>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav id="navMenu">
-                <ul id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown">
-                        <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-                        <div class="dropdown-content">
-                            <a href="admission-procedure.html">Procedure</a>
-                            <a href="fees.html">Fee Structure</a>
-                            <a href="online-apply.html">Apply Online</a>
-                        </div>
-                    </li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <header></header>
+    <main id="siteContent" style="display:none;">
+        <section class="section" style="text-align:center; padding-bottom:0;">
+            <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Admission Procedure</h1>
+            <p style="color:var(--text-muted); margin-top:10px;">A transparent and simple process to join our family.
+            </p>
+        </section>
 
-    <main id="siteContent">
+        <div id="sectionsContainer"></div>
+
         <section class="section">
-            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Admission Procedure
-            </h1>
-
             <div class="card" style="margin-bottom:30px;">
                 <h2 style="color:var(--primary); margin-bottom:20px;">Step-by-Step Guide</h2>
                 <div class="grid" style="grid-template-columns: 1fr; gap:20px;">
@@ -86,16 +68,8 @@
                     </div>
                 </div>
             </div>
-
-            <div class="card" style="background:#f0f9ff; border:1px dashed var(--primary); text-align:center;">
-                <h3>Need Assistance?</h3>
-                <p>Call our admission counselor at <strong>+91 9406613049</strong></p>
-                <a href="online-apply.html" class="btn" style="margin-top:15px; display:inline-block;">Start
-                    Application</a>
-            </div>
         </section>
     </main>
-
     <footer id="footer"></footer>
     <script src="script.js"></script>
 </body>

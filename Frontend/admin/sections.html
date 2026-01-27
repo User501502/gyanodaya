@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manage Sections | Gyanodaya Admin</title>
+  <title>Manage Page Content | Gyanodaya Admin</title>
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -12,38 +12,50 @@
 <body>
   <div class="layout">
     <aside class="sidebar">
-      <h3>Gyanodaya Admin</h3>
-      <a href="dashboard.html">Dashboard</a>
-      <a href="home.html">Home Management</a>
-      <a href="sections.html">Sections</a>
-      <a href="faculty.html">Faculty</a>
-      <a href="notices.html">Notices</a>
-      <a href="admissions.html">Admissions</a>
-      <a href="gallery.html">Gallery</a>
-      <a href="tc.html">TC Issued</a>
-      <a href="disclosure.html">Disclosures</a>
-      <div class="sidebar-bottom">
-        <a href="settings.html">Settings</a>
-        <button id="logoutBtn">Logout</button>
-      </div>
+      <!-- Sidebar content injected by admin.js -->
     </aside>
 
     <main class="content">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h1>Page Sections Management</h1>
+        <h1>Manage Page Content</h1>
         <div style="display: flex; gap: 10px;">
-          <select id="pageFilter" class="form-group" style="padding: 10px; margin: 0; min-width: 150px;">
-            <option value="home">Home Page</option>
-            <option value="calendar">Calendar Page</option>
-            <option value="infrastructure">Infrastructure</option>
-            <option value="management">Management</option>
-            <option value="curriculum">Curriculum</option>
-            <option value="vision">Vision & Mission</option>
+          <select id="pageFilter" class="form-group" style="padding: 10px; margin: 0; min-width: 200px;">
+            <optgroup label="Main Pages">
+              <option value="home">Home Page (index)</option>
+              <option value="about">About Us</option>
+              <option value="contact">Contact Us</option>
+            </optgroup>
+            <optgroup label="About Subpages">
+              <option value="vision">Vision & Mission</option>
+              <option value="principal">Principal's Message</option>
+              <option value="management">Management</option>
+              <option value="infrastructure">Infrastructure</option>
+            </optgroup>
+            <optgroup label="Academics">
+              <option value="academics">Academics (Main)</option>
+              <option value="curriculum">Curriculum</option>
+              <option value="faculty">Our Faculty (Text Blocks)</option>
+              <option value="calendar">Academic Calendar</option>
+              <option value="books">List of Books</option>
+            </optgroup>
+            <optgroup label="Admissions">
+              <option value="admissions">Admissions (Main)</option>
+              <option value="admission-procedure">Admission Procedure</option>
+              <option value="fees">Fee Structure</option>
+              <option value="online-apply">Online Apply Page</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="notice">News & Notices</option>
+              <option value="tc-issued">TC Issued Page</option>
+              <option value="disclosure">Mandatory Disclosure</option>
+              <option value="gallery">Gallery Page</option>
+            </optgroup>
           </select>
-          <button class="btn btn-primary" onclick="showAddSection()">+ Add New Section</button>
+          <button class="btn btn-primary" onclick="showAddSection()">+ Add Section to Page</button>
         </div>
       </div>
-      <p class="page-desc">Add custom text or list-based blocks to any page on the website.</p>
+      <p class="page-desc">Add custom text or list-based blocks to any page. Select a page from the dropdown to manage
+        its content.</p>
 
       <div id="sectionsList" style="margin-top: 30px;">
         <!-- Drag-and-drop handles will be here -->
@@ -55,24 +67,18 @@
   <div id="sectionModal" class="modal"
     style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
     <div class="card" style="width:600px; max-width:90%; padding:30px; max-height: 90vh; overflow-y: auto;">
-      <h3 id="modalTitle">Add New Section</h3>
+      <h3 id="modalTitle">Add Content Section</h3>
       <form id="sectionForm" style="margin-top:20px;">
         <input type="hidden" id="editId">
         <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
           <div class="form-group">
             <label>Target Page</label>
-            <select id="sectionPage">
-              <option value="home">Home Page</option>
-              <option value="calendar">Calendar Page</option>
-              <option value="infrastructure">Infrastructure</option>
-              <option value="management">Management</option>
-              <option value="curriculum">Curriculum</option>
-              <option value="vision">Vision & Mission</option>
-            </select>
+            <input id="sectionPageDisplay" type="text" readonly style="background: #f1f5f9; cursor: not-allowed;">
+            <input id="sectionPage" type="hidden">
           </div>
           <div class="form-group">
             <label>Section Title</label>
-            <input id="sectionTitle" type="text" required>
+            <input id="sectionTitle" type="text" placeholder="e.g. Our Facilities" required>
           </div>
           <div class="form-group">
             <label>Content Type</label>
@@ -82,27 +88,29 @@
             </select>
           </div>
           <div class="form-group">
-            <label>Status</label>
+            <label>Visibility</label>
             <select id="sectionActive">
-              <option value="true">Active</option>
-              <option value="false">Inactive</option>
+              <option value="true">Active (Visible)</option>
+              <option value="false">Hidden</option>
             </select>
           </div>
         </div>
 
         <div id="textContentArea" class="form-group" style="margin-top:15px;">
           <label>Paragraph Content</label>
-          <textarea id="sectionText" rows="5" placeholder="Enter your text here..."></textarea>
+          <textarea id="sectionText" rows="6" placeholder="Enter the detailed text content here..."></textarea>
         </div>
 
         <div id="listContentArea" class="form-group" style="margin-top:15px; display:none;">
           <label>List Items (One per line)</label>
-          <textarea id="sectionList" rows="5" placeholder="Feature 1&#10;Feature 2&#10;Feature 3..."></textarea>
+          <textarea id="sectionList" rows="6"
+            placeholder="Bullet Item 1&#10;Bullet Item 2&#10;Bullet Item 3..."></textarea>
+          <small style="color:var(--text-muted);">Each line will appear as a card with a checkmark.</small>
         </div>
 
         <div style="display: flex; gap: 10px; margin-top: 30px;">
           <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeModal()">Cancel</button>
-          <button type="submit" class="btn btn-primary" style="flex:1;">Save Section</button>
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save Content</button>
         </div>
       </form>
     </div>

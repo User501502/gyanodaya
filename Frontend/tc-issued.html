@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TC Issued | Gyanodaya Public School</title>
-    <!-- Modern Fonts -->
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
         rel="stylesheet">
@@ -14,69 +13,25 @@
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-                <span id="schoolName">Gyanodaya Public School</span>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav id="navMenu">
-                <ul id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown">
-                        <a href="about.html" class="dropdown-toggle">About Us</a>
-                        <div class="dropdown-content">
-                            <a href="vision.html">Vision & Mission</a>
-                            <a href="principal.html">Principal's Message</a>
-                            <a href="management.html">Management</a>
-                            <a href="infrastructure.html">Infrastructure</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="academics.html" class="dropdown-toggle">Academics</a>
-                        <div class="dropdown-content">
-                            <a href="curriculum.html">Curriculum</a>
-                            <a href="faculty.html">Our Faculty</a>
-                            <a href="calendar.html">Calendar</a>
-                            <a href="books.html">List of Books</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle">Information</a>
-                        <div class="dropdown-content">
-                            <a href="tc-issued.html">TC Issued</a>
-                            <a href="disclosure.html">Mandatory Disclosure</a>
-                            <a href="notice.html">Notices & News</a>
-                        </div>
-                    </li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                    <li><a href="contact.html">Contact Us</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <header></header>
+    <main id="siteContent" style="display:none;">
+        <section class="section" style="text-align:center; padding-bottom:0;">
+            <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Transfer Certificates
+                Issued</h1>
+            <p style="color:var(--text-muted); margin-top:10px;">Verify and search TC records issued by the school.</p>
+        </section>
 
-    <main id="siteContent">
+        <div id="sectionsContainer"></div>
+
         <section class="section">
-            <div style="text-align:center; margin-bottom:40px;">
-                <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:clamp(2rem, 5vw, 42px);">
-                    Transfer Certificates Issued</h1>
-                <p style="color:var(--text-muted); font-size:16px;">Search and verify TC records issued by the school.
-                </p>
-            </div>
-
-            <!-- SEARCH BAR -->
             <div style="max-width: 600px; margin: 0 auto 40px; position: relative;">
                 <input type="text" id="tcSearch" placeholder="Search by Student Name or TC Number..."
-                    style="width: 100%; padding: 15px 50px 15px 20px; border-radius: 50px; border: 2px solid #eee; font-size: 16px; outline: none; transition: 0.3s;">
+                    style="width: 100%; padding: 15px 50px 15px 20px; border-radius: 50px; border: 2px solid #eee; font-size: 16px; outline: none;">
                 <i class="fas fa-search"
                     style="position: absolute; right: 25px; top: 18px; color: var(--text-muted);"></i>
             </div>
-
-            <div class="card"
-                style="box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius:15px; overflow:hidden; padding:0;">
-                <div class="table-container" style="overflow-x:auto;">
+            <div class="card" style="padding:0; overflow:hidden;">
+                <div class="table-container">
                     <table style="width:100%; border-collapse:collapse;">
                         <thead>
                             <tr style="background:var(--primary); color:white; text-align:left;">
@@ -89,9 +44,8 @@
                         </thead>
                         <tbody id="tcData">
                             <tr>
-                                <td colspan="5" style="text-align:center; padding:40px; color:var(--text-muted);">
-                                    <i class="fas fa-spinner fa-spin"></i> Loading records...
-                                </td>
+                                <td colspan="5" style="text-align:center; padding:40px;"><i
+                                        class="fas fa-spinner fa-spin"></i> Loading...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -99,33 +53,24 @@
             </div>
         </section>
     </main>
-
     <footer id="footer"></footer>
-
     <script src="script.js"></script>
     <script>
         let allTCs = [];
-
         async function fetchTC() {
             try {
                 const res = await fetch('/api/tc');
                 allTCs = await res.json();
                 renderTC(allTCs);
-            } catch (error) {
-                console.error('Error fetching TC data:', error);
-                document.getElementById('tcData').innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px; color: red;">Failed to load data.</td></tr>';
-            }
+            } catch (error) { console.error(error); }
         }
-
         function renderTC(data) {
             const tbody = document.getElementById('tcData');
             tbody.innerHTML = '';
-
             if (!data || data.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px;">No matching records found.</td></tr>';
                 return;
             }
-
             data.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.style.borderBottom = "1px solid #eee";
@@ -135,23 +80,16 @@
                     <td style="padding: 20px;">${item.year}</td>
                     <td style="padding: 20px;"><span style="background:#f1f5f9; padding:5px 12px; border-radius:50px; font-weight:bold; font-size:13px;">${item.tcNo}</span></td>
                     <td style="padding: 20px;">
-                        ${item.fileUrl ? `<a href="${item.fileUrl}" target="_blank" class="btn" style="background:var(--primary); color:white; padding:5px 15px; font-size:12px; border-radius:4px; text-decoration:none;">View TC</a>` : `<span style="color:#94a3b8; font-size:12px;">Not Available</span>`}
+                        ${item.fileUrl ? `<a href="${item.fileUrl}" target="_blank" class="btn" style="background:var(--primary); color:white; padding:5px 15px; font-size:12px; text-decoration:none;">View TC</a>` : `<span style="color:#94a3b8; font-size:12px;">Not Available</span>`}
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
-
-        // Search logic
         document.getElementById('tcSearch').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
-            const filtered = allTCs.filter(item =>
-                item.studentName.toLowerCase().includes(term) ||
-                item.tcNo.toLowerCase().includes(term)
-            );
-            renderTC(filtered);
+            renderTC(allTCs.filter(item => item.studentName.toLowerCase().includes(term) || item.tcNo.toLowerCase().includes(term)));
         });
-
         document.addEventListener('DOMContentLoaded', fetchTC);
     </script>
 </body>

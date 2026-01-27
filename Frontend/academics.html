@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Academics | Gyanodaya</title>
+  <title>Academics | Gyanodaya Public School</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
     rel="stylesheet">
@@ -13,42 +13,16 @@
 </head>
 
 <body>
-  <header>
-    <div class="navbar">
-      <a href="index.html" class="logo">
-        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-        <span id="schoolName">Gyanodaya Public School</span>
-      </a>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="vision.html">Vision & Mission</a>
-              <a href="principal.html">Principal's Message</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="curriculum.html">Curriculum</a>
-              <a href="faculty.html">Our Faculty</a>
-              <a href="calendar.html">Calendar</a>
-              <a href="books.html">List of Books</a>
-            </div>
-          </li>
-          <li><a href="gallery.html">Gallery</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <header></header>
+  <main id="siteContent" style="display:none;">
+    <section class="section" style="text-align:center; padding-bottom:0;">
+      <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Academic Excellence</h1>
+      <p style="color:var(--text-muted); margin-top:10px;">Empowering minds for a brighter tomorrow.</p>
+    </section>
 
-  <main id="siteContent">
+    <div id="sectionsContainer"></div>
+
     <section class="section">
-      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Academic Excellence</h1>
-
       <div class="grid">
         <div class="card" style="text-align:center;">
           <i class="fas fa-book-open fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
@@ -69,16 +43,8 @@
           <a href="calendar.html" class="btn" style="margin-top:15px; display:inline-block;">View Calendar</a>
         </div>
       </div>
-
-      <div class="card" style="margin-top:40px; border-left: 5px solid var(--accent);">
-        <h3>List of Books</h3>
-        <p>Access the officially prescribed book list for all classes.</p>
-        <a href="books.html" class="btn"
-          style="margin-top:15px; display:inline-block; background:var(--accent); color:black;">View Book List</a>
-      </div>
     </section>
   </main>
-
   <footer id="footer"></footer>
   <script src="script.js"></script>
 </body>

@@ -4,45 +4,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fee Structure | Gyanodaya</title>
+    <title>Fee Structure | Gyanodaya Public School</title>
     <link
         href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-                <span id="schoolName">Gyanodaya Public School</span>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav id="navMenu">
-                <ul id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown">
-                        <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-                        <div class="dropdown-content">
-                            <a href="admission-procedure.html">Procedure</a>
-                            <a href="fees.html">Fee Structure</a>
-                            <a href="online-apply.html">Apply Online</a>
-                        </div>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+    <header></header>
+    <main id="siteContent" style="display:none;">
+        <section class="section" style="text-align:center; padding-bottom:0;">
+            <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Fee Structure</h1>
+            <p style="color:var(--text-muted); margin-top:10px;">Transparent and competitive fee policy.</p>
+        </section>
 
-    <main id="siteContent">
+        <div id="sectionsContainer"></div>
+
         <section class="section">
-            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Fee Structure 2024-25
-            </h1>
-
             <div class="card">
-                <p style="text-align:center; margin-bottom:30px;">Information regarding tuition and other mandatory
-                    fees.</p>
                 <div class="table-container">
                     <table style="width:100%; border-collapse:collapse;">
                         <thead>
@@ -76,18 +57,9 @@
                         </tbody>
                     </table>
                 </div>
-                <div style="margin-top:30px; padding:20px; background:#fefce8; border-radius:10px; font-size:14px;">
-                    <strong>Note:</strong>
-                    <ul style="margin-top:10px;">
-                        <li>Transportation fees are extra based on distance.</li>
-                        <li>Examination fees will be charged twice a year.</li>
-                        <li>Discount available for siblings.</li>
-                    </ul>
-                </div>
             </div>
         </section>
     </main>
-
     <footer id="footer"></footer>
     <script src="script.js"></script>
 </body>

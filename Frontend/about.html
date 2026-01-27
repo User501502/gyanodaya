@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>About | Gyanodaya Public School</title>
+  <title>About Us | Gyanodaya Public School</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
     rel="stylesheet">
@@ -13,63 +13,18 @@
 </head>
 
 <body>
-  <header>
-    <div class="navbar">
-      <a href="index.html" class="logo">
-        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-        <span id="schoolName">Gyanodaya Public School</span>
-      </a>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="vision.html">Vision & Mission</a>
-              <a href="principal.html">Principal's Message</a>
-              <a href="management.html">Management</a>
-              <a href="infrastructure.html">Infrastructure</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="curriculum.html">Curriculum</a>
-              <a href="faculty.html">Our Faculty</a>
-              <a href="calendar.html">Calendar</a>
-              <a href="books.html">List of Books</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Information</a>
-            <div class="dropdown-content">
-              <a href="tc-issued.html">TC Issued</a>
-              <a href="disclosure.html">Mandatory Disclosure</a>
-              <a href="notice.html">Notices & News</a>
-            </div>
-          </li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <header></header>
+  <main id="siteContent" style="display:none;">
+    <section class="section" style="text-align:center; padding-bottom:0;">
+      <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">About Gyanodaya</h1>
+      <p style="color:var(--text-muted); margin-top:10px;">A heritage of excellence, a future of success.</p>
+    </section>
 
-  <main id="siteContent">
+    <!-- Managed Content Sections -->
+    <div id="sectionsContainer"></div>
+
+    <!-- Static Info Grid -->
     <section class="section">
-      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">About Gyanodaya</h1>
-
-      <div class="card" style="margin-bottom:40px;">
-        <p style="font-size:18px; line-height:1.8;">
-          Gyanodaya Public School is a premier educational institution committed to excellence in education and
-          development.
-          Founded with a vision to nurture young minds, we provide a vibrant learning environment that encourages
-          curiosity,
-          creativity, and critical thinking.
-        </p>
-      </div>
-
       <div class="grid">
         <div class="card" style="text-align:center;">
           <i class="fas fa-eye fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
@@ -92,7 +47,6 @@
       </div>
     </section>
   </main>
-
   <footer id="footer"></footer>
   <script src="script.js"></script>
 </body>

@@ -13,63 +13,31 @@
 </head>
 
 <body>
-  <header>
-    <div class="navbar">
-      <a href="index.html" class="logo">
-        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-        <span id="schoolName">Gyanodaya Public School</span>
-      </a>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="vision.html">Vision & Mission</a>
-              <a href="principal.html">Principal's Message</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="curriculum.html">Curriculum</a>
-              <a href="faculty.html">Our Faculty</a>
-            </div>
-          </li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
+  <header></header>
+  <main id="siteContent" style="display:none;">
+    <section class="section" style="text-align:center; padding-bottom:0;">
+      <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">School Gallery</h1>
+      <p style="color:var(--text-muted); margin-top:10px;">Capturing moments of growth, learning, and celebration.</p>
+    </section>
 
-  <main id="siteContent">
+    <div id="sectionsContainer"></div>
+
     <section class="section">
-      <div style="text-align:center; margin-bottom:50px;">
-        <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">School Gallery</h1>
-        <p style="color:var(--text-muted); font-size:16px;">Capturing moments of growth, learning, and celebration.</p>
-
-        <div style="margin-top:20px; display:flex; gap:10px; justify-content:center;">
-          <button class="btn active-filter" onclick="filterGallery('all')" id="filterAll">All</button>
-          <button class="btn" onclick="filterGallery('photo')" id="filterPhoto">Photos</button>
-          <button class="btn" onclick="filterGallery('video')" id="filterVideo">Videos</button>
-        </div>
+      <div style="margin-bottom:30px; display:flex; gap:10px; justify-content:center;">
+        <button class="btn active-filter" onclick="filterGallery('all')" id="filterAll">All</button>
+        <button class="btn" onclick="filterGallery('photo')" id="filterPhoto">Photos</button>
+        <button class="btn" onclick="filterGallery('video')" id="filterVideo">Videos</button>
       </div>
-
       <div id="galleryContainer" class="grid"
         style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:20px;">
-        <!-- Dynamic -->
+        <!-- Dynamic Content -->
       </div>
     </section>
   </main>
-
   <footer id="footer"></footer>
-
   <script src="script.js"></script>
   <script>
     let allItems = [];
-
     async function fetchGallery() {
       try {
         const res = await fetch('/api/gallery');
@@ -77,61 +45,37 @@
         renderGallery(allItems);
       } catch (err) { console.error(err); }
     }
-
     function renderGallery(items) {
       const container = document.getElementById('galleryContainer');
       container.innerHTML = '';
-
       if (!items || items.length === 0) {
         container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px;">No items found.</div>';
         return;
       }
-
       items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
         card.style.padding = '0';
         card.style.overflow = 'hidden';
         card.style.borderRadius = '12px';
-        card.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
-
         if (item.type === 'photo') {
-          card.innerHTML = `
-                        <img src="${item.url}" style="width:100%; height:200px; object-fit:cover; display:block;">
-                        <div style="padding:15px; font-weight:600; font-size:14px;">${item.title}</div>
-                    `;
+          card.innerHTML = `<img src="${item.url}" style="width:100%; height:200px; object-fit:cover; display:block;"><div style="padding:15px; font-weight:600; font-size:14px;">${item.title}</div>`;
         } else {
-          let videoId = "dQw4w9WgXcQ"; // fallback
+          let videoId = "dQw4w9WgXcQ";
           try {
             if (item.url.includes('v=')) videoId = item.url.split('v=')[1].split('&')[0];
             else videoId = item.url.split('/').pop();
           } catch (e) { }
-
-          card.innerHTML = `
-                        <div style="position:relative; width:100%; height:200px; background:#000;">
-                            <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" style="width:100%; height:100%; object-fit:cover; opacity:0.7;">
-                            <a href="${item.url}" target="_blank" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:40px;">
-                                <i class="fab fa-youtube"></i>
-                            </a>
-                        </div>
-                        <div style="padding:15px; font-weight:600; font-size:14px;">${item.title} (Video)</div>
-                    `;
+          card.innerHTML = `<div style="position:relative; width:100%; height:200px; background:#000;"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" style="width:100%; height:100%; object-fit:cover; opacity:0.7;"><a href="${item.url}" target="_blank" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:40px;"><i class="fab fa-youtube"></i></a></div><div style="padding:15px; font-weight:600; font-size:14px;">${item.title} (Video)</div>`;
         }
         container.appendChild(card);
       });
     }
-
     function filterGallery(type) {
       document.querySelectorAll('.btn').forEach(b => b.classList.remove('active-filter'));
-      if (type === 'all') {
-        renderGallery(allItems);
-        document.getElementById('filterAll').classList.add('active-filter');
-      } else {
-        renderGallery(allItems.filter(i => i.type === type));
-        document.getElementById('filter' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active-filter');
-      }
+      if (type === 'all') { renderGallery(allItems); document.getElementById('filterAll').classList.add('active-filter'); }
+      else { renderGallery(allItems.filter(i => i.type === type)); document.getElementById('filter' + type.charAt(0).toUpperCase() + type.slice(1)).classList.add('active-filter'); }
     }
-
     document.addEventListener('DOMContentLoaded', fetchGallery);
   </script>
   <style>

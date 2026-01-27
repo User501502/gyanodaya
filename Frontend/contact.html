@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact Us | Gyanodaya</title>
+  <title>Contact Us | Gyanodaya Public School</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
     rel="stylesheet">
@@ -14,30 +14,33 @@
 
 <body>
   <header></header>
-  <main id="siteContent">
-    <section class="section">
-      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Get In Touch</h1>
+  <main id="siteContent" style="display:none;">
+    <section class="section" style="text-align:center; padding-bottom:0;">
+      <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Contact Us</h1>
+      <p style="color:var(--text-muted); margin-top:10px;">We are here to help you. Reach out for any queries.</p>
+    </section>
 
+    <div id="sectionsContainer"></div>
+
+    <section class="section">
       <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:40px;">
-        <!-- Contact Info -->
         <div class="card">
           <h3 style="margin-bottom:20px;">Contact Information</h3>
           <div style="display:flex; gap:15px; margin-bottom:20px;">
             <i class="fas fa-map-marker-alt" style="color:var(--primary); font-size:20px; margin-top:5px;"></i>
-            <p><strong>Campus Address:</strong><br>Gyanodaya Public School, Opp. Gayatri Shakti Peeth, Near Railway
-              Crossing, Vidisha (M.P.) 464001</p>
+            <p><strong>Campus Address:</strong><br><span id="contactAddress">Opp. Gayatri Shakti Peeth, Near Railway
+                Crossing, Vidisha (M.P.) 464001</span></p>
           </div>
           <div style="display:flex; gap:15px; margin-bottom:20px;">
             <i class="fas fa-phone" style="color:var(--primary); font-size:20px; margin-top:5px;"></i>
-            <p><strong>Call Us:</strong><br>+91 9406613049, +91 7592408221</p>
+            <p><strong>Call Us:</strong><br><span id="contactPhone">+91 9406613049</span></p>
           </div>
           <div style="display:flex; gap:15px; margin-bottom:20px;">
             <i class="fas fa-envelope" style="color:var(--primary); font-size:20px; margin-top:5px;"></i>
-            <p><strong>Email:</strong><br>gyanodayavidisha@gmail.com</p>
+            <p><strong>Email:</strong><br><span id="contactEmail">gyanodayavidisha@gmail.com</span></p>
           </div>
         </div>
 
-        <!-- Contact Form -->
         <div class="card">
           <h3 style="margin-bottom:20px;">Send Us a Message</h3>
           <form id="contactForm" style="display:grid; gap:15px;">
@@ -51,18 +54,29 @@
       </div>
     </section>
 
-    <!-- Location Map -->
-    <section class="section" style="padding-top:0;">
+    <section class="section">
       <div class="card" style="padding:0; overflow:hidden; border-radius:15px;">
-        <iframe id="mapFrame"
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1830.8358498263592!2d77.81180290000001!3d23.526322900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c0f135b54203b%3A0xe54930379895cae7!2sGyanodaya%20Higher%20Secondary%20School!5e0!3m2!1sen!2sin!4v1716388484501!5m2!1sen!2sin"
-          width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
-        </iframe>
+        <iframe id="mapFrame" src="" width="100%" height="450" style="border:0;" allowfullscreen=""
+          loading="lazy"></iframe>
       </div>
     </section>
   </main>
   <footer id="footer"></footer>
   <script src="script.js"></script>
+  <script>
+    // Update contact page specifically with dynamic values if needed
+    async function updateContactDetails() {
+      try {
+        const res = await fetch("/api/home");
+        const data = await res.json();
+        if (!data || !data.footer) return;
+        document.getElementById('contactAddress').innerText = data.footer.address || "";
+        document.getElementById('contactPhone').innerText = data.footer.phone || "";
+        document.getElementById('contactEmail').innerText = data.footer.email || "";
+      } catch (e) { }
+    }
+    document.addEventListener('DOMContentLoaded', updateContactDetails);
+  </script>
 </body>
 
 </html>
