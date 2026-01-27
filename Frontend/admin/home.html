@@ -1,95 +1,102 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Home Page Manager | Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="admin.css" />
 </head>
+
 <body>
 
-<div class="layout">
-  <aside class="sidebar">
-    <h3>Gyanodaya Admin</h3>
-    <a href="dashboard.html">Dashboard</a>
-    <a href="home.html" class="active">Home</a>
-    <button id="logoutBtn">Logout</button>
-  </aside>
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Admin</h3>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="home.html" class="active">Home</a>
+      <a href="sections.html">Sections</a>
+      <a href="notices.html">Notices</a>
+      <a href="admissions.html">Admissions</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tc.html">TC Issued</a>
+      <a href="disclosure.html">Disclosure</a>
+      <a href="settings.html">Settings</a>
+      <button id="logoutBtn">Logout</button>
+    </aside>
 
-  <main class="content">
-    <h1>Home Page Management</h1>
+    <main class="content">
+      <h1>Home Page Management</h1>
 
-    <!-- HEADER -->
-    <div class="cms-block">
-      <h3>Header</h3>
-      <input id="schoolName" placeholder="School Name">
-      <input type="file" id="logoInput">
-      <img id="logoPreview" class="preview">
-    </div>
+      <!-- HEADER -->
+      <div class="cms-block">
+        <h3>Header</h3>
+        <input id="schoolName" placeholder="School Name">
+        <input type="file" id="logoInput">
+        <img id="logoPreview" class="preview">
+      </div>
 
-    <!-- HERO -->
-    <div class="cms-block">
-      <h3>Hero</h3>
-      <input id="heroTitle" placeholder="Hero Title">
-      <textarea id="heroIntro" placeholder="Hero Intro"></textarea>
-      <label><input type="checkbox" id="admissionOpen"> Admission Open</label>
-    </div>
+      <!-- HERO -->
+      <div class="cms-block">
+        <h3>Hero</h3>
+        <input id="heroTitle" placeholder="Hero Title">
+        <textarea id="heroIntro" placeholder="Hero Intro"></textarea>
+        <label><input type="checkbox" id="admissionOpen"> Admission Open</label>
+      </div>
 
-    <!-- ================= SECTIONS MANAGER ================= -->
-<div class="cms-block">
-  <h3>Sections</h3>
+      <!-- ================= SECTIONS MANAGER ================= -->
+      <div class="cms-block">
+        <h3>Sections</h3>
 
-  <form id="sectionForm">
-    <input id="sectionTitle" placeholder="Section Title" required>
+        <form id="sectionForm">
+          <input id="sectionTitle" placeholder="Section Title" required>
 
-    <select id="sectionType">
-      <option value="list">List</option>
-      <option value="text">Text</option>
-    </select>
+          <select id="sectionType">
+            <option value="list">List</option>
+            <option value="text">Text</option>
+          </select>
 
-    <textarea id="sectionContent"
-      placeholder="One item per line (for list)"
-      rows="4"></textarea>
+          <textarea id="sectionContent" placeholder="One item per line (for list)" rows="4"></textarea>
 
-    <label>
-      <input type="checkbox" id="sectionActive" checked>
-      Active
-    </label>
+          <label>
+            <input type="checkbox" id="sectionActive" checked>
+            Active
+          </label>
 
-    <button type="submit">Add / Update Section</button>
-  </form>
+          <button type="submit">Add / Update Section</button>
+        </form>
 
-  <div id="sectionsList" class="drag-list"></div>
-</div>
+        <div id="sectionsList" class="drag-list"></div>
+      </div>
 
-    <!-- FOOTER -->
-    <div class="cms-block">
-      <h3>Footer</h3>
+      <!-- FOOTER -->
+      <div class="cms-block">
+        <h3>Footer</h3>
 
-      <textarea id="footerAbout" placeholder="About School"></textarea>
-      <input id="footerAddress" placeholder="Address">
-      <input id="footerPhone" placeholder="Phone">
-      <input id="footerEmail" placeholder="Email">
+        <textarea id="footerAbout" placeholder="About School"></textarea>
+        <input id="footerAddress" placeholder="Address">
+        <input id="footerPhone" placeholder="Phone">
+        <input id="footerEmail" placeholder="Email">
 
-      <input id="mapLink" placeholder="Google Maps link">
+        <input id="mapLink" placeholder="Google Maps link">
 
-      <h4>Quick Links</h4>
-      <div id="quickLinksList"></div>
-      <button onclick="addQuickLink()">+ Add Link</button>
+        <h4>Quick Links</h4>
+        <div id="quickLinksList"></div>
+        <button onclick="addQuickLink()">+ Add Link</button>
 
-      <h4>Social Links</h4>
-<div id="socialLinksList"></div>
-<button type="button" onclick="addSocial()">Add Social</button>
+        <h4>Social Links</h4>
+        <div id="socialLinksList"></div>
+        <button type="button" onclick="addSocial()">Add Social</button>
 
-      <input id="footerCopyright"
-        placeholder="© 2026 Gyanodaya Public School">
-    </div>
+        <input id="footerCopyright" placeholder="© 2026 Gyanodaya Public School">
+      </div>
 
-    <button id="saveHomeBtn">💾 Save Home</button>
-  </main>
-</div>
+      <button id="saveHomeBtn">💾 Save Home</button>
+    </main>
+  </div>
 
-<script type="module" src="admin.js"></script>
-<script type="module" src="home.js"></script>
+  <script type="module" src="admin.js"></script>
+  <script type="module" src="home.js"></script>
 </body>
+
 </html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage TC Issued</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <h3>Admin</h3>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="home.html">Home</a>
+            <a href="notices.html">Notices</a>
+            <a href="admissions.html">Admissions</a>
+            <a href="tc.html">TC Issued</a>
+            <a href="disclosure.html">Disclosure</a>
+            <a href="settings.html">Settings</a>
+            <button id="logoutBtn">Logout</button>
+        </aside>
+
+        <main class="content">
+            <h1>Manage TC Issued</h1>
+            <form id="tcForm" style="display: grid; gap: 10px; max-width: 400px; margin-bottom: 20px;">
+                <input id="studentName" placeholder="Student Name" required>
+                <input id="className" placeholder="Class" required>
+                <input id="year" placeholder="Year" required>
+                <input id="tcNo" placeholder="TC Number" required>
+                <button>Add TC Entry</button>
+            </form>
+
+            <div class="card">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f4f4f4;">
+                            <th style="padding: 10px; border: 1px solid #ddd;">Name</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Class</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Year</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">TC No.</th>
+                            <th style="padding: 10px; border: 1px solid #ddd;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tcTableBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="tc.js"></script>
+</body>
+
+</html>

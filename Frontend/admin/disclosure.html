@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Manage Mandatory Disclosure</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar" id="sidebar">
+            <h3>Admin</h3>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="home.html">Home</a>
+            <a href="notices.html">Notices</a>
+            <a href="admissions.html">Admissions</a>
+            <a href="tc.html">TC Issued</a>
+            <a href="disclosure.html">Disclosure</a>
+            <a href="settings.html">Settings</a>
+            <button id="logoutBtn">Logout</button>
+        </aside>
+
+        <main class="content">
+            <h1>Manage Mandatory Disclosure</h1>
+            <form id="disclosureForm" style="display: grid; gap: 10px; max-width: 400px; margin-bottom: 20px;">
+                <input id="title" placeholder="Document Title (e.g. Fire Safety Certificate)" required>
+                <input id="fileUrl" placeholder="File URL (PDF Link)" required>
+                <button>Add Document</button>
+            </form>
+
+            <div class="card">
+                <ul id="disclosureList" style="list-style: none; padding: 0;"></ul>
+            </div>
+        </main>
+    </div>
+    <script type="module" src="disclosure.js"></script>
+</body>
+
+</html>

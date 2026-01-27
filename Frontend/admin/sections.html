@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <title>Manage Sections | Admin Panel</title>
@@ -7,21 +8,23 @@
 
   <link rel="stylesheet" href="admin.css" />
 </head>
+
 <body>
 
   <div class="layout">
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-      <h3>Gyanodaya Admin</h3>
-
+      <h3>Admin</h3>
       <a href="dashboard.html">Dashboard</a>
       <a href="home.html">Home</a>
       <a href="sections.html" class="active">Sections</a>
       <a href="notices.html">Notices</a>
       <a href="admissions.html">Admissions</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tc.html">TC Issued</a>
+      <a href="disclosure.html">Disclosure</a>
       <a href="settings.html">Settings</a>
-
       <button id="logoutBtn">Logout</button>
     </aside>
 
@@ -36,12 +39,7 @@
 
         <label>
           Section Title
-          <input
-            type="text"
-            id="title"
-            placeholder="e.g. Why Choose Us"
-            required
-          />
+          <input type="text" id="title" placeholder="e.g. Why Choose Us" required />
         </label>
 
         <label>
@@ -53,14 +51,9 @@
         </label>
 
         <label>
-          Content  
+          Content
           <small>(For list: one item per line)</small>
-          <textarea
-            id="content"
-            rows="5"
-            placeholder="Enter content here"
-            required
-          ></textarea>
+          <textarea id="content" rows="5" placeholder="Enter content here" required></textarea>
         </label>
 
         <label style="display:flex;align-items:center;gap:8px;">
@@ -87,4 +80,5 @@
   <script type="module" src="sections.js"></script>
 
 </body>
+
 </html>

@@ -41,10 +41,10 @@ async function initPage() {
     }
 
     /* ===== FOOTER ===== */
-if (homeData.footer) {
-  const f = homeData.footer;
+    if (homeData.footer) {
+      const f = homeData.footer;
 
-  document.getElementById("footer").innerHTML = `
+      document.getElementById("footer").innerHTML = `
     <div class="footer-grid">
 
       <div>
@@ -59,8 +59,8 @@ if (homeData.footer) {
         <h4>Quick Links</h4>
         <ul>
           ${(f.quickLinks || []).map(l =>
-            `<li><a href="${l.url}">${l.title}</a></li>`
-          ).join("")}
+        `<li><a href="${l.url}">${l.title}</a></li>`
+      ).join("")}
         </ul>
       </div>
 
@@ -68,10 +68,10 @@ if (homeData.footer) {
         <h4>Follow Us</h4>
         <div class="social-icons">
           ${(f.socials || []).map(s =>
-            `<a href="${s.url}" target="_blank">
+        `<a href="${s.url}" target="_blank">
               <img src="${s.icon}" alt="${s.name}">
             </a>`
-          ).join("")}
+      ).join("")}
         </div>
       </div>
 
@@ -81,7 +81,7 @@ if (homeData.footer) {
       <small>${f.copyright || ""}</small>
     </div>
   `;
-}
+    }
 
     /* ===== SECTIONS (CARDS) ===== */
     const container = document.getElementById("dynamicSections");

@@ -1,22 +1,42 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Admissions</title>
   <link rel="stylesheet" href="admin.css">
 </head>
+
 <body>
-<div class="layout">
-  <aside class="sidebar">...</aside>
-  <main class="content">
-    <h1>Admissions</h1>
-    <table>
-      <thead>
-        <tr><th>Name</th><th>Phone</th><th>Date</th><th>Status</th></tr>
-      </thead>
-      <tbody id="admissionTable"></tbody>
-    </table>
-  </main>
-</div>
-<script type="module" src="admissions.js"></script>
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Admin</h3>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="home.html">Home</a>
+      <a href="sections.html">Sections</a>
+      <a href="notices.html">Notices</a>
+      <a href="admissions.html" class="active">Admissions</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tc.html">TC Issued</a>
+      <a href="disclosure.html">Disclosure</a>
+      <a href="settings.html">Settings</a>
+      <button id="logoutBtn">Logout</button>
+    </aside>
+    <main class="content">
+      <h1>Admissions</h1>
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Date</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="admissionTable"></tbody>
+      </table>
+    </main>
+  </div>
+  <script type="module" src="admissions.js"></script>
 </body>
+
 </html>
