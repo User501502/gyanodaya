@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply Online | Gyanodaya</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+                <span id="schoolName">Gyanodaya Public School</span>
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <nav id="navMenu">
+                <ul id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="dropdown">
+                        <a href="admissions.html" class="dropdown-toggle">Admissions</a>
+                        <div class="dropdown-content">
+                            <a href="admission-procedure.html">Procedure</a>
+                            <a href="fees.html">Fee Structure</a>
+                            <a href="online-apply.html">Apply Online</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="siteContent">
+        <section class="section">
+            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Online Admission
+                Application</h1>
+
+            <div class="card" style="max-width:800px; margin:0 auto;">
+                <form id="applyForm"
+                    style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:25px;">
+                    <div>
+                        <label>Student's Full Name</label>
+                        <input type="text" id="name" required placeholder="Enter student name">
+                    </div>
+                    <div>
+                        <label>Parent/Guardian Phone</label>
+                        <input type="tel" id="phone" required placeholder="10 Digit Number">
+                    </div>
+                    <div>
+                        <label>Class Applying For</label>
+                        <select id="classLevel" required>
+                            <option value="">Select Class</option>
+                            <option value="Nursery">Nursery</option>
+                            <option value="KG-1">KG-I</option>
+                            <option value="KG-2">KG-II</option>
+                            <option value="1">Class 1st</option>
+                            <option value="2">Class 2nd</option>
+                            <option value="3">Class 3rd</option>
+                            <option value="4">Class 4th</option>
+                            <option value="5">Class 5th</option>
+                            <option value="6">Class 6th</option>
+                            <option value="7">Class 7th</option>
+                            <option value="8">Class 8th</option>
+                            <option value="9">Class 9th</option>
+                            <option value="10">Class 10th</option>
+                            <option value="11">Class 11th</option>
+                            <option value="12">Class 12th</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Email Address (Optional)</label>
+                        <input type="email" id="email" placeholder="example@mail.com">
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label>Any Message / Query</label>
+                        <textarea id="message" rows="3"
+                            placeholder="Tell us about previous school or any queries..."></textarea>
+                    </div>
+                    <div style="grid-column: 1 / -1; text-align:center;">
+                        <button type="submit" class="btn"
+                            style="padding:15px 50px; background:var(--primary); color:white; font-weight:bold; width:100%;">
+                            Submit Application
+                        </button>
+                    </div>
+                </form>
+                <div id="status" style="margin-top:20px; text-align:center; display:none;"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('applyForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const status = document.getElementById('status');
+
+            btn.disabled = true;
+            btn.innerText = 'Submitting...';
+
+            const payload = {
+                name: document.getElementById('name').value,
+                phone: document.getElementById('phone').value,
+                classLevel: document.getElementById('classLevel').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value
+            };
+
+            try {
+                const res = await fetch('/api/admissions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (res.ok) {
+                    status.style.display = 'block';
+                    status.innerHTML = '<div style="color:green; font-weight:bold;"><i class="fas fa-check-circle"></i> Application Submitted Successfully! We will contact you soon.</div>';
+                    e.target.reset();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (err) {
+                status.style.display = 'block';
+                status.innerHTML = '<div style="color:red;">Error submitting application. Please try again or call use.</div>';
+            } finally {
+                btn.disabled = false;
+                btn.innerText = 'Submit Application';
+            }
+        };
+    </script>
+</body>
+
+</html>

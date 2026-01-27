@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Procedure | Gyanodaya</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+                <span id="schoolName">Gyanodaya Public School</span>
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <nav id="navMenu">
+                <ul id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="dropdown">
+                        <a href="admissions.html" class="dropdown-toggle">Admissions</a>
+                        <div class="dropdown-content">
+                            <a href="admission-procedure.html">Procedure</a>
+                            <a href="fees.html">Fee Structure</a>
+                            <a href="online-apply.html">Apply Online</a>
+                        </div>
+                    </li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="siteContent">
+        <section class="section">
+            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Admission Procedure
+            </h1>
+
+            <div class="card" style="margin-bottom:30px;">
+                <h2 style="color:var(--primary); margin-bottom:20px;">Step-by-Step Guide</h2>
+                <div class="grid" style="grid-template-columns: 1fr; gap:20px;">
+                    <div style="display:flex; gap:20px;">
+                        <div
+                            style="background:var(--primary); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:bold;">
+                            1</div>
+                        <div>
+                            <h4>Registration</h4>
+                            <p>Fill out the online application form or visit the school office for a registration form.
+                            </p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:20px;">
+                        <div
+                            style="background:var(--primary); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:bold;">
+                            2</div>
+                        <div>
+                            <h4>Interaction / Assessment</h4>
+                            <p>For primary classes, an informal interaction. For middle/senior school, a basic aptitude
+                                assessment.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:20px;">
+                        <div
+                            style="background:var(--primary); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:bold;">
+                            3</div>
+                        <div>
+                            <h4>Documentation</h4>
+                            <p>Submission of Birth Certificate, Transfer Certificate (original), Previous Marksheets,
+                                and Aadhar copy.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:20px;">
+                        <div
+                            style="background:var(--primary); color:white; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-weight:bold;">
+                            4</div>
+                        <div>
+                            <h4>Admission Confirmation</h4>
+                            <p>Payment of admission fees to secure the seat.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="background:#f0f9ff; border:1px dashed var(--primary); text-align:center;">
+                <h3>Need Assistance?</h3>
+                <p>Call our admission counselor at <strong>+91 9406613049</strong></p>
+                <a href="online-apply.html" class="btn" style="margin-top:15px; display:inline-block;">Start
+                    Application</a>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

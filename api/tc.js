@@ -7,6 +7,7 @@ const TCSchema = new mongoose.Schema({
     className: String,
     year: String,
     tcNo: String,
+    fileUrl: String,
     createdAt: { type: Date, default: Date.now }
 });
 

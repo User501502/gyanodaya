@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List of Books | Gyanodaya</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+                <span id="schoolName">Gyanodaya Public School</span>
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <nav id="navMenu">
+                <ul id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="academics.html">Academics</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="siteContent">
+        <section class="section">
+            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Prescribed List of
+                Books 2024-25</h1>
+
+            <div class="card">
+                <p style="text-align:center; margin-bottom:30px;">In compliance with NCERT/CBSE guidelines.</p>
+                <div class="table-container">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr style="background:var(--primary); color:white;">
+                                <th style="padding:15px;">Class</th>
+                                <th style="padding:15px;">Publisher</th>
+                                <th style="padding:15px;">Subjects Covered</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px; font-weight:bold;">Primary (I - V)</td>
+                                <td style="padding:15px;">NCERT / Private Publications (as per norms)</td>
+                                <td style="padding:15px;">English, Hindi, Math, EVS, Comp, G.K.</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px; font-weight:bold;">Middle (VI - VIII)</td>
+                                <td style="padding:15px;">NCERT</td>
+                                <td style="padding:15px;">English, Hindi, Sanskrit, Math, Science, S.St, Comp</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px; font-weight:bold;">Secondary (IX - X)</td>
+                                <td style="padding:15px;">NCERT</td>
+                                <td style="padding:15px;">English, Hindi, Math, Science, S.St, IT</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px; font-weight:bold;">Senior Secondary (XI - XII)</td>
+                                <td style="padding:15px;">NCERT</td>
+                                <td style="padding:15px;">Stream specific subjects</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="margin-top:40px; text-align:center;">
+                <a href="#" class="btn btn-primary"><i class="fas fa-download"></i> Download Full Detailed List
+                    (PDF)</a>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

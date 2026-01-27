@@ -4,55 +4,97 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty | Gyanodaya Public School</title>
+  <title>Faculty | Gyanodaya</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-
   <header>
     <div class="navbar">
-      <div class="logo">
-        <img src="logo.png" alt="School Logo">
-        <span>Gyanodaya Public School</span>
-      </div>
-
-      <!-- Hamburger -->
+      <a href="index.html" class="logo">
+        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+        <span id="schoolName">Gyanodaya Public School</span>
+      </a>
       <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
       <nav id="navMenu">
-        <ul>
+        <ul id="navLinks">
           <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="academics.html">Academics</a></li>
-          <li><a href="faculty.html">Faculty</a></li>
-          <li><a href="notice.html">Notice</a></li>
+          <li class="dropdown">
+            <a href="about.html" class="dropdown-toggle">About Us</a>
+            <div class="dropdown-content">
+              <a href="vision.html">Vision & Mission</a>
+              <a href="principal.html">Principal's Message</a>
+            </div>
+          </li>
+          <li class="dropdown">
+            <a href="academics.html" class="dropdown-toggle">Academics</a>
+            <div class="dropdown-content">
+              <a href="curriculum.html">Curriculum</a>
+              <a href="faculty.html">Our Faculty</a>
+              <a href="calendar.html">Calendar</a>
+            </div>
+          </li>
           <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="admissions.html">Admissions</a></li>
-          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
+  <main id="siteContent">
+    <section class="section">
+      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Our Expert Faculty</h1>
 
-  <section class="section">
-    <h2>Our Faculty</h2>
+      <div class="grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:30px;">
+        <!-- Faculty Cards -->
+        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1544717297-fa154da09f5b?w=400&auto=format&fit=crop&q=60"
+            style="width:100%; height:250px; object-fit:cover;">
+          <div style="padding:20px;">
+            <h3 style="margin-bottom:5px;">Mrs. Asha Sharma</h3>
+            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">Principal</p>
+            <p style="font-size:13px; color:var(--text-muted);">M.A., B.Ed | 20+ Years Exp.</p>
+          </div>
+        </div>
 
-    <div class="grid">
-      <div class="card faculty-card">
-        <img src="https://via.placeholder.com/300" alt="Teacher Photo">
-        <h3>Teacher Name</h3>
-        <p>M.A / B.Ed</p>
-        <p>Subject</p>
+        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=60"
+            style="width:100%; height:250px; object-fit:cover;">
+          <div style="padding:20px;">
+            <h3 style="margin-bottom:5px;">Ms. Ritu Jha</h3>
+            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">Senior Coordinator</p>
+            <p style="font-size:13px; color:var(--text-muted);">M.Sc. Physics | Expert in NEET/JEE</p>
+          </div>
+        </div>
+
+        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&auto=format&fit=crop&q=60"
+            style="width:100%; height:250px; object-fit:cover;">
+          <div style="padding:20px;">
+            <h3 style="margin-bottom:5px;">Mr. Vikrant Singh</h3>
+            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">HOD Mathematics</p>
+            <p style="font-size:13px; color:var(--text-muted);">M.Sc., B.Ed | Mental Math Expert</p>
+          </div>
+        </div>
+
+        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
+          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=60"
+            style="width:100%; height:250px; object-fit:cover;">
+          <div style="padding:20px;">
+            <h3 style="margin-bottom:5px;">Mrs. Sunita Verma</h3>
+            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">HOD English</p>
+            <p style="font-size:13px; color:var(--text-muted);">M.A. English Lit | Soft Skills Trainer</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
-  <footer>
-    <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
-  </footer>
-  <a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
+  <footer id="footer"></footer>
+  <script src="script.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Calendar | Gyanodaya</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="logo">
+                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+                <span id="schoolName">Gyanodaya Public School</span>
+            </a>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <nav id="navMenu">
+                <ul id="navLinks">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html">About</a></li>
+                    <li class="dropdown">
+                        <a href="academics.html" class="dropdown-toggle">Academics</a>
+                        <div class="dropdown-content">
+                            <a href="curriculum.html">Curriculum</a>
+                            <a href="faculty.html">Our Faculty</a>
+                            <a href="calendar.html">Calendar</a>
+                        </div>
+                    </li>
+                    <li><a href="gallery.html">Gallery</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="siteContent">
+        <section class="section">
+            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Academic Calendar
+                2024-25</h1>
+
+            <div class="card">
+                <p style="text-align:center; margin-bottom:20px;">Detailed schedule of examinations, holidays, and
+                    events.</p>
+                <div class="table-container">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr style="background:var(--primary); color:white;">
+                                <th style="padding:15px;">Date / Month</th>
+                                <th style="padding:15px;">Event Description</th>
+                                <th style="padding:15px;">Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px;">1st April 2024</td>
+                                <td style="padding:15px;">Commencement of New Academic Session</td>
+                                <td style="padding:15px;">Academic</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px;">May 2024</td>
+                                <td style="padding:15px;">Summer Vacation Starts</td>
+                                <td style="padding:15px;">Holiday</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px;">September 2024</td>
+                                <td style="padding:15px;">Mid-Term Examinations</td>
+                                <td style="padding:15px;">Exam</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px;">October 2024</td>
+                                <td style="padding:15px;">Annual Sports Day</td>
+                                <td style="padding:15px;">Event</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #eee;">
+                                <td style="padding:15px;">March 2025</td>
+                                <td style="padding:15px;">Final Examinations</td>
+                                <td style="padding:15px;">Exam</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="text-align:center; margin-top:40px;">
+                <p style="color:var(--text-muted); font-size:14px;">* Subject to change based on govt. guidelines.</p>
+            </div>
+        </section>
+    </main>
+
+    <footer id="footer"></footer>
+    <script src="script.js"></script>
+</body>
+
+</html>

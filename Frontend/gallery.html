@@ -26,23 +26,15 @@
           <li class="dropdown">
             <a href="about.html" class="dropdown-toggle">About Us</a>
             <div class="dropdown-content">
-              <a href="about.html#vision">Vision & Mission</a>
-              <a href="about.html#principal">Principal's Message</a>
+              <a href="vision.html">Vision & Mission</a>
+              <a href="principal.html">Principal's Message</a>
             </div>
           </li>
           <li class="dropdown">
             <a href="academics.html" class="dropdown-toggle">Academics</a>
             <div class="dropdown-content">
-              <a href="academics.html#curriculum">Curriculum</a>
+              <a href="curriculum.html">Curriculum</a>
               <a href="faculty.html">Our Faculty</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Information</a>
-            <div class="dropdown-content">
-              <a href="tc-issued.html">TC Issued</a>
-              <a href="disclosure.html">Mandatory Disclosure</a>
-              <a href="notice.html">Notices & News</a>
             </div>
           </li>
           <li><a href="gallery.html">Gallery</a></li>
@@ -90,6 +82,11 @@
       const container = document.getElementById('galleryContainer');
       container.innerHTML = '';
 
+      if (!items || items.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; padding:50px;">No items found.</div>';
+        return;
+      }
+
       items.forEach(item => {
         const card = document.createElement('div');
         card.className = 'card';
@@ -104,7 +101,12 @@
                         <div style="padding:15px; font-weight:600; font-size:14px;">${item.title}</div>
                     `;
         } else {
-          const videoId = item.url.split('v=')[1] || item.url.split('/').pop();
+          let videoId = "dQw4w9WgXcQ"; // fallback
+          try {
+            if (item.url.includes('v=')) videoId = item.url.split('v=')[1].split('&')[0];
+            else videoId = item.url.split('/').pop();
+          } catch (e) { }
+
           card.innerHTML = `
                         <div style="position:relative; width:100%; height:200px; background:#000;">
                             <img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" style="width:100%; height:100%; object-fit:cover; opacity:0.7;">

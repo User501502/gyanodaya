@@ -29,18 +29,34 @@
 
         <main class="content">
             <h1>TC Issued Management</h1>
-            <p class="page-desc">Add records of Transfer Certificates issued to students.</p>
+            <p class="page-desc">Add records and upload PDF links for Transfer Certificates.</p>
 
             <div class="card">
                 <h3>Add New TC Entry</h3>
                 <form id="tcForm"
                     style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; box-shadow:none; padding:0; max-width:100%;">
-                    <input id="studentName" type="text" placeholder="Student Name" required>
-                    <input id="studentClass" type="text" placeholder="Class" required>
-                    <input id="tcYear" type="number" placeholder="Year" required>
-                    <input id="tcNumber" type="text" placeholder="TC Number" required>
-                    <button class="btn btn-primary" style="grid-column: span 1 / -1;">
-                        <i class="fas fa-plus"></i> Add TC Entry
+                    <div>
+                        <label>Student Name</label>
+                        <input id="studentName" type="text" placeholder="Student Name" required>
+                    </div>
+                    <div>
+                        <label>Class</label>
+                        <input id="studentClass" type="text" placeholder="Class" required>
+                    </div>
+                    <div>
+                        <label>Academic Year</label>
+                        <input id="tcYear" type="text" placeholder="e.g. 2024-25" required>
+                    </div>
+                    <div>
+                        <label>TC Number</label>
+                        <input id="tcNumber" type="text" placeholder="TC No" required>
+                    </div>
+                    <div style="grid-column: 1 / -1;">
+                        <label>Document URL (PDF Link from Google Drive/Dropbox)</label>
+                        <input id="tcFileUrl" type="text" placeholder="https://...">
+                    </div>
+                    <button class="btn btn-primary" style="grid-column: 1 / -1;">
+                        <i class="fas fa-plus"></i> Save TC Record
                     </button>
                 </form>
             </div>
@@ -52,7 +68,7 @@
                             <th>Student Name</th>
                             <th>Class</th>
                             <th>Year</th>
-                            <th>TC Number</th>
+                            <th>TC No</th>
                             <th>Actions</th>
                         </tr>
                     </thead>

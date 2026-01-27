@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gallery Management | Gyanodaya Admin</title>
+  <title>Manage Gallery | Gyanodaya Admin</title>
   <link rel="stylesheet" href="admin.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -29,50 +29,56 @@
 
     <main class="content">
       <h1>Gallery Management</h1>
-      <p class="page-desc">Upload photos and add video links to your school gallery.</p>
+      <p class="page-desc">Add photos and videos to the school gallery.</p>
 
       <div class="card">
-        <h3>Upload New Item</h3>
-        <form id="galleryForm"
-          style="display:grid; grid-template-columns: 1fr 1fr auto; gap:15px; box-shadow:none; padding:0; max-width:100%;">
-          <div>
-            <label>Item Type</label>
-            <select id="type">
-              <option value="photo">Photo</option>
-              <option value="video">Video (YouTube Link)</option>
-            </select>
+        <h3>Add To Gallery</h3>
+        <form id="galleryForm" style="box-shadow:none; padding:0; margin-top:20px;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="form-group">
+              <label>Item Title</label>
+              <input id="title" type="text" placeholder="e.g. Annual Day 2024" required>
+            </div>
+            <div class="form-group">
+              <label>Content Type</label>
+              <select id="type" required>
+                <option value="photo">Photo</option>
+                <option value="video">YouTube Video</option>
+              </select>
+            </div>
           </div>
-          <div>
-            <label>Title / Caption</label>
-            <input id="title" type="text" placeholder="e.g. Annual Day 2025" required>
+          <div class="form-group">
+            <label id="urlLabel">Photo URL / YouTube Link</label>
+            <input id="url" type="text" placeholder="https://..." required>
+            <small id="sizeHint" style="color:var(--text-muted); display:block; margin-top:5px;">
+              <i class="fas fa-info-circle"></i> Recommended Dimensions: <strong>1200 x 800 px</strong> (for Photos)
+            </small>
           </div>
-          <div style="display:flex; align-items:flex-end;">
-            <button type="submit" class="btn btn-primary" style="height:42px;">
-              <i class="fas fa-upload"></i> Upload
-            </button>
-          </div>
-          <div id="fileGroup">
-            <label>Image File</label>
-            <input id="fileInput" type="file" accept="image/*">
-          </div>
-          <div id="urlGroup" class="hidden">
-            <label>YouTube URL</label>
-            <input id="urlInput" type="text" placeholder="https://youtube.com/watch?v=...">
-          </div>
+          <button type="submit" class="btn btn-primary" style="width:200px;">
+            <i class="fas fa-plus"></i> Add Item
+          </button>
         </form>
       </div>
 
-      <div class="card">
-        <h3>Gallery Items</h3>
-        <div id="galleryList"
-          style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; margin-top:20px;">
-          <!-- Dynamic -->
-        </div>
+      <div id="galleryItems" class="grid"
+        style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:20px; margin-top:30px;">
+        <!-- Dynamic -->
       </div>
     </main>
   </div>
 
   <script type="module" src="gallery.js"></script>
+  <script>
+    // Simple UI feedback for type change
+    document.getElementById('type').addEventListener('change', (e) => {
+      const hint = document.getElementById('sizeHint');
+      if (e.target.value === 'video') {
+        hint.innerHTML = '<i class="fas fa-info-circle"></i> Paste the full <strong>YouTube Video URL</strong> (e.g. https://www.youtube.com/watch?v=...)';
+      } else {
+        hint.innerHTML = '<i class="fas fa-info-circle"></i> Recommended Dimensions: <strong>1200 x 800 px</strong> (for Photos)';
+      }
+    });
+  </script>
 </body>
 
 </html>

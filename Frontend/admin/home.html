@@ -28,106 +28,82 @@
     </aside>
 
     <main class="content">
-      <h1>Home Management</h1>
-      <p class="page-desc">Customize your school's header, hero section, and footer.</p>
+      <h1>Home Page Management</h1>
+      <p class="page-desc">Control branding, hero content, and footer global settings.</p>
 
-      <!-- HEADER & LOGO -->
-      <div class="cms-block">
-        <div class="cms-block-header">
-          <h2><i class="fas fa-heading"></i> Header & Branding</h2>
-        </div>
-        <div class="cms-block-body">
-          <div class="form-group">
-            <label>School Name</label>
-            <input id="schoolName" type="text" placeholder="Enter school name">
-          </div>
-          <div class="form-group">
-            <label>School Logo</label>
-            <input type="file" id="logoInput" accept="image/*">
-            <img id="logoPreview" class="preview-img" src="" alt="">
-          </div>
-        </div>
-      </div>
-
-      <!-- HERO SECTION -->
-      <div class="cms-block">
-        <div class="cms-block-header">
-          <h2><i class="fas fa-star"></i> Hero Section</h2>
-        </div>
-        <div class="cms-block-body">
-          <div class="form-group">
-            <label>Hero Title</label>
-            <input id="heroTitle" type="text" placeholder="e.g. Welcome to Gyanodaya">
-          </div>
-          <div class="form-group">
-            <label>Hero Intro Text</label>
-            <textarea id="heroIntro" rows="3" placeholder="A brief introduction..."></textarea>
-          </div>
-          <div class="form-group">
-            <label>
-              <input type="checkbox" id="admissionOpen" style="width: auto; margin-right: 8px;">
-              Show "Admission Open" Badge
-            </label>
-          </div>
-        </div>
-      </div>
-
-      <!-- FOOTER SECTION -->
-      <div class="cms-block">
-        <div class="cms-block-header">
-          <h2><i class="fas fa-shoe-prints"></i> Footer Management</h2>
-        </div>
-        <div class="cms-block-body">
-          <div class="form-group">
-            <label>About School (Footer Short)</label>
-            <textarea id="footerAbout" rows="3"></textarea>
-          </div>
-          <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <!-- Global Branding -->
+      <div class="card">
+        <h3>Branding & Global Header</h3>
+        <form id="brandingForm" style="box-shadow:none; padding:0; margin-top:20px;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
             <div class="form-group">
-              <label>Address</label>
-              <input id="footerAddress" type="text">
+              <label>School Name</label>
+              <input id="schoolNameInput" type="text" placeholder="Gyanodaya Public School">
             </div>
             <div class="form-group">
-              <label>Phone</label>
+              <label>School Logo URL</label>
+              <input id="schoolLogoInput" type="text" placeholder="https://...">
+              <small class="text-muted"><i class="fas fa-info-circle"></i> Best Size: <strong>200 x 200 px</strong>
+                (Square)</small>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:200px;">Save Branding</button>
+        </form>
+      </div>
+
+      <!-- Hero Section -->
+      <div class="card">
+        <h3>Hero Section</h3>
+        <form id="heroForm" style="box-shadow:none; padding:0; margin-top:20px;">
+          <div class="form-group">
+            <label>Main Headline</label>
+            <input id="heroTitle" type="text" placeholder="Nurturing Excellence...">
+          </div>
+          <div class="form-group">
+            <label>Sub-text</label>
+            <textarea id="heroSubtitle" rows="2" placeholder="Describe your school's motto..."></textarea>
+          </div>
+          <div class="form-group">
+            <label>Hero Image URL</label>
+            <input id="heroImage" type="text" placeholder="https://...">
+            <small class="text-muted"><i class="fas fa-info-circle"></i> Best Size: <strong>1920 x 600 px</strong>
+              (Panoramic)</small>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:200px;">Update Hero</button>
+        </form>
+      </div>
+
+      <!-- Global Footer Settings -->
+      <div class="card">
+        <h3>Global Footer Settings</h3>
+        <form id="footerForm" style="box-shadow:none; padding:0; margin-top:20px;">
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+            <div class="form-group">
+              <label>About Text</label>
+              <textarea id="footerAbout" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Address</label>
+              <textarea id="footerAddress" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Primary Phone</label>
               <input id="footerPhone" type="text">
             </div>
             <div class="form-group">
-              <label>Email</label>
-              <input id="footerEmail" type="text">
-            </div>
-            <div class="form-group">
-              <label>Copyright Text</label>
-              <input id="footerCopyright" type="text">
+              <label>Primary Email</label>
+              <input id="footerEmail" type="email">
             </div>
           </div>
-          <div class="form-group">
-            <label>Google Maps Link (for Map Embed)</label>
-            <input id="mapLink" type="text" placeholder="Paste Google Maps URL here">
+          <h4 style="margin:20px 0 10px;">Social Links</h4>
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+            <input id="fbLink" placeholder="Facebook URL">
+            <input id="twLink" placeholder="Twitter URL">
+            <input id="igLink" placeholder="Instagram URL">
+            <input id="ytLink" placeholder="YouTube URL">
           </div>
-
-          <div class="form-group">
-            <label>Quick Links</label>
-            <div id="quickLinksList"></div>
-            <button type="button" class="btn btn-secondary" onclick="addQuickLink()" style="margin-top: 10px;">
-              <i class="fas fa-plus"></i> Add Link
-            </button>
-          </div>
-
-          <div class="form-group">
-            <label>Social Media Links</label>
-            <div id="socialLinksList"></div>
-            <button type="button" class="btn btn-secondary" onclick="addSocial()" style="margin-top: 10px;">
-              <i class="fas fa-share-alt"></i> Add Social
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div style="position: sticky; bottom: 40px; text-align: right;">
-        <button id="saveHomeBtn" class="btn btn-primary"
-          style="padding: 15px 40px; font-size: 16px; box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.4);">
-          <i class="fas fa-save"></i> Save All Changes
-        </button>
+          <button type="submit" class="btn btn-primary" style="width:200px; margin-top:20px;">Save Footer</button>
+        </form>
       </div>
     </main>
   </div>

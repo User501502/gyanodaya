@@ -5,48 +5,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About | Gyanodaya Public School</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-
   <header>
     <div class="navbar">
-      <div class="logo">
-        <img src="logo.png" alt="School Logo">
-        <span>Gyanodaya Public School</span>
-      </div>
-
-      <!-- Hamburger -->
+      <a href="index.html" class="logo">
+        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+        <span id="schoolName">Gyanodaya Public School</span>
+      </a>
       <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
       <nav id="navMenu">
         <ul id="navLinks">
           <li><a href="index.html">Home</a></li>
           <li class="dropdown">
             <a href="about.html" class="dropdown-toggle">About Us</a>
             <div class="dropdown-content">
-              <a href="about.html#vision">Vision & Mission</a>
-              <a href="about.html#principal">Principal's Message</a>
-              <a href="about.html#management">Management</a>
-              <a href="about.html#infrastructure">Infrastructure</a>
+              <a href="vision.html">Vision & Mission</a>
+              <a href="principal.html">Principal's Message</a>
+              <a href="management.html">Management</a>
+              <a href="infrastructure.html">Infrastructure</a>
             </div>
           </li>
           <li class="dropdown">
             <a href="academics.html" class="dropdown-toggle">Academics</a>
             <div class="dropdown-content">
-              <a href="academics.html#curriculum">Curriculum</a>
-              <a href="academics.html#calendar">Academic Calendar</a>
+              <a href="curriculum.html">Curriculum</a>
               <a href="faculty.html">Our Faculty</a>
-              <a href="academics.html#books">List of Books</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-            <div class="dropdown-content">
-              <a href="admissions.html#procedure">Admission Procedure</a>
-              <a href="admissions.html#fees">Fee Structure</a>
-              <a href="admissions.html#apply">Apply Online</a>
+              <a href="calendar.html">Calendar</a>
+              <a href="books.html">List of Books</a>
             </div>
           </li>
           <li class="dropdown">
@@ -57,48 +49,52 @@
               <a href="notice.html">Notices & News</a>
             </div>
           </li>
-          <li class="dropdown">
-            <a href="gallery.html" class="dropdown-toggle">Gallery</a>
-            <div class="dropdown-content">
-              <a href="gallery.html#photos">Photo Gallery</a>
-              <a href="gallery.html#videos">Video Gallery</a>
-            </div>
-          </li>
+          <li><a href="gallery.html">Gallery</a></li>
           <li><a href="contact.html">Contact Us</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <section class="section">
-    <h2>About Our School</h2>
-    <p>
-      Gyanodaya Public School, Sinhasa provides quality English-medium education
-      from Nursery to Class 12th with a focus on discipline, values and excellence.
-    </p>
+  <main id="siteContent">
+    <section class="section">
+      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">About Gyanodaya</h1>
 
-    <div class="grid">
-      <div class="card">
-        <h3>Vision</h3>
-        <p>To nurture responsible and knowledgeable citizens.</p>
+      <div class="card" style="margin-bottom:40px;">
+        <p style="font-size:18px; line-height:1.8;">
+          Gyanodaya Public School is a premier educational institution committed to excellence in education and
+          development.
+          Founded with a vision to nurture young minds, we provide a vibrant learning environment that encourages
+          curiosity,
+          creativity, and critical thinking.
+        </p>
       </div>
-      <div class="card">
-        <h3>Mission</h3>
-        <p>Deliver affordable, modern and value-based education.</p>
+
+      <div class="grid">
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-eye fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+          <h3>Vision</h3>
+          <p>To be a leading center of excellence that shapes global citizens with traditional values.</p>
+          <a href="vision.html" class="btn" style="margin-top:15px; display:inline-block;">Read More</a>
+        </div>
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-user-tie fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+          <h3>Principal's Desk</h3>
+          <p>Message from our leadership guiding the way to success.</p>
+          <a href="principal.html" class="btn" style="margin-top:15px; display:inline-block;">Read More</a>
+        </div>
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-building fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+          <h3>Infrastructure</h3>
+          <p>Modern facilities designed for the comprehensive growth of students.</p>
+          <a href="infrastructure.html" class="btn" style="margin-top:15px; display:inline-block;">Read More</a>
+        </div>
       </div>
-    </div>
+    </section>
+  </main>
 
-    <div class="card">
-      <h3>Principal’s Message</h3>
-      <p>Education is the most powerful tool for shaping the future.</p>
-    </div>
-  </section>
-
-  <footer>
-    <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
-  </footer>
-
-  <a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
+  <footer id="footer"></footer>
+  <script src="script.js"></script>
 </body>
 
 </html>

@@ -18,10 +18,11 @@ async function loadTCs() {
             const tr = document.createElement("tr");
             tr.innerHTML = `
                 <td>${tc.studentName}</td>
-                <td>${tc.class}</td>
+                <td>${tc.className}</td>
                 <td>${tc.year}</td>
-                <td>${tc.tcNumber}</td>
+                <td>${tc.tcNo}</td>
                 <td>
+                    ${tc.fileUrl ? `<a href="${tc.fileUrl}" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-file-pdf"></i> View</a>` : '<span class="text-muted">No File</span>'}
                     <button class="btn btn-danger btn-sm" onclick="deleteTC('${tc._id}')">
                         <i class="fas fa-trash"></i>
                     </button>
@@ -37,13 +38,16 @@ async function loadTCs() {
 form.onsubmit = async (e) => {
     e.preventDefault();
     const btn = form.querySelector("button");
+    const originalText = btn.innerHTML;
     btn.disabled = true;
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
     const payload = {
         studentName: document.getElementById("studentName").value,
-        class: document.getElementById("studentClass").value,
+        className: document.getElementById("studentClass").value,
         year: document.getElementById("tcYear").value,
-        tcNumber: document.getElementById("tcNumber").value
+        tcNo: document.getElementById("tcNumber").value,
+        fileUrl: document.getElementById("tcFileUrl").value
     };
 
     try {
@@ -54,6 +58,7 @@ form.onsubmit = async (e) => {
         alert(err.message);
     } finally {
         btn.disabled = false;
+        btn.innerHTML = originalText;
     }
 };
 

@@ -4,93 +4,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact | Gyanodaya Public School</title>
+  <title>Contact Us | Gyanodaya</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
+  <header></header>
+  <main id="siteContent">
+    <section class="section">
+      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Get In Touch</h1>
 
-  <header>
-    <div class="navbar">
-      <div class="logo">
-        <img src="logo.png" alt="School Logo">
-        <span>Gyanodaya Public School</span>
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:40px;">
+        <!-- Contact Info -->
+        <div class="card">
+          <h3 style="margin-bottom:20px;">Contact Information</h3>
+          <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <i class="fas fa-map-marker-alt" style="color:var(--primary); font-size:20px; margin-top:5px;"></i>
+            <p><strong>Campus Address:</strong><br>Gyanodaya Public School, Opp. Gayatri Shakti Peeth, Near Railway
+              Crossing, Vidisha (M.P.) 464001</p>
+          </div>
+          <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <i class="fas fa-phone" style="color:var(--primary); font-size:20px; margin-top:5px;"></i>
+            <p><strong>Call Us:</strong><br>+91 9406613049, +91 7592408221</p>
+          </div>
+          <div style="display:flex; gap:15px; margin-bottom:20px;">
+            <i class="fas fa-envelope" style="color:var(--primary); font-size:20px; margin-top:5px;"></i>
+            <p><strong>Email:</strong><br>gyanodayavidisha@gmail.com</p>
+          </div>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="card">
+          <h3 style="margin-bottom:20px;">Send Us a Message</h3>
+          <form id="contactForm" style="display:grid; gap:15px;">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <input type="tel" placeholder="Phone Number" required>
+            <textarea rows="4" placeholder="Your Message..." required></textarea>
+            <button type="submit" class="btn btn-primary" style="width:100%;">Send Message</button>
+          </form>
+        </div>
       </div>
+    </section>
 
-      <!-- Hamburger -->
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="about.html#vision">Vision & Mission</a>
-              <a href="about.html#principal">Principal's Message</a>
-              <a href="about.html#management">Management</a>
-              <a href="about.html#infrastructure">Infrastructure</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="academics.html#curriculum">Curriculum</a>
-              <a href="academics.html#calendar">Academic Calendar</a>
-              <a href="faculty.html">Our Faculty</a>
-              <a href="academics.html#books">List of Books</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-            <div class="dropdown-content">
-              <a href="admissions.html#procedure">Admission Procedure</a>
-              <a href="admissions.html#fees">Fee Structure</a>
-              <a href="admissions.html#apply">Apply Online</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Information</a>
-            <div class="dropdown-content">
-              <a href="tc-issued.html">TC Issued</a>
-              <a href="disclosure.html">Mandatory Disclosure</a>
-              <a href="notice.html">Notices & News</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="gallery.html" class="dropdown-toggle">Gallery</a>
-            <div class="dropdown-content">
-              <a href="gallery.html#photos">Photo Gallery</a>
-              <a href="gallery.html#videos">Video Gallery</a>
-            </div>
-          </li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <section class="section">
-    <h2>Contact Us</h2>
-
-    <p>📍 Gyanodaya Public School, Sinhasa</p>
-    <p>📞 9406613049</p>
-    <p>✉️ gyanodayapublicschool14@gmail.com</p>
-
-    <iframe src="https://maps.google.com/maps?q=Sinhasa&t=&z=13&output=embed" width="100%" height="300"></iframe>
-
-    <form>
-      <input placeholder="Your Name">
-      <input placeholder="Mobile Number">
-      <textarea placeholder="Message"></textarea>
-      <button>Send Message</button>
-    </form>
-  </section>
-
-  <footer>
-    <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
-  </footer>
-  <a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
+    <!-- Location Map -->
+    <section class="section" style="padding-top:0;">
+      <div class="card" style="padding:0; overflow:hidden; border-radius:15px;">
+        <iframe id="mapFrame"
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1830.8358498263592!2d77.81180290000001!3d23.526322900000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x397c0f135b54203b%3A0xe54930379895cae7!2sGyanodaya%20Higher%20Secondary%20School!5e0!3m2!1sen!2sin!4v1716388484501!5m2!1sen!2sin"
+          width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </section>
+  </main>
+  <footer id="footer"></footer>
+  <script src="script.js"></script>
 </body>
 
 </html>

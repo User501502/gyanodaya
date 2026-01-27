@@ -4,111 +4,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admissions | Gyanodaya Public School</title>
+  <title>Admissions | Gyanodaya</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
+  <header></header>
+  <main id="siteContent">
+    <section class="section">
+      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Join Our Community</h1>
 
-  <header>
-    <div class="navbar">
-      <div class="logo">
-        <img src="logo.png" alt="School Logo">
-        <span>Gyanodaya Public School</span>
+      <div class="grid">
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-clipboard-list fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+          <h3>Admission Procedure</h3>
+          <p>Learn about our registration and selection process.</p>
+          <a href="admission-procedure.html" class="btn" style="margin-top:15px; display:inline-block;">Read More</a>
+        </div>
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-wallet fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+          <h3>Fee Structure</h3>
+          <p>Detailed information about tuition and other academic fees.</p>
+          <a href="fees.html" class="btn" style="margin-top:15px; display:inline-block;">View Fees</a>
+        </div>
+        <div class="card" style="text-align:center;">
+          <i class="fas fa-edit fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+          <h3>Apply Online</h3>
+          <p>Submit your initial application form via our secure portal.</p>
+          <a href="online-apply.html" class="btn"
+            style="margin-top:15px; display:inline-block; background:var(--accent); color:black;">Apply Now</a>
+        </div>
       </div>
 
-      <!-- Hamburger -->
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="about.html#vision">Vision & Mission</a>
-              <a href="about.html#principal">Principal's Message</a>
-              <a href="about.html#management">Management</a>
-              <a href="about.html#infrastructure">Infrastructure</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="academics.html#curriculum">Curriculum</a>
-              <a href="academics.html#calendar">Academic Calendar</a>
-              <a href="faculty.html">Our Faculty</a>
-              <a href="academics.html#books">List of Books</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-            <div class="dropdown-content">
-              <a href="admissions.html#procedure">Admission Procedure</a>
-              <a href="admissions.html#fees">Fee Structure</a>
-              <a href="admissions.html#apply">Apply Online</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle">Information</a>
-            <div class="dropdown-content">
-              <a href="tc-issued.html">TC Issued</a>
-              <a href="disclosure.html">Mandatory Disclosure</a>
-              <a href="notice.html">Notices & News</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="gallery.html" class="dropdown-toggle">Gallery</a>
-            <div class="dropdown-content">
-              <a href="gallery.html#photos">Photo Gallery</a>
-              <a href="gallery.html#videos">Video Gallery</a>
-            </div>
-          </li>
-          <li><a href="contact.html">Contact Us</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-
-  <section class="section">
-    <h2>Admissions</h2>
-
-    <div class="grid">
-      <div class="card">
-        <h3>Admission Process</h3>
-        <ol>
-          <li>Enquiry</li>
-          <li>Form Submission</li>
-          <li>Confirmation</li>
-        </ol>
+      <div class="card" style="margin-top:40px; text-align:center; background:#f8fafc;">
+        <h3>Have Questions?</h3>
+        <p>Visit our campus for a personal tour and interaction with our faculty.</p>
+        <a href="contact.html" class="btn btn-secondary" style="margin-top:10px;">Contact Helpdesk</a>
       </div>
-
-      <div class="card">
-        <h3>Required Documents</h3>
-        <ul>
-          <li>Birth Certificate</li>
-          <li>Aadhar Card</li>
-          <li>Previous Report Card</li>
-        </ul>
-      </div>
-    </div>
-
-    <form>
-      <input placeholder="Parent Name">
-      <input placeholder="Mobile Number">
-      <select>
-        <option>Select Class</option>
-      </select>
-      <textarea placeholder="Message"></textarea>
-      <button>Submit Enquiry</button>
-    </form>
-  </section>
-
-  <footer>
-    <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
-  </footer>
-  <a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
+    </section>
+  </main>
+  <footer id="footer"></footer>
+  <script src="script.js"></script>
 </body>
 
 </html>

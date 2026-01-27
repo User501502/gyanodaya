@@ -31,7 +31,7 @@ async function loadNotices() {
       div.style.borderLeft = "4px solid var(--primary)";
 
       div.innerHTML = `
-                <span style="font-size: 14px; font-weight: 500;">${n.text}</span>
+                <span style="font-size: 14px; font-weight: 500;">${n.title}</span>
                 <button class="btn btn-danger btn-sm" onclick="deleteNotice('${n._id}')" style="padding: 5px 10px;">
                    <i class="fas fa-trash"></i>
                 </button>
@@ -51,7 +51,7 @@ form.onsubmit = async (e) => {
   try {
     await api("/api/notices", {
       method: "POST",
-      body: JSON.stringify({ text: input.value.trim() })
+      body: JSON.stringify({ title: input.value.trim() })
     });
     input.value = "";
     loadNotices();
