@@ -19,6 +19,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (pageName === 'home') {
       await loadNoticeTicker();
     }
+
+    if (['calendar', 'fees', 'books'].includes(pageName)) {
+      await loadPageRecords(pageName);
+    }
+
     setupMobileDropdowns();
   };
   init();
@@ -169,6 +174,16 @@ async function loadGlobalSettings() {
     const heroIntro = document.getElementById("heroIntro");
     if (heroIntro) heroIntro.innerText = data.heroIntro || "";
 
+    const heroSection = document.getElementById("heroSection");
+    if (heroSection && data.heroImage) {
+      heroSection.style.backgroundImage = `url('${data.heroImage}')`;
+    }
+
+    const admissionBadge = document.getElementById("admissionBadge");
+    if (admissionBadge) {
+      admissionBadge.style.display = "inline-block";
+    }
+
     const mapFrame = document.getElementById("mapFrame");
     if (mapFrame && data.footer?.mapEmbed) mapFrame.src = data.footer.mapEmbed;
 
@@ -185,31 +200,41 @@ window.loadSections = async function (page = "home") {
     const container = document.getElementById("sectionsContainer");
     if (!container) return;
 
-    // Filter active sections and sort by position
     const activeSections = sections.filter(s => s.isActive);
-    if (activeSections.length === 0 && page !== 'home') {
-      // Optional: show placeholder if empty
-    }
-
     container.innerHTML = "";
+
     activeSections.forEach(section => {
       let html = `<section class="section">
                         <div style="text-align:center; margin-bottom:40px;">
                             <h2 style="font-family:'Outfit', sans-serif; font-size:32px; color:var(--primary);">${section.title}</h2>
                             <div style="width:60px; height:4px; background:var(--accent); margin:15px auto;"></div>
                         </div>`;
+
+      let flexBox = `<div style="display:flex; flex-direction:column; gap:30px;">`;
+
+      // If there's an image, create a 2-column layout for text
+      if (section.image && section.type === 'text') {
+        flexBox = `<div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap:40px; align-items:center;">
+                    <div style="border-radius:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.1);">
+                        <img src="${section.image}" style="width:100%; height:auto; display:block;">
+                    </div>`;
+      }
+
       if (section.type === "list") {
-        html += `<div class="grid">`;
+        let grid = `<div class="grid">`;
         section.content.forEach(item => {
-          html += `<div class="card" style="text-align:center;">
+          grid += `<div class="card" style="text-align:center;">
                         <i class="fas fa-check-circle" style="color:var(--primary); font-size:24px; margin-bottom:15px; display:block;"></i>
                         <p style="font-weight:500;">${item}</p>
                     </div>`;
         });
-        html += `</div>`;
+        grid += `</div>`;
+        html += grid;
       } else {
-        html += `<div class="card" style="line-height:1.8; font-size:16px;"><p>${section.content.join("<br>")}</p></div>`;
+        html += flexBox + `<div class="card" style="line-height:1.8; font-size:16px;"><p>${section.content.join("<br>")}</p></div>`;
+        if (section.image) html += `</div>`; // close grid
       }
+
       html += `</section>`;
       container.innerHTML += html;
     });
@@ -228,6 +253,47 @@ window.loadNoticeTicker = async function () {
       ticker.style.display = "block";
       textEl.innerText = notices.map(n => n.title).join("  |  ✦  ");
     }
+  } catch (err) { console.error(err); }
+};
+
+// Function to load specialized records (Fees, Books, Calendar)
+window.loadPageRecords = async function (category) {
+  try {
+    const res = await fetch(`/api/records?category=${category}`);
+    const records = await res.json();
+    const container = document.getElementById("recordsContainer");
+    if (!container || records.length === 0) return;
+
+    const titles = {
+      fees: ["Class", "Admission Fee", "Monthly Fee"],
+      books: ["Class", "Subject", "Book Name & Publisher"],
+      calendar: ["Date", "Event Title", "Description"]
+    };
+    const [h1, h2, h3] = titles[category];
+
+    let html = `
+      <div class="card" style="margin-top:20px; overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse;">
+          <thead>
+            <tr style="background:var(--bg); text-align:left;">
+              <th style="padding:15px; border-bottom:2px solid var(--primary);">${h1}</th>
+              <th style="padding:15px; border-bottom:2px solid var(--primary);">${h2}</th>
+              <th style="padding:15px; border-bottom:2px solid var(--primary);">${h3}</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${records.map(r => `
+              <tr style="border-bottom:1px solid #eee;">
+                <td style="padding:15px; font-weight:600;">${r.col1}</td>
+                <td style="padding:15px;">${r.col2}</td>
+                <td style="padding:15px;">${r.col3 || ""}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+    container.innerHTML = html;
   } catch (err) { console.error(err); }
 };
 

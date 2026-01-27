@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media & Files | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <h1>Media & Files Library</h1>
+                    <p class="page-desc">Upload and manage school documents, images, and other assets.</p>
+                </div>
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-upload"></i> Upload New File
+                </button>
+            </div>
+
+            <input type="file" id="fileInput" style="display: none;" onchange="handleUpload(event)">
+
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>File Preview</th>
+                                <th>Name</th>
+                                <th>Type</th>
+                                <th>URL (Copy Link)</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="assetTable">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px;">Loading assets...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            loadAssets();
+        }
+
+        async function loadAssets() {
+            try {
+                const assets = await api("/api/assets");
+                const tbody = document.getElementById('assetTable');
+                tbody.innerHTML = '';
+
+                if (assets.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 40px;">No files uploaded yet.</td></tr>';
+                    return;
+                }
+
+                assets.forEach(asset => {
+                    const tr = document.createElement('tr');
+                    const isImg = asset.type.startsWith('image');
+                    tr.innerHTML = `
+                        <td>
+                            ${isImg ? `<img src="${asset.url}" style="height: 40px; width: 40px; object-fit: cover; border-radius: 4px;">` : `<i class="fas fa-file-pdf fa-2x" style="color: #ef4444;"></i>`}
+                        </td>
+                        <td style="font-weight: 600;">${asset.name}</td>
+                        <td><span style="background: #f1f5f9; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: bold;">${asset.type.toUpperCase()}</span></td>
+                        <td>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <input type="text" value="${asset.url}" readonly style="font-size: 11px; padding: 5px; background: #f8fafc; border: 1px solid #e2e8f0; width: 200px;">
+                                <button onclick="copyToClipboard('${asset.url}')" class="btn btn-secondary" style="padding: 5px 10px; font-size: 11px;"><i class="fas fa-copy"></i></button>
+                            </div>
+                        </td>
+                        <td>
+                            <button onclick="deleteAsset('${asset._id}')" class="btn btn-danger" style="padding: 5px 10px; font-size: 11px;"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        window.copyToClipboard = (text) => {
+            navigator.clipboard.writeText(text);
+            alert("Link copied to clipboard!");
+        };
+
+        window.deleteAsset = async (id) => {
+            if (!confirm("Are you sure? This cannot be undone.")) return;
+            try {
+                await api(`/api/assets/${id}`, { method: "DELETE" });
+                loadAssets();
+            } catch (err) { alert(err.message); }
+        };
+
+        window.handleUpload = (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async () => {
+                try {
+                    await api("/api/assets", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            name: file.name,
+                            url: reader.result,
+                            type: file.type || 'file',
+                            size: file.size
+                        })
+                    });
+                    loadAssets();
+                } catch (err) { alert(err.message); }
+            };
+            reader.readAsDataURL(file);
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

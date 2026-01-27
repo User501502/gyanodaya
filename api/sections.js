@@ -5,6 +5,7 @@ const SectionSchema = new mongoose.Schema({
   title: String,
   type: String,           // "list" | "text" | "infrastructure" | "calendar"
   content: [String],
+  image: String,          // Base64 or URL for the section photo
   position: Number,
   isActive: { type: Boolean, default: true },
   page: { type: String, default: "home" } // "home", "calendar", "infrastructure", "management", etc.

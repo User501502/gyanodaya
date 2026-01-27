@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Data | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <h1 id="pageTitle">Manage Records</h1>
+                    <p class="page-desc" id="pageDesc">Manage items for this category.</p>
+                </div>
+                <button class="btn btn-primary" onclick="showAddModal()">
+                    <i class="fas fa-plus"></i> Add New Record
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="table-container">
+                    <table>
+                        <thead id="tableHead">
+                            <!-- Dynamic -->
+                        </thead>
+                        <tbody id="recordTable">
+                            <tr>
+                                <td colspan="5" style="text-align: center; padding: 40px;">Loading records...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="recordModal" class="modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="card" style="width:500px; padding:30px;">
+            <h3 id="modalTitle">Add Record</h3>
+            <form id="recordForm" style="margin-top:20px;">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label id="label1">Column 1</label>
+                    <input id="col1" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label id="label2">Column 2</label>
+                    <input id="col2" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label id="label3">Column 3</label>
+                    <input id="col3" type="text">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;"
+                        onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Save Record</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const category = urlParams.get('category') || 'fees';
+
+        const configs = {
+            fees: { title: "Fee Structure", desc: "Manage fees for each class.", h1: "Class", h2: "Admission Fee", h3: "Monthly Fee" },
+            books: { title: "List of Books", desc: "Manage books and publishers for each class.", h1: "Class", h2: "Subject", h3: "Book Name & Publisher" },
+            calendar: { title: "Academic Calendar", desc: "Manage school events and holidays.", h1: "Date", h2: "Event Title", h3: "Description" }
+        };
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            renderHeader();
+            loadRecords();
+        }
+
+        function renderHeader() {
+            const config = configs[category];
+            document.getElementById('pageTitle').innerText = config.title;
+            document.getElementById('pageDesc').innerText = config.desc;
+            document.getElementById('tableHead').innerHTML = `
+                <tr>
+                    <th>${config.h1}</th>
+                    <th>${config.h2}</th>
+                    <th>${config.h3}</th>
+                    <th>Action</th>
+                </tr>
+            `;
+            document.getElementById('label1').innerText = config.h1;
+            document.getElementById('label2').innerText = config.h2;
+            document.getElementById('label3').innerText = config.h3;
+        }
+
+        async function loadRecords() {
+            try {
+                const records = await api(`/api/records?category=${category}`);
+                const tbody = document.getElementById('recordTable');
+                tbody.innerHTML = '';
+                records.forEach(r => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td style="font-weight:600;">${r.col1}</td>
+                        <td>${r.col2}</td>
+                        <td>${r.col3 || ''}</td>
+                        <td>
+                            <button onclick="editRecord('${r._id}')" class="btn btn-secondary btn-sm"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteRecord('${r._id}')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        window.showAddModal = () => {
+            document.getElementById('recordForm').reset();
+            document.getElementById('editId').value = '';
+            document.getElementById('modalTitle').innerText = "Add New " + configs[category].title;
+            document.getElementById('recordModal').style.display = 'flex';
+        };
+
+        window.closeModal = () => document.getElementById('recordModal').style.display = 'none';
+
+        document.getElementById('recordForm').onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('editId').value;
+            const payload = {
+                category,
+                col1: document.getElementById('col1').value,
+                col2: document.getElementById('col2').value,
+                col3: document.getElementById('col3').value
+            };
+            try {
+                if (id) await api(`/api/records/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                else await api("/api/records", { method: "POST", body: JSON.stringify(payload) });
+                closeModal();
+                loadRecords();
+            } catch (err) { alert(err.message); }
+        };
+
+        window.editRecord = async (id) => {
+            const records = await api(`/api/records?category=${category}`);
+            const r = records.find(x => x._id === id);
+            if (!r) return;
+            document.getElementById('editId').value = r._id;
+            document.getElementById('col1').value = r.col1;
+            document.getElementById('col2').value = r.col2;
+            document.getElementById('col3').value = r.col3;
+            document.getElementById('modalTitle').innerText = "Edit Record";
+            document.getElementById('recordModal').style.display = 'flex';
+        };
+
+        window.deleteRecord = async (id) => {
+            if (!confirm("Delete this?")) return;
+            await api(`/api/records/${id}`, { method: "DELETE" });
+            loadRecords();
+        };
+
+        init();
+    </script>
+</body>
+
+</html>

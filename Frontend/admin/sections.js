@@ -5,11 +5,37 @@ const pageFilter = document.getElementById("pageFilter");
 const modal = document.getElementById("sectionModal");
 const form = document.getElementById("sectionForm");
 
+const imageInput = document.getElementById("sectionImageInput");
+const imagePreview = document.getElementById("imagePreview");
+const imageBase64 = document.getElementById("sectionImageBase64");
+
 async function init() {
   await protectPage();
   initSidebar();
+
+  // Use page from query param if available
+  const urlParams = new URLSearchParams(window.location.search);
+  const pageParam = urlParams.get('page');
+  if (pageParam) {
+    pageFilter.value = pageParam;
+    const pageName = pageFilter.options[pageFilter.selectedIndex]?.text || pageParam;
+    document.querySelector('h1').innerText = `Manage ${pageName}`;
+  }
+
   loadSections();
 }
+
+imageInput.onchange = (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    imageBase64.value = reader.result;
+    imagePreview.src = reader.result;
+    imagePreview.style.display = "block";
+  };
+  reader.readAsDataURL(file);
+};
 
 pageFilter.onchange = () => loadSections();
 
@@ -36,12 +62,15 @@ async function loadSections() {
       card.style.borderLeft = s.isActive ? "5px solid var(--primary)" : "5px solid #ccc";
 
       card.innerHTML = `
-                <div>
-                    <h4 style="margin-bottom:5px;">${s.title}</h4>
-                    <span class="badge" style="background:#f1f5f9; color:#64748b; font-size:10px;">${s.type.toUpperCase()}</span>
-                    <span class="badge" style="background:${s.isActive ? '#dcfce7' : '#fee2e2'}; color:${s.isActive ? '#166534' : '#991b1b'}; font-size:10px;">
-                        ${s.isActive ? 'Active' : 'Hidden'}
-                    </span>
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    ${s.image ? `<img src="${s.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">` : `<div style="width: 50px; height: 50px; background: #f8fafc; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #cbd5e1;"><i class="fas fa-image"></i></div>`}
+                    <div>
+                        <h4 style="margin-bottom:5px;">${s.title}</h4>
+                        <span class="badge" style="background:#f1f5f9; color:#64748b; font-size:10px;">${s.type.toUpperCase()}</span>
+                        <span class="badge" style="background:${s.isActive ? '#dcfce7' : '#fee2e2'}; color:${s.isActive ? '#166534' : '#991b1b'}; font-size:10px;">
+                            ${s.isActive ? 'Active' : 'Hidden'}
+                        </span>
+                    </div>
                 </div>
                 <div style="display:flex; gap:10px;">
                     <button class="btn btn-secondary btn-sm" onclick="editSection('${s._id}')"><i class="fas fa-edit"></i></button>
@@ -58,6 +87,8 @@ async function loadSections() {
 window.showAddSection = () => {
   form.reset();
   document.getElementById("editId").value = "";
+  imageBase64.value = "";
+  imagePreview.style.display = "none";
   const pageValue = pageFilter.value;
   document.getElementById("sectionPage").value = pageValue;
   document.getElementById("sectionPageDisplay").value = pageValue.toUpperCase();
@@ -85,6 +116,7 @@ form.onsubmit = async (e) => {
     page: document.getElementById("sectionPage").value,
     title: document.getElementById("sectionTitle").value,
     type: type,
+    image: imageBase64.value,
     isActive: document.getElementById("sectionActive").value === "true",
     content: type === "text"
       ? [document.getElementById("sectionText").value]
@@ -104,7 +136,8 @@ form.onsubmit = async (e) => {
 
 window.editSection = async (id) => {
   try {
-    const sections = await api(`/api/sections`);
+    const page = pageFilter.value;
+    const sections = await api(`/api/sections?page=${page}`);
     const s = sections.find(x => x._id === id);
     if (!s) return;
 
@@ -115,9 +148,19 @@ window.editSection = async (id) => {
     document.getElementById("sectionType").value = s.type;
     document.getElementById("sectionActive").value = s.isActive.toString();
 
+    imageBase64.value = s.image || "";
+    if (s.image) {
+      imagePreview.src = s.image;
+      imagePreview.style.display = "block";
+    } else {
+      imagePreview.style.display = "none";
+    }
+
     if (s.type === "text") {
       document.getElementById("sectionText").value = s.content[0] || "";
     } else {
+      document.getElementById("listContentArea").style.display = "block";
+      document.getElementById("textContentArea").style.display = "none";
       document.getElementById("sectionList").value = (s.content || []).join('\n');
     }
 

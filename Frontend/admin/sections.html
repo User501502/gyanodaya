@@ -96,6 +96,19 @@
           </div>
         </div>
 
+        <div class="form-group" style="margin-top:15px;">
+          <label>Section Image (Optional)</label>
+          <div style="display: flex; gap: 15px; align-items: center;">
+            <input type="file" id="sectionImageInput" accept="image/*"
+              style="padding: 10px; border: 1px dashed var(--border);">
+            <img id="imagePreview" src=""
+              style="height: 50px; width: 50px; object-fit: cover; display: none; border: 1px solid #ddd;">
+            <input type="hidden" id="sectionImageBase64">
+          </div>
+          <small style="color:var(--text-muted);">Recommended for Infrastructure, Principal's Message, or featured
+            sections.</small>
+        </div>
+
         <div id="textContentArea" class="form-group" style="margin-top:15px;">
           <label>Paragraph Content</label>
           <textarea id="sectionText" rows="6" placeholder="Enter the detailed text content here..."></textarea>
