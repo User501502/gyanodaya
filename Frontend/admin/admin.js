@@ -51,6 +51,26 @@ export async function api(url, options = {}) {
  * Initialize Sidebar functionality (Consistency)
  */
 export function initSidebar() {
+  const sidebar = document.querySelector(".sidebar");
+  if (sidebar) {
+    sidebar.innerHTML = `
+            <h3>Gyanodaya Admin</h3>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="home.html">Home Management</a>
+            <a href="sections.html">Sections</a>
+            <a href="faculty.html">Faculty</a>
+            <a href="notices.html">Notices</a>
+            <a href="admissions.html">Admissions</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="tc.html">TC Issued</a>
+            <a href="disclosure.html">Disclosures</a>
+            <div class="sidebar-bottom">
+                <a href="settings.html">Settings</a>
+                <button id="logoutBtn">Logout</button>
+            </div>
+        `;
+  }
+
   const logoutBtn = document.getElementById("logoutBtn");
   if (logoutBtn) {
     logoutBtn.onclick = async () => {
@@ -65,7 +85,8 @@ export function initSidebar() {
   const currentPath = window.location.pathname;
   const links = document.querySelectorAll(".sidebar a");
   links.forEach(link => {
-    if (currentPath.includes(link.getAttribute("href"))) {
+    const href = link.getAttribute("href");
+    if (href && currentPath.endsWith(href)) {
       link.classList.add("active");
     }
   });

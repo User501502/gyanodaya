@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Faculty | Gyanodaya Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <h3>Gyanodaya Admin</h3>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="home.html">Home Management</a>
+            <a href="sections.html">Sections</a>
+            <a href="faculty.html">Faculty</a>
+            <a href="notices.html">Notices</a>
+            <a href="admissions.html">Admissions</a>
+            <a href="gallery.html">Gallery</a>
+            <a href="tc.html">TC Issued</a>
+            <a href="disclosure.html">Disclosures</a>
+            <div class="sidebar-bottom">
+                <a href="settings.html">Settings</a>
+                <button id="logoutBtn">Logout</button>
+            </div>
+        </aside>
+
+        <main class="content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1>Faculty Management</h1>
+                <button class="btn btn-primary" onclick="showAddModal()">+ Add Faculty Member</button>
+            </div>
+            <p class="page-desc">Manage teachers and staff display on the "Our Faculty" page.</p>
+
+            <div id="facultyGrid" class="grid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; margin-top: 30px;">
+                <!-- Faculty cards will be loaded here -->
+            </div>
+        </main>
+    </div>
+
+    <!-- Add/Edit Modal -->
+    <div id="facultyModal" class="modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="card" style="width:500px; max-width:90%; padding:30px;">
+            <h3 id="modalTitle">Add Faculty Member</h3>
+            <form id="facultyForm" style="margin-top:20px;">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input id="facName" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Designation (e.g. Principal, HOD Physics)</label>
+                    <input id="facDesignation" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Qualification (e.g. M.A., B.Ed)</label>
+                    <input id="facQualification" type="text">
+                </div>
+                <div class="form-group">
+                    <label>Experience (e.g. 10 Years)</label>
+                    <input id="facExperience" type="text">
+                </div>
+                <div class="form-group">
+                    <label>Display Order (Smallest first)</label>
+                    <input id="facOrder" type="number" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Photo (Upload from Device)</label>
+                    <input id="facPhotoInput" type="file" accept="image/*">
+                    <img id="facPreview" src=""
+                        style="height:80px; width:80px; object-fit:cover; border-radius:10px; margin-top:10px; display:none;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;"
+                        onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module" src="faculty.js"></script>
+</body>
+
+</html>

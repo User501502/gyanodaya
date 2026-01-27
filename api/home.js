@@ -34,6 +34,7 @@ const HomeSchema = new mongoose.Schema({
 
   heroTitle: String,
   heroIntro: String,
+  heroImage: String,
   admissionOpen: Boolean,
 
   footer: FooterSchema   // 🔥 THIS WAS MISSING

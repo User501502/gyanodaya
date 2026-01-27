@@ -16,6 +16,7 @@
       <a href="dashboard.html">Dashboard</a>
       <a href="home.html">Home Management</a>
       <a href="sections.html">Sections</a>
+      <a href="faculty.html">Faculty</a>
       <a href="notices.html">Notices</a>
       <a href="admissions.html">Admissions</a>
       <a href="gallery.html">Gallery</a>
@@ -42,43 +43,41 @@
             <div class="form-group">
               <label>Content Type</label>
               <select id="type" required>
-                <option value="photo">Photo</option>
-                <option value="video">YouTube Video</option>
+                <option value="photo">Photo (Upload from device)</option>
+                <option value="video">YouTube Video (Link)</option>
               </select>
             </div>
           </div>
-          <div class="form-group">
-            <label id="urlLabel">Photo URL / YouTube Link</label>
-            <input id="url" type="text" placeholder="https://..." required>
-            <small id="sizeHint" style="color:var(--text-muted); display:block; margin-top:5px;">
-              <i class="fas fa-info-circle"></i> Recommended Dimensions: <strong>1200 x 800 px</strong> (for Photos)
+
+          <!-- File Input for Photos -->
+          <div id="fileGroup" class="form-group">
+            <label>Select Photo</label>
+            <input id="fileInput" type="file" accept="image/*">
+            <small style="color:var(--text-muted); display:block; margin-top:5px;">
+              <i class="fas fa-info-circle"></i> Best size: 1200x800 px
             </small>
           </div>
-          <button type="submit" class="btn btn-primary" style="width:200px;">
+
+          <!-- URL Input for Videos -->
+          <div id="urlGroup" class="form-group" style="display:none;">
+            <label>YouTube Video URL</label>
+            <input id="urlInput" type="text" placeholder="https://www.youtube.com/watch?v=...">
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:200px; margin-top:10px;">
             <i class="fas fa-plus"></i> Add Item
           </button>
         </form>
       </div>
 
-      <div id="galleryItems" class="grid"
-        style="display:grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap:20px; margin-top:30px;">
+      <div id="galleryList" class="grid"
+        style="display:grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap:20px; margin-top:30px;">
         <!-- Dynamic -->
       </div>
     </main>
   </div>
 
   <script type="module" src="gallery.js"></script>
-  <script>
-    // Simple UI feedback for type change
-    document.getElementById('type').addEventListener('change', (e) => {
-      const hint = document.getElementById('sizeHint');
-      if (e.target.value === 'video') {
-        hint.innerHTML = '<i class="fas fa-info-circle"></i> Paste the full <strong>YouTube Video URL</strong> (e.g. https://www.youtube.com/watch?v=...)';
-      } else {
-        hint.innerHTML = '<i class="fas fa-info-circle"></i> Recommended Dimensions: <strong>1200 x 800 px</strong> (for Photos)';
-      }
-    });
-  </script>
 </body>
 
 </html>

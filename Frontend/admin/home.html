@@ -11,11 +11,12 @@
 
 <body>
   <div class="layout">
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
       <h3>Gyanodaya Admin</h3>
       <a href="dashboard.html">Dashboard</a>
       <a href="home.html">Home Management</a>
       <a href="sections.html">Sections</a>
+      <a href="faculty.html">Faculty</a>
       <a href="notices.html">Notices</a>
       <a href="admissions.html">Admissions</a>
       <a href="gallery.html">Gallery</a>
@@ -31,79 +32,92 @@
       <h1>Home Page Management</h1>
       <p class="page-desc">Control branding, hero content, and footer global settings.</p>
 
-      <!-- Global Branding -->
       <div class="card">
-        <h3>Branding & Global Header</h3>
-        <form id="brandingForm" style="box-shadow:none; padding:0; margin-top:20px;">
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-            <div class="form-group">
-              <label>School Name</label>
-              <input id="schoolNameInput" type="text" placeholder="Gyanodaya Public School">
-            </div>
-            <div class="form-group">
-              <label>School Logo URL</label>
-              <input id="schoolLogoInput" type="text" placeholder="https://...">
-              <small class="text-muted"><i class="fas fa-info-circle"></i> Best Size: <strong>200 x 200 px</strong>
-                (Square)</small>
-            </div>
+        <h3>General Branding</h3>
+        <div class="form-group">
+          <label>School Name</label>
+          <input id="schoolName" type="text" placeholder="Gyanodaya Public School">
+        </div>
+        <div class="form-group">
+          <label>Logo (Upload from Device)</label>
+          <div style="display: flex; gap: 20px; align-items: center;">
+            <input id="logoInput" type="file" accept="image/*" style="flex: 1;">
+            <img id="logoPreview" src=""
+              style="height: 60px; border: 1px solid #ddd; padding: 5px; background: #f9f9f9; display: none;">
           </div>
-          <button type="submit" class="btn btn-primary" style="width:200px;">Save Branding</button>
-        </form>
+        </div>
       </div>
 
-      <!-- Hero Section -->
       <div class="card">
         <h3>Hero Section</h3>
-        <form id="heroForm" style="box-shadow:none; padding:0; margin-top:20px;">
-          <div class="form-group">
-            <label>Main Headline</label>
-            <input id="heroTitle" type="text" placeholder="Nurturing Excellence...">
-          </div>
-          <div class="form-group">
-            <label>Sub-text</label>
-            <textarea id="heroSubtitle" rows="2" placeholder="Describe your school's motto..."></textarea>
-          </div>
-          <div class="form-group">
-            <label>Hero Image URL</label>
-            <input id="heroImage" type="text" placeholder="https://...">
-            <small class="text-muted"><i class="fas fa-info-circle"></i> Best Size: <strong>1920 x 600 px</strong>
-              (Panoramic)</small>
-          </div>
-          <button type="submit" class="btn btn-primary" style="width:200px;">Update Hero</button>
-        </form>
+        <div class="form-group">
+          <label>Headline</label>
+          <input id="heroTitle" type="text" placeholder="Hero Title">
+        </div>
+        <div class="form-group">
+          <label>Intro Text</label>
+          <textarea id="heroIntro" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Hero Background Image</label>
+          <input id="heroInput" type="file" accept="image/*">
+          <p class="text-muted" style="font-size: 12px; margin-top: 5px;">Best size: 1920x800px</p>
+        </div>
+        <div class="form-group">
+          <label><input id="admissionOpen" type="checkbox"> Admissions Open Badge Visible</label>
+        </div>
       </div>
 
-      <!-- Global Footer Settings -->
       <div class="card">
-        <h3>Global Footer Settings</h3>
-        <form id="footerForm" style="box-shadow:none; padding:0; margin-top:20px;">
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-            <div class="form-group">
-              <label>About Text</label>
-              <textarea id="footerAbout" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Address</label>
-              <textarea id="footerAddress" rows="3"></textarea>
-            </div>
-            <div class="form-group">
-              <label>Primary Phone</label>
-              <input id="footerPhone" type="text">
-            </div>
-            <div class="form-group">
-              <label>Primary Email</label>
-              <input id="footerEmail" type="email">
-            </div>
+        <h3>Global Footer Details</h3>
+        <div class="grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div class="form-group">
+            <label>About Text (Footer)</label>
+            <textarea id="footerAbout" rows="3"></textarea>
           </div>
-          <h4 style="margin:20px 0 10px;">Social Links</h4>
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
-            <input id="fbLink" placeholder="Facebook URL">
-            <input id="twLink" placeholder="Twitter URL">
-            <input id="igLink" placeholder="Instagram URL">
-            <input id="ytLink" placeholder="YouTube URL">
+          <div class="form-group">
+            <label>Campus Address</label>
+            <textarea id="footerAddress" rows="3"></textarea>
           </div>
-          <button type="submit" class="btn btn-primary" style="width:200px; margin-top:20px;">Save Footer</button>
-        </form>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input id="footerPhone" type="text">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input id="footerEmail" type="email">
+          </div>
+          <div class="form-group">
+            <label>Copyright Text</label>
+            <input id="footerCopyright" type="text">
+          </div>
+          <div class="form-group">
+            <label>Google Maps Link (to extract embed)</label>
+            <input id="mapLink" type="text" placeholder="Paste Maps URL">
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>Quick Links</h3>
+          <button class="btn btn-secondary" onclick="addQuickLink()">+ Add Link</button>
+        </div>
+        <div id="quickLinksList"></div>
+      </div>
+
+      <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3>Social Media Icons</h3>
+          <button class="btn btn-secondary" onclick="addSocial()">+ Add Social Platform</button>
+        </div>
+        <div id="socialLinksList"></div>
+      </div>
+
+      <div style="margin-top: 40px; text-align: right;">
+        <button id="saveHomeBtn" class="btn btn-primary" style="padding: 15px 40px;">
+          <i class="fas fa-save"></i> Save All Changes
+        </button>
       </div>
     </main>
   </div>

@@ -13,76 +13,18 @@
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-                <span id="schoolName">Gyanodaya Public School</span>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav id="navMenu">
-                <ul id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown">
-                        <a href="about.html" class="dropdown-toggle">About Us</a>
-                        <div class="dropdown-content">
-                            <a href="vision.html">Vision & Mission</a>
-                            <a href="principal.html">Principal's Message</a>
-                            <a href="management.html">Management</a>
-                            <a href="infrastructure.html">Infrastructure</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="academics.html" class="dropdown-toggle">Academics</a>
-                        <div class="dropdown-content">
-                            <a href="curriculum.html">Curriculum</a>
-                            <a href="faculty.html">Our Faculty</a>
-                            <a href="calendar.html">Calendar</a>
-                            <a href="books.html">List of Books</a>
-                        </div>
-                    </li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
+    <header></header>
     <main id="siteContent">
-        <section class="section">
-            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Principal's Message
-            </h1>
-
-            <div class="card"
-                style="display:flex; flex-direction:row; gap:40px; align-items:flex-start; flex-wrap:wrap;">
-                <div style="flex:1; min-width:300px;">
-                    <img src="https://images.unsplash.com/photo-1544717297-fa154da09f5b?w=500&auto=format&fit=crop&q=60"
-                        alt="Principal" style="width:100%; border-radius:15px; box-shadow:0 10px 20px rgba(0,0,0,0.1);">
-                    <div style="margin-top:20px; text-align:center;">
-                        <h3 style="margin:0;">Mrs. Asha Sharma</h3>
-                        <p style="color:var(--primary); font-weight:bold;">Principal, Gyanodaya</p>
-                    </div>
-                </div>
-                <div style="flex:2; min-width:300px;">
-                    <p style="font-size:18px; line-height:2; font-style:italic; color:#475569;">
-                        "Education is not the learning of facts, but the training of the mind to think."
-                    </p>
-                    <p style="font-size:16px; line-height:1.8; margin-top:20px;">
-                        Welcome to Gyanodaya Public School. It is my privilege to lead this institution where we strive
-                        to provide a holistic education that balances academic rigor with creative exploration and
-                        character building.
-                        Our goal is to create environment where every student feels valued, challenged, and inspired to
-                        reach their full potential.
-                        <br><br>
-                        We believe in fostering a partnership between parents, teachers, and students to ensure a
-                        supportive and enriching educational journey. I invite you to explore our website and learn more
-                        about the wonderful opportunities that await your child at Gyanodaya.
-                    </p>
-                    <p style="margin-top:30px; font-weight:600;">Warm Regards,<br>Mrs. Asha Sharma</p>
-                </div>
-            </div>
+        <section class="section" style="text-align:center; padding-bottom:0;">
+            <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Principal's Message</h1>
         </section>
-    </main>
 
+        <div id="sectionsContainer">
+            <!-- Managed by Admin -->
+        </div>
+
+        <!-- Default Static fallback or additional fixed content if needed -->
+    </main>
     <footer id="footer"></footer>
     <script src="script.js"></script>
 </body>

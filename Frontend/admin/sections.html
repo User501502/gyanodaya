@@ -16,6 +16,7 @@
       <a href="dashboard.html">Dashboard</a>
       <a href="home.html">Home Management</a>
       <a href="sections.html">Sections</a>
+      <a href="faculty.html">Faculty</a>
       <a href="notices.html">Notices</a>
       <a href="admissions.html">Admissions</a>
       <a href="gallery.html">Gallery</a>
@@ -28,58 +29,83 @@
     </aside>
 
     <main class="content">
-      <h1>Dynamic Sections</h1>
-      <p class="page-desc">Create and reorder custom sections for your home page.</p>
-
-      <div class="grid" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; align-items: start;">
-        <!-- FORM -->
-        <div class="card">
-          <h3 id="formTitle">Add New Section</h3>
-          <form id="sectionForm" style="box-shadow: none; padding: 0; max-width: 100%;">
-            <div class="form-group">
-              <label>Section Title</label>
-              <input id="title" type="text" required placeholder="e.g. Our Awards">
-            </div>
-            <div class="form-group">
-              <label>Display Type</label>
-              <select id="type">
-                <option value="list">List of Cards (Grid)</option>
-                <option value="text">Single Text Block</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Content (One item per line for List)</label>
-              <textarea id="content" rows="6" required placeholder="Item 1&#10;Item 2..."></textarea>
-            </div>
-            <div class="form-group">
-              <label>
-                <input type="checkbox" id="isActive" checked style="width: auto; margin-right: 8px;">
-                Is Active
-              </label>
-            </div>
-            <button type="submit" class="btn btn-primary" style="width: 100%;">
-              <i class="fas fa-save"></i> Save Section
-            </button>
-            <button type="button" id="cancelEdit" class="btn btn-secondary hidden"
-              style="width: 100%; margin-top: 10px;">
-              Cancel Edit
-            </button>
-          </form>
-        </div>
-
-        <!-- LIST -->
-        <div>
-          <h3>Current Sections</h3>
-          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">
-            <i class="fas fa-info-circle"></i> Drag ☰ to reorder.
-          </p>
-          <div id="sectionsList" class="sections-grid">
-            <!-- Dynamic -->
-            <p>Loading sections...</p>
-          </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1>Page Sections Management</h1>
+        <div style="display: flex; gap: 10px;">
+          <select id="pageFilter" class="form-group" style="padding: 10px; margin: 0; min-width: 150px;">
+            <option value="home">Home Page</option>
+            <option value="calendar">Calendar Page</option>
+            <option value="infrastructure">Infrastructure</option>
+            <option value="management">Management</option>
+            <option value="curriculum">Curriculum</option>
+            <option value="vision">Vision & Mission</option>
+          </select>
+          <button class="btn btn-primary" onclick="showAddSection()">+ Add New Section</button>
         </div>
       </div>
+      <p class="page-desc">Add custom text or list-based blocks to any page on the website.</p>
+
+      <div id="sectionsList" style="margin-top: 30px;">
+        <!-- Drag-and-drop handles will be here -->
+      </div>
     </main>
+  </div>
+
+  <!-- Modal -->
+  <div id="sectionModal" class="modal"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div class="card" style="width:600px; max-width:90%; padding:30px; max-height: 90vh; overflow-y: auto;">
+      <h3 id="modalTitle">Add New Section</h3>
+      <form id="sectionForm" style="margin-top:20px;">
+        <input type="hidden" id="editId">
+        <div class="grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:15px;">
+          <div class="form-group">
+            <label>Target Page</label>
+            <select id="sectionPage">
+              <option value="home">Home Page</option>
+              <option value="calendar">Calendar Page</option>
+              <option value="infrastructure">Infrastructure</option>
+              <option value="management">Management</option>
+              <option value="curriculum">Curriculum</option>
+              <option value="vision">Vision & Mission</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Section Title</label>
+            <input id="sectionTitle" type="text" required>
+          </div>
+          <div class="form-group">
+            <label>Content Type</label>
+            <select id="sectionType" onchange="toggleContentInputs()">
+              <option value="text">Single Paragraph (Text)</option>
+              <option value="list">Bulletin List (Cards)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="sectionActive">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="textContentArea" class="form-group" style="margin-top:15px;">
+          <label>Paragraph Content</label>
+          <textarea id="sectionText" rows="5" placeholder="Enter your text here..."></textarea>
+        </div>
+
+        <div id="listContentArea" class="form-group" style="margin-top:15px; display:none;">
+          <label>List Items (One per line)</label>
+          <textarea id="sectionList" rows="5" placeholder="Feature 1&#10;Feature 2&#10;Feature 3..."></textarea>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+          <button type="button" class="btn btn-secondary" style="flex:1;" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" style="flex:1;">Save Section</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script type="module" src="sections.js"></script>

@@ -1,165 +1,135 @@
 import { protectPage, initSidebar, api } from "./admin.js";
 
+const listContainer = document.getElementById("sectionsList");
+const pageFilter = document.getElementById("pageFilter");
+const modal = document.getElementById("sectionModal");
 const form = document.getElementById("sectionForm");
-const list = document.getElementById("sectionsList");
-const cancelBtn = document.getElementById("cancelEdit");
-const formTitle = document.getElementById("formTitle");
-
-let editId = null;
-let draggedCard = null;
 
 async function init() {
   await protectPage();
   initSidebar();
-  await loadSections();
+  loadSections();
 }
+
+pageFilter.onchange = () => loadSections();
 
 async function loadSections() {
   try {
-    const sections = await api("/api/sections");
-    list.innerHTML = "";
+    const page = pageFilter.value;
+    const sections = await api(`/api/sections?page=${page}`);
+    listContainer.innerHTML = "";
 
     if (sections.length === 0) {
-      list.innerHTML = "<p>No sections created yet.</p>";
+      listContainer.innerHTML = `<div class="card" style="text-align:center; padding:50px; color:var(--text-muted);">
+            No sections found for this page. Add your first section to get started!
+        </div>`;
       return;
     }
 
-    sections
-      .sort((a, b) => a.position - b.position)
-      .forEach(section => {
-        const card = document.createElement("div");
-        card.className = `section-card ${section.isActive ? "" : "inactive"}`;
-        card.draggable = true;
-        card.dataset.id = section._id;
+    sections.forEach((s) => {
+      const card = document.createElement("div");
+      card.className = "card";
+      card.style.marginBottom = "15px";
+      card.style.display = "flex";
+      card.style.justifyContent = "space-between";
+      card.style.alignItems = "center";
+      card.style.borderLeft = s.isActive ? "5px solid var(--primary)" : "5px solid #ccc";
 
-        card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:start">
-                        <div>
-                            <h4 style="margin:0">${section.title}</h4>
-                            <div class="section-meta">${section.type.toUpperCase()}</div>
-                        </div>
-                        <span style="cursor:grab; color: var(--text-muted); font-size: 20px;">☰</span>
-                    </div>
-                    <div style="margin-top: 15px; display: flex; gap: 8px;">
-                        <button class="btn btn-secondary btn-sm edit-btn" style="padding: 5px 10px; font-size: 12px;">Edit</button>
-                        <button class="btn btn-danger btn-sm del-btn" style="padding: 5px 10px; font-size: 12px;">Delete</button>
-                    </div>
-                `;
-
-        card.querySelector(".edit-btn").onclick = () => startEdit(section);
-        card.querySelector(".del-btn").onclick = () => deleteSection(section._id);
-
-        // Drag logic
-        card.addEventListener("dragstart", () => {
-          draggedCard = card;
-          card.style.opacity = "0.4";
-        });
-        card.addEventListener("dragend", () => {
-          draggedCard = null;
-          card.style.opacity = "1";
-          saveOrder();
-        });
-        card.addEventListener("dragover", e => {
-          e.preventDefault();
-          const afterElement = getDragAfterElement(list, e.clientY);
-          if (afterElement == null) {
-            list.appendChild(draggedCard);
-          } else {
-            list.insertBefore(draggedCard, afterElement);
-          }
-        });
-
-        list.appendChild(card);
-      });
+      card.innerHTML = `
+                <div>
+                    <h4 style="margin-bottom:5px;">${s.title}</h4>
+                    <span class="badge" style="background:#f1f5f9; color:#64748b; font-size:10px;">${s.type.toUpperCase()}</span>
+                    <span class="badge" style="background:${s.isActive ? '#dcfce7' : '#fee2e2'}; color:${s.isActive ? '#166534' : '#991b1b'}; font-size:10px;">
+                        ${s.isActive ? 'Active' : 'Hidden'}
+                    </span>
+                </div>
+                <div style="display:flex; gap:10px;">
+                    <button class="btn btn-secondary btn-sm" onclick="editSection('${s._id}')"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteSection('${s._id}')"><i class="fas fa-trash"></i></button>
+                </div>
+            `;
+      listContainer.appendChild(card);
+    });
   } catch (err) {
-    list.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+    console.error(err);
   }
 }
 
-function startEdit(s) {
-  editId = s._id;
-  document.getElementById("title").value = s.title;
-  document.getElementById("type").value = s.type;
-  document.getElementById("content").value = s.content.join("\n");
-  document.getElementById("isActive").checked = s.isActive;
-  formTitle.textContent = "Edit Section";
-  cancelBtn.classList.remove("hidden");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-cancelBtn.onclick = () => {
-  editId = null;
+window.showAddSection = () => {
   form.reset();
-  formTitle.textContent = "Add New Section";
-  cancelBtn.classList.add("hidden");
+  document.getElementById("editId").value = "";
+  document.getElementById("sectionPage").value = pageFilter.value;
+  document.getElementById("modalTitle").innerText = "Add New Section";
+  toggleContentInputs();
+  modal.style.display = "flex";
+};
+
+window.closeModal = () => {
+  modal.style.display = "none";
+};
+
+window.toggleContentInputs = () => {
+  const type = document.getElementById("sectionType").value;
+  document.getElementById("textContentArea").style.display = type === "text" ? "block" : "none";
+  document.getElementById("listContentArea").style.display = type === "list" ? "block" : "none";
 };
 
 form.onsubmit = async (e) => {
   e.preventDefault();
-  const btn = form.querySelector("button[type='submit']");
-  const originalText = btn.innerHTML;
-  btn.disabled = true;
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+  const id = document.getElementById("editId").value;
+  const type = document.getElementById("sectionType").value;
 
   const payload = {
-    title: document.getElementById("title").value.trim(),
-    type: document.getElementById("type").value,
-    content: document.getElementById("content").value.split("\n").map(i => i.trim()).filter(Boolean),
-    isActive: document.getElementById("isActive").checked
+    page: document.getElementById("sectionPage").value,
+    title: document.getElementById("sectionTitle").value,
+    type: type,
+    isActive: document.getElementById("sectionActive").value === "true",
+    content: type === "text"
+      ? [document.getElementById("sectionText").value]
+      : document.getElementById("sectionList").value.split('\n').filter(l => l.trim())
   };
 
   try {
-    if (editId) {
-      await api(`/api/sections?id=${editId}`, { method: "PUT", body: JSON.stringify(payload) });
+    if (id) {
+      await api(`/api/sections?id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
     } else {
       await api("/api/sections", { method: "POST", body: JSON.stringify(payload) });
     }
-    form.reset();
-    cancelBtn.onclick();
+    closeModal();
     loadSections();
-  } catch (err) {
-    alert("Error: " + err.message);
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = originalText;
-  }
+  } catch (err) { alert(err.message); }
 };
 
-async function deleteSection(id) {
-  if (!confirm("Are you sure you want to delete this section?")) return;
+window.editSection = async (id) => {
+  try {
+    const sections = await api(`/api/sections`);
+    const s = sections.find(x => x._id === id);
+    if (!s) return;
+
+    document.getElementById("editId").value = s._id;
+    document.getElementById("sectionPage").value = s.page || "home";
+    document.getElementById("sectionTitle").value = s.title;
+    document.getElementById("sectionType").value = s.type;
+    document.getElementById("sectionActive").value = s.isActive.toString();
+
+    if (s.type === "text") {
+      document.getElementById("sectionText").value = s.content[0] || "";
+    } else {
+      document.getElementById("sectionList").value = (s.content || []).join('\n');
+    }
+
+    document.getElementById("modalTitle").innerText = "Edit Section";
+    toggleContentInputs();
+    modal.style.display = "flex";
+  } catch (err) { alert(err.message); }
+};
+
+window.deleteSection = async (id) => {
+  if (!confirm("Delete this section?")) return;
   try {
     await api(`/api/sections?id=${id}`, { method: "DELETE" });
     loadSections();
-  } catch (err) {
-    alert(err.message);
-  }
-}
-
-async function saveOrder() {
-  const cards = [...list.children];
-  const order = cards.map((c, i) => ({ id: c.dataset.id, position: i }));
-  // We send them sequentially or as one batch if the API supports it
-  // Our existing API handles PUT by ID. Let's do them in parallel.
-  try {
-    await Promise.all(order.map(item =>
-      api(`/api/sections?id=${item.id}`, { method: "PUT", body: JSON.stringify({ position: item.position }) })
-    ));
-  } catch (err) {
-    console.error("Failed to save order", err);
-  }
-}
-
-function getDragAfterElement(container, y) {
-  const draggableElements = [...container.querySelectorAll(".section-card:not(.dragging)")];
-  return draggableElements.reduce((closest, child) => {
-    const box = child.getBoundingClientRect();
-    const offset = y - box.top - box.height / 2;
-    if (offset < 0 && offset > closest.offset) {
-      return { offset: offset, element: child };
-    } else {
-      return closest;
-    }
-  }, { offset: Number.NEGATIVE_INFINITY }).element;
-}
+  } catch (err) { alert(err.message); }
+};
 
 init();

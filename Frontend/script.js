@@ -12,14 +12,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const init = async () => {
     await loadNavbar();
     await loadGlobalSettings();
-    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
-      await loadSections();
+
+    const pageName = getPageName();
+    await loadSections(pageName);
+
+    if (pageName === 'home') {
       await loadNoticeTicker();
     }
     setupMobileDropdowns();
   };
   init();
 });
+
+function getPageName() {
+  const path = window.location.pathname;
+  const file = path.split("/").pop();
+  if (!file || file === "index.html" || file === "") return "home";
+  return file.replace(".html", "");
+}
 
 function setupMobileDropdowns() {
   const dropdowns = document.querySelectorAll(".dropdown-toggle");
@@ -168,38 +178,41 @@ async function loadGlobalSettings() {
 }
 
 // Dynamically Load Homepage Sections
-window.loadSections = async function () {
+window.loadSections = async function (page = "home") {
   try {
-    const res = await fetch("/api/sections");
+    const res = await fetch(`/api/sections?page=${page}`);
     const sections = await res.json();
     const container = document.getElementById("sectionsContainer");
     if (!container) return;
 
+    // Filter active sections and sort by position
+    const activeSections = sections.filter(s => s.isActive);
+    if (activeSections.length === 0 && page !== 'home') {
+      // Optional: show placeholder if empty
+    }
+
     container.innerHTML = "";
-    sections
-      .filter(s => s.isActive)
-      .sort((a, b) => a.position - b.position)
-      .forEach(section => {
-        let html = `<section class="section">
+    activeSections.forEach(section => {
+      let html = `<section class="section">
                         <div style="text-align:center; margin-bottom:40px;">
                             <h2 style="font-family:'Outfit', sans-serif; font-size:32px; color:var(--primary);">${section.title}</h2>
                             <div style="width:60px; height:4px; background:var(--accent); margin:15px auto;"></div>
                         </div>`;
-        if (section.type === "list") {
-          html += `<div class="grid">`;
-          section.content.forEach(item => {
-            html += `<div class="card" style="text-align:center;">
+      if (section.type === "list") {
+        html += `<div class="grid">`;
+        section.content.forEach(item => {
+          html += `<div class="card" style="text-align:center;">
                         <i class="fas fa-check-circle" style="color:var(--primary); font-size:24px; margin-bottom:15px; display:block;"></i>
                         <p style="font-weight:500;">${item}</p>
                     </div>`;
-          });
-          html += `</div>`;
-        } else {
-          html += `<div class="card" style="line-height:1.8; font-size:16px;"><p>${section.content.join("<br>")}</p></div>`;
-        }
-        html += `</section>`;
-        container.innerHTML += html;
-      });
+        });
+        html += `</div>`;
+      } else {
+        html += `<div class="card" style="line-height:1.8; font-size:16px;"><p>${section.content.join("<br>")}</p></div>`;
+      }
+      html += `</section>`;
+      container.innerHTML += html;
+    });
   } catch (e) { console.error(e); }
 };
 

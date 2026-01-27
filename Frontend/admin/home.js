@@ -3,6 +3,8 @@ import { protectPage, initSidebar, api } from "./admin.js";
 /* ================= GLOBAL STATE ================= */
 window.quickLinks = [];
 window.socials = [];
+let logoBase64 = "";
+let heroBase64 = "";
 
 /* ================= ELEMENTS ================= */
 const schoolName = document.getElementById("schoolName");
@@ -19,9 +21,8 @@ const mapLink = document.getElementById("mapLink");
 
 const logoInput = document.getElementById("logoInput");
 const logoPreview = document.getElementById("logoPreview");
+const heroInput = document.getElementById("heroInput");
 const saveBtn = document.getElementById("saveHomeBtn");
-
-let logoBase64 = "";
 
 /* ================= INIT ================= */
 async function init() {
@@ -58,28 +59,47 @@ async function loadHome() {
     if (data.logo) {
       logoBase64 = data.logo;
       logoPreview.src = data.logo;
+      logoPreview.style.display = "block";
+    }
+    if (data.heroImage) {
+      heroBase64 = data.heroImage;
     }
   } catch (err) {
     console.error("Load failed", err);
   }
 }
 
-/* ================= LOGO ================= */
+/* ================= FILE UPLOADS ================= */
 logoInput.onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
   const reader = new FileReader();
   reader.onload = () => {
     logoBase64 = reader.result;
     logoPreview.src = logoBase64;
+    logoPreview.style.display = "block";
   };
-  reader.readAsDataURL(e.target.files[0]);
+  reader.readAsDataURL(file);
+};
+
+heroInput.onchange = e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    heroBase64 = reader.result;
+  };
+  reader.readAsDataURL(file);
 };
 
 /* ================= MAP HELPER ================= */
 function convertToEmbedMap(url) {
   if (!url) return "";
-  if (url.includes("output=embed")) return url;
+  if (url.includes("google.com/maps/embed")) return url;
 
-  // Simplistic extraction for common Google Maps links
+  const srcMatch = url.match(/src="([^"]+)"/);
+  if (srcMatch) return srcMatch[1];
+
   const cidMatch = url.match(/!1s([^!]+)/);
   if (cidMatch) return `https://www.google.com/maps?cid=${cidMatch[1]}&output=embed`;
 
@@ -99,6 +119,7 @@ saveBtn.onclick = async () => {
         logo: logoBase64,
         heroTitle: heroTitle.value,
         heroIntro: heroIntro.value,
+        heroImage: heroBase64,
         admissionOpen: admissionOpen.checked,
         footer: {
           about: footerAbout.value,
@@ -122,7 +143,7 @@ saveBtn.onclick = async () => {
   }
 };
 
-/* ================= QUICK LINKS ================= */
+/* ================= LIST MGMT ================= */
 window.addQuickLink = () => {
   window.quickLinks.push({ title: "", url: "" });
   renderQuickLinks();
@@ -131,21 +152,22 @@ window.addQuickLink = () => {
 function renderQuickLinks() {
   const box = document.getElementById("quickLinksList");
   box.innerHTML = "";
-
   window.quickLinks.forEach((l, i) => {
     const div = document.createElement("div");
     div.className = "social-row";
+    div.style.marginBottom = "10px";
     div.innerHTML = `
-            <input placeholder="Title" value="${l.title}" oninput="window.quickLinks[${i}].title=this.value">
-            <input placeholder="URL" value="${l.url}" oninput="window.quickLinks[${i}].url=this.value">
-            <button class="btn btn-danger" onclick="window.quickLinks.splice(${i},1);renderQuickLinks()"><i class="fas fa-trash"></i></button>
+            <input placeholder="Title" value="${l.title}" oninput="window.quickLinks[${i}].title=this.value" style="flex:1;">
+            <input placeholder="URL" value="${l.url}" oninput="window.quickLinks[${i}].url=this.value" style="flex:2;">
+            <button class="btn btn-danger" onclick="window.quickLinks.splice(${i},1);renderQuickLinks()">
+                <i class="fas fa-trash"></i>
+            </button>
         `;
     box.appendChild(div);
   });
 }
 window.renderQuickLinks = renderQuickLinks;
 
-/* ================= SOCIAL LINKS ================= */
 window.addSocial = () => {
   window.socials.push({ name: "", url: "", icon: "" });
   renderSocials();
@@ -154,21 +176,26 @@ window.addSocial = () => {
 window.renderSocials = function () {
   const box = document.getElementById("socialLinksList");
   box.innerHTML = "";
-
   window.socials.forEach((s, i) => {
     const div = document.createElement("div");
     div.className = "card";
     div.style.padding = "15px";
-    div.style.marginBottom = "10px";
+    div.style.marginBottom = "15px";
+    div.style.background = "#fafafa";
     div.innerHTML = `
-            <div class="social-row">
-                <input value="${s.name}" placeholder="Platform Name (e.g. Facebook)" oninput="window.socials[${i}].name=this.value">
-                <input value="${s.url}" placeholder="URL" oninput="window.socials[${i}].url=this.value">
-                <button class="btn btn-danger" onclick="window.socials.splice(${i},1);renderSocials()"><i class="fas fa-trash"></i></button>
+            <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                <input value="${s.name}" placeholder="Platform (e.g. Facebook)" oninput="window.socials[${i}].name=this.value" style="flex:1;">
+                <input value="${s.url}" placeholder="Profile URL" oninput="window.socials[${i}].url=this.value" style="flex:2;">
+                <button class="btn btn-danger" onclick="window.socials.splice(${i},1);renderSocials()">
+                    <i class="fas fa-trash"></i>
+                </button>
             </div>
-            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
-                <input type="file" onchange="uploadSocialIcon(event, ${i})" style="flex: 1;">
-                ${s.icon ? `<img src="${s.icon}" class="social-preview" style="height:32px; width:32px; object-fit:contain;">` : ""}
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="flex:1;">
+                    <label style="font-size:12px; display:block; margin-bottom:5px;">Platform Icon (Logo)</label>
+                    <input type="file" accept="image/*" onchange="window.uploadSocialIcon(event, ${i})">
+                </div>
+                ${s.icon ? `<img src="${s.icon}" style="height:40px; width:40px; object-fit:contain; border:1px solid #ddd; padding:2px; background:white;">` : ""}
             </div>
         `;
     box.appendChild(div);
@@ -181,7 +208,7 @@ window.uploadSocialIcon = (e, index) => {
   const reader = new FileReader();
   reader.onload = () => {
     window.socials[index].icon = reader.result;
-    renderSocials();
+    window.renderSocials();
   };
   reader.readAsDataURL(file);
 };

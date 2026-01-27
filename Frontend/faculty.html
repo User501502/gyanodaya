@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Faculty | Gyanodaya</title>
+  <title>Our Faculty | Gyanodaya Public School</title>
   <link
     href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
     rel="stylesheet">
@@ -13,88 +13,60 @@
 </head>
 
 <body>
-  <header>
-    <div class="navbar">
-      <a href="index.html" class="logo">
-        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-        <span id="schoolName">Gyanodaya Public School</span>
-      </a>
-      <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-      <nav id="navMenu">
-        <ul id="navLinks">
-          <li><a href="index.html">Home</a></li>
-          <li class="dropdown">
-            <a href="about.html" class="dropdown-toggle">About Us</a>
-            <div class="dropdown-content">
-              <a href="vision.html">Vision & Mission</a>
-              <a href="principal.html">Principal's Message</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="academics.html" class="dropdown-toggle">Academics</a>
-            <div class="dropdown-content">
-              <a href="curriculum.html">Curriculum</a>
-              <a href="faculty.html">Our Faculty</a>
-              <a href="calendar.html">Calendar</a>
-            </div>
-          </li>
-          <li><a href="gallery.html">Gallery</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
+  <header></header>
   <main id="siteContent">
     <section class="section">
-      <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Our Expert Faculty</h1>
+      <div style="text-align:center; margin-bottom:50px;">
+        <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Our Expert Faculty</h1>
+        <p style="color:var(--text-muted); font-size:16px;">Dedicated educators shaping the winners of tomorrow.</p>
+      </div>
 
-      <div class="grid" style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:30px;">
-        <!-- Faculty Cards -->
-        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1544717297-fa154da09f5b?w=400&auto=format&fit=crop&q=60"
-            style="width:100%; height:250px; object-fit:cover;">
-          <div style="padding:20px;">
-            <h3 style="margin-bottom:5px;">Mrs. Asha Sharma</h3>
-            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">Principal</p>
-            <p style="font-size:13px; color:var(--text-muted);">M.A., B.Ed | 20+ Years Exp.</p>
-          </div>
-        </div>
-
-        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop&q=60"
-            style="width:100%; height:250px; object-fit:cover;">
-          <div style="padding:20px;">
-            <h3 style="margin-bottom:5px;">Ms. Ritu Jha</h3>
-            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">Senior Coordinator</p>
-            <p style="font-size:13px; color:var(--text-muted);">M.Sc. Physics | Expert in NEET/JEE</p>
-          </div>
-        </div>
-
-        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=400&auto=format&fit=crop&q=60"
-            style="width:100%; height:250px; object-fit:cover;">
-          <div style="padding:20px;">
-            <h3 style="margin-bottom:5px;">Mr. Vikrant Singh</h3>
-            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">HOD Mathematics</p>
-            <p style="font-size:13px; color:var(--text-muted);">M.Sc., B.Ed | Mental Math Expert</p>
-          </div>
-        </div>
-
-        <div class="card faculty-card" style="text-align:center; padding:0; overflow:hidden;">
-          <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&auto=format&fit=crop&q=60"
-            style="width:100%; height:250px; object-fit:cover;">
-          <div style="padding:20px;">
-            <h3 style="margin-bottom:5px;">Mrs. Sunita Verma</h3>
-            <p style="color:var(--primary); font-weight:600; font-size:14px; margin-bottom:10px;">HOD English</p>
-            <p style="font-size:13px; color:var(--text-muted);">M.A. English Lit | Soft Skills Trainer</p>
-          </div>
-        </div>
+      <div id="facultyList" class="grid"
+        style="display:grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap:30px;">
+        <!-- Dynamic -->
       </div>
     </section>
   </main>
 
   <footer id="footer"></footer>
   <script src="script.js"></script>
+  <script>
+    async function fetchFaculty() {
+      try {
+        const res = await fetch('/api/faculty');
+        const data = await res.json();
+        const container = document.getElementById('facultyList');
+        container.innerHTML = '';
+
+        if (!data || data.length === 0) {
+          container.innerHTML = '<p style="grid-column: 1/-1; text-align:center;">Information coming soon.</p>';
+          return;
+        }
+
+        data.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card faculty-card';
+          card.style.textAlign = 'center';
+          card.style.padding = '0';
+          card.style.overflow = 'hidden';
+
+          card.innerHTML = `
+                        <div style="height:300px; overflow:hidden;">
+                            <img src="${item.photo || 'https://via.placeholder.com/300x300'}" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        <div style="padding:25px;">
+                            <h3 style="margin-bottom:5px;">${item.name}</h3>
+                            <p style="color:var(--primary); font-weight:700; font-size:14px; margin-bottom:10px; text-transform:uppercase;">${item.designation}</p>
+                            <p style="font-size:13px; color:var(--text-muted);">${item.qualification || ""}</p>
+                            ${item.experience ? `<p style="font-size:13px; color:var(--text-muted); margin-top:5px;">Exp: ${item.experience}</p>` : ""}
+                        </div>
+                    `;
+          container.appendChild(card);
+        });
+      } catch (error) { console.error(error); }
+    }
+    document.addEventListener('DOMContentLoaded', fetchFaculty);
+  </script>
 </body>
 
 </html>

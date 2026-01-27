@@ -3,10 +3,11 @@ import mongoose from "mongoose";
 
 const SectionSchema = new mongoose.Schema({
   title: String,
-  type: String,           // "list" | "text"
+  type: String,           // "list" | "text" | "infrastructure" | "calendar"
   content: [String],
   position: Number,
-  isActive: Boolean
+  isActive: { type: Boolean, default: true },
+  page: { type: String, default: "home" } // "home", "calendar", "infrastructure", "management", etc.
 });
 
 const Section =
@@ -17,7 +18,9 @@ export default async function handler(req, res) {
 
   // GET → website + admin (ALL sections)
   if (req.method === "GET") {
-    const sections = await Section.find().sort({ position: 1 });
+    const { page } = req.query;
+    const query = page ? { page } : {};
+    const sections = await Section.find(query).sort({ position: 1 });
     return res.json(sections);
   }
 

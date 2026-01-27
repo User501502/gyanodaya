@@ -13,76 +13,17 @@
 </head>
 
 <body>
-    <header>
-        <div class="navbar">
-            <a href="index.html" class="logo">
-                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
-                <span id="schoolName">Gyanodaya Public School</span>
-            </a>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav id="navMenu">
-                <ul id="navLinks">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="dropdown">
-                        <a href="about.html" class="dropdown-toggle">About Us</a>
-                        <div class="dropdown-content">
-                            <a href="vision.html">Vision & Mission</a>
-                            <a href="principal.html">Principal's Message</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="academics.html" class="dropdown-toggle">Academics</a>
-                        <div class="dropdown-content">
-                            <a href="curriculum.html">Curriculum</a>
-                            <a href="faculty.html">Our Faculty</a>
-                            <a href="calendar.html">Calendar</a>
-                        </div>
-                    </li>
-                    <li><a href="gallery.html">Gallery</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
+    <header></header>
     <main id="siteContent">
-        <section class="section">
-            <h1 style="font-family:'Outfit', sans-serif; text-align:center; margin-bottom:40px;">Our Curriculum</h1>
-
-            <div class="card" style="margin-bottom:30px;">
-                <h2 style="color:var(--primary); margin-bottom:15px;">Primary & Middle School</h2>
-                <p style="font-size:16px; line-height:1.8;">
-                    Our primary curriculum is designed to be engaging and exploratory, focusing on foundational literacy
-                    and numeracy. As students move to middle school, we introduce more specialized subjects to broaden
-                    their horizons.
-                </p>
-            </div>
-
-            <div class="card" style="margin-bottom:30px; border-left: 5px solid var(--accent);">
-                <h2 style="color:var(--primary); margin-bottom:15px;">Senior Secondary (Class XI & XII)</h2>
-                <p style="font-size:16px; line-height:1.8; margin-bottom:15px;">We offer major streams in specialized
-                    subjects:</p>
-                <div class="grid">
-                    <div style="background:#f8fafc; padding:20px; border-radius:8px;">
-                        <h4 style="color:var(--primary);">Science Stream</h4>
-                        <p style="font-size:14px;">Physics, Chemistry, Mathematics, Biology, Computer Science, PE.</p>
-                    </div>
-                    <div style="background:#f8fafc; padding:20px; border-radius:8px;">
-                        <h4 style="color:var(--primary);">Commerce Stream</h4>
-                        <p style="font-size:14px;">Accountancy, Business Studies, Economics, Mathematics, PE.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h2 style="color:var(--primary); margin-bottom:15px;">Co-Curricular Activities</h2>
-                <p style="font-size:16px; line-height:1.8;">
-                    We believe in holistic development. Our students participate in music, dance, sports, debating, and
-                    art projects regularly to develop their talents beyond academics.
-                </p>
-            </div>
+        <section class="section" style="text-align:center; padding-bottom:0;">
+            <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Academic Curriculum</h1>
+            <p style="color:var(--text-muted); margin-top:10px;">Our approach to learning and excellence.</p>
         </section>
-    </main>
 
+        <div id="sectionsContainer">
+            <!-- Managed by Admin -->
+        </div>
+    </main>
     <footer id="footer"></footer>
     <script src="script.js"></script>
 </body>
