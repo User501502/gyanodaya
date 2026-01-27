@@ -5,16 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TC Issued | Gyanodaya Public School</title>
+    <!-- Modern Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
     <header>
         <div class="navbar">
-            <div class="logo">
-                <img src="logo.png" alt="School Logo" style="max-height: 60px;">
-                <span>Gyanodaya Public School</span>
-            </div>
+            <a href="index.html" class="logo">
+                <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+                <span id="schoolName">Gyanodaya Public School</span>
+            </a>
             <div class="menu-toggle" onclick="toggleMenu()">☰</div>
             <nav id="navMenu">
                 <ul id="navLinks">
@@ -24,25 +29,13 @@
                         <div class="dropdown-content">
                             <a href="about.html#vision">Vision & Mission</a>
                             <a href="about.html#principal">Principal's Message</a>
-                            <a href="about.html#management">Management</a>
-                            <a href="about.html#infrastructure">Infrastructure</a>
                         </div>
                     </li>
                     <li class="dropdown">
                         <a href="academics.html" class="dropdown-toggle">Academics</a>
                         <div class="dropdown-content">
                             <a href="academics.html#curriculum">Curriculum</a>
-                            <a href="academics.html#calendar">Academic Calendar</a>
                             <a href="faculty.html">Our Faculty</a>
-                            <a href="academics.html#books">List of Books</a>
-                        </div>
-                    </li>
-                    <li class="dropdown">
-                        <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-                        <div class="dropdown-content">
-                            <a href="admissions.html#procedure">Admission Procedure</a>
-                            <a href="admissions.html#fees">Fee Structure</a>
-                            <a href="admissions.html#apply">Apply Online</a>
                         </div>
                     </li>
                     <li class="dropdown">
@@ -53,13 +46,7 @@
                             <a href="notice.html">Notices & News</a>
                         </div>
                     </li>
-                    <li class="dropdown">
-                        <a href="gallery.html" class="dropdown-toggle">Gallery</a>
-                        <div class="dropdown-content">
-                            <a href="gallery.html#photos">Photo Gallery</a>
-                            <a href="gallery.html#videos">Video Gallery</a>
-                        </div>
-                    </li>
+                    <li><a href="gallery.html">Gallery</a></li>
                     <li><a href="contact.html">Contact Us</a></li>
                 </ul>
             </nav>
@@ -68,26 +55,34 @@
 
     <main id="siteContent">
         <section class="section">
-            <h2>TC Issued Information</h2>
-            <p>Below is the list of Transfer Certificates (TC) issued by Gyanodaya Public School. For any verification,
-                please contact the school office.</p>
+            <div style="text-align:center; margin-bottom:50px;">
+                <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Transfer
+                    Certificates Issued</h1>
+                <p style="color:var(--text-muted); font-size:16px;">Official record of TCs issued by the institution for
+                    verification purposes.</p>
+            </div>
 
-            <div class="card" style="margin-top: 30px; overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; text-align: left;">
-                    <thead>
-                        <tr style="background: var(--primary); color: white;">
-                            <th style="padding: 12px; border: 1px solid #ddd;">Student Name</th>
-                            <th style="padding: 12px; border: 1px solid #ddd;">Class</th>
-                            <th style="padding: 12px; border: 1px solid #ddd;">Year</th>
-                            <th style="padding: 12px; border: 1px solid #ddd;">TC No.</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tcData">
-                        <tr>
-                            <td colspan="4" style="text-align: center; padding: 20px;">Loading...</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card"
+                style="box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius:15px; overflow:hidden; padding:0;">
+                <div class="table-container" style="overflow-x:auto;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <thead>
+                            <tr style="background:var(--primary); color:white; text-align:left;">
+                                <th style="padding:20px;">Student Name</th>
+                                <th style="padding:20px;">Class</th>
+                                <th style="padding:20px;">Academic Year</th>
+                                <th style="padding:20px;">TC Number</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tcData">
+                            <tr>
+                                <td colspan="4" style="text-align:center; padding:40px; color:var(--text-muted);">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading records...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
     </main>
@@ -104,23 +99,24 @@
                 tbody.innerHTML = '';
 
                 if (!data || data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px;">No TC records found.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px;">No TC records found.</td></tr>';
                     return;
                 }
 
                 data.forEach(item => {
                     const tr = document.createElement('tr');
+                    tr.style.borderBottom = "1px solid #eee";
                     tr.innerHTML = `
-                        <td style="padding: 12px; border: 1px solid #ddd;">${item.studentName}</td>
-                        <td style="padding: 12px; border: 1px solid #ddd;">${item.className}</td>
-                        <td style="padding: 12px; border: 1px solid #ddd;">${item.year}</td>
-                        <td style="padding: 12px; border: 1px solid #ddd;">${item.tcNo}</td>
+                        <td style="padding: 20px; font-weight:600;">${item.studentName}</td>
+                        <td style="padding: 20px;">${item.class}</td>
+                        <td style="padding: 20px;">${item.year}</td>
+                        <td style="padding: 20px;"><span style="background:#f1f5f9; padding:5px 12px; border-radius:50px; font-weight:bold; font-size:13px;">${item.tcNumber}</span></td>
                     `;
                     tbody.appendChild(tr);
                 });
             } catch (error) {
                 console.error('Error fetching TC data:', error);
-                document.getElementById('tcData').innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: red;">Failed to load data.</td></tr>';
+                document.getElementById('tcData').innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 40px; color: red;">Failed to load data from server.</td></tr>';
             }
         }
         document.addEventListener('DOMContentLoaded', fetchTC);

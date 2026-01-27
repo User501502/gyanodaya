@@ -1,9 +1,8 @@
-import { api } from "./admin.js";
+import { protectPage, initSidebar, api } from "./admin.js";
 
 /* ================= GLOBAL STATE ================= */
 window.quickLinks = [];
 window.socials = [];
-
 
 /* ================= ELEMENTS ================= */
 const schoolName = document.getElementById("schoolName");
@@ -24,33 +23,44 @@ const saveBtn = document.getElementById("saveHomeBtn");
 
 let logoBase64 = "";
 
+/* ================= INIT ================= */
+async function init() {
+  await protectPage();
+  initSidebar();
+  await loadHome();
+}
+
 /* ================= LOAD ================= */
 async function loadHome() {
-  const data = await api("/api/home");
-  if (!data) return;
+  try {
+    const data = await api("/api/home");
+    if (!data) return;
 
-  schoolName.value = data.schoolName || "";
-  heroTitle.value = data.heroTitle || "";
-  heroIntro.value = data.heroIntro || "";
-  admissionOpen.checked = data.admissionOpen || false;
+    schoolName.value = data.schoolName || "";
+    heroTitle.value = data.heroTitle || "";
+    heroIntro.value = data.heroIntro || "";
+    admissionOpen.checked = data.admissionOpen || false;
 
-  const f = data.footer || {};
-  footerAbout.value = f.about || "";
-  footerAddress.value = f.address || "";
-  footerPhone.value = f.phone || "";
-  footerEmail.value = f.email || "";
-  footerCopyright.value = f.copyright || "";
-  mapLink.value = f.mapLink || "";
+    const f = data.footer || {};
+    footerAbout.value = f.about || "";
+    footerAddress.value = f.address || "";
+    footerPhone.value = f.phone || "";
+    footerEmail.value = f.email || "";
+    footerCopyright.value = f.copyright || "";
+    mapLink.value = f.mapLink || "";
 
-  window.quickLinks = f.quickLinks || [];
-  window.socials = f.socials || [];
+    window.quickLinks = f.quickLinks || [];
+    window.socials = f.socials || [];
 
-  renderQuickLinks();
-  renderSocials();
+    renderQuickLinks();
+    renderSocials();
 
-  if (data.logo) {
-    logoBase64 = data.logo;
-    logoPreview.src = data.logo;
+    if (data.logo) {
+      logoBase64 = data.logo;
+      logoPreview.src = data.logo;
+    }
+  } catch (err) {
+    console.error("Load failed", err);
   }
 }
 
@@ -64,66 +74,52 @@ logoInput.onchange = e => {
   reader.readAsDataURL(e.target.files[0]);
 };
 
-/* ================= MAP ================= */
+/* ================= MAP HELPER ================= */
 function convertToEmbedMap(url) {
   if (!url) return "";
+  if (url.includes("output=embed")) return url;
 
-  // already embed
-  if (url.includes("output=embed")) {
-    return url;
-  }
-
-  // 1️⃣ Extract PLACE ID (cid)
+  // Simplistic extraction for common Google Maps links
   const cidMatch = url.match(/!1s([^!]+)/);
-  if (cidMatch) {
-    return `https://www.google.com/maps?cid=${cidMatch[1]}&output=embed`;
-  }
+  if (cidMatch) return `https://www.google.com/maps?cid=${cidMatch[1]}&output=embed`;
 
-  // 2️⃣ Extract lat,lng (fallback)
-  const latLngMatch = url.match(/@(-?\d+\.\d+),(-?\d+\.\d+)/);
-  if (latLngMatch) {
-    const lat = latLngMatch[1];
-    const lng = latLngMatch[2];
-    return `https://www.google.com/maps?q=${lat},${lng}&output=embed`;
-  }
-
-  // 3️⃣ Place name fallback
-  const placeMatch = url.match(/\/place\/([^/]+)/);
-  if (placeMatch) {
-    const place = decodeURIComponent(placeMatch[1].replace(/\+/g, " "));
-    return `https://www.google.com/maps?q=${encodeURIComponent(place)}&output=embed`;
-  }
-
-  // 4️⃣ Final fallback
   return `https://www.google.com/maps?q=${encodeURIComponent(url)}&output=embed`;
 }
 
-
 /* ================= SAVE ================= */
 saveBtn.onclick = async () => {
-  await api("/api/home", {
-    method: "POST",
-    body: JSON.stringify({
-      schoolName: schoolName.value,
-      logo: logoBase64,
-      heroTitle: heroTitle.value,
-      heroIntro: heroIntro.value,
-      admissionOpen: admissionOpen.checked,
-      footer: {
-        about: footerAbout.value,
-        address: footerAddress.value,
-        phone: footerPhone.value,
-        email: footerEmail.value,
-        mapLink: mapLink.value,
-        mapEmbed: convertToEmbedMap(mapLink.value),
-        quickLinks: window.quickLinks,
-        socials: window.socials,
-        copyright: footerCopyright.value
-      }
-    })
-  });
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
 
-  alert("✅ Home page saved successfully");
+  try {
+    await api("/api/home", {
+      method: "POST",
+      body: JSON.stringify({
+        schoolName: schoolName.value,
+        logo: logoBase64,
+        heroTitle: heroTitle.value,
+        heroIntro: heroIntro.value,
+        admissionOpen: admissionOpen.checked,
+        footer: {
+          about: footerAbout.value,
+          address: footerAddress.value,
+          phone: footerPhone.value,
+          email: footerEmail.value,
+          mapLink: mapLink.value,
+          mapEmbed: convertToEmbedMap(mapLink.value),
+          quickLinks: window.quickLinks,
+          socials: window.socials,
+          copyright: footerCopyright.value
+        }
+      })
+    });
+    alert("✅ Home page settings saved successfully!");
+  } catch (err) {
+    alert("❌ Error: " + err.message);
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.innerHTML = '<i class="fas fa-save"></i> Save All Changes';
+  }
 };
 
 /* ================= QUICK LINKS ================= */
@@ -137,18 +133,16 @@ function renderQuickLinks() {
   box.innerHTML = "";
 
   window.quickLinks.forEach((l, i) => {
-    box.innerHTML += `
-      <div class="row">
-        <input placeholder="Title" value="${l.title}"
-          oninput="window.quickLinks[${i}].title=this.value">
-        <input placeholder="URL" value="${l.url}"
-          oninput="window.quickLinks[${i}].url=this.value">
-        <button onclick="window.quickLinks.splice(${i},1);renderQuickLinks()">✕</button>
-      </div>
-    `;
+    const div = document.createElement("div");
+    div.className = "social-row";
+    div.innerHTML = `
+            <input placeholder="Title" value="${l.title}" oninput="window.quickLinks[${i}].title=this.value">
+            <input placeholder="URL" value="${l.url}" oninput="window.quickLinks[${i}].url=this.value">
+            <button class="btn btn-danger" onclick="window.quickLinks.splice(${i},1);renderQuickLinks()"><i class="fas fa-trash"></i></button>
+        `;
+    box.appendChild(div);
   });
 }
-
 window.renderQuickLinks = renderQuickLinks;
 
 /* ================= SOCIAL LINKS ================= */
@@ -162,34 +156,28 @@ window.renderSocials = function () {
   box.innerHTML = "";
 
   window.socials.forEach((s, i) => {
-    box.innerHTML += `
-      <div class="social-row">
-        <input value="${s.name}" placeholder="Social Name"
-          oninput="window.socials[${i}].name=this.value">
-
-        <input value="${s.url}" placeholder="Social URL"
-          oninput="window.socials[${i}].url=this.value">
-
-        <input value="${s.icon.startsWith('http') ? s.icon : ''}" placeholder="Icon URL(optional)"
-          oninput="window.socials[${i}].icon=this.value">
-
-        <input type="file"
-          onchange="uploadSocialIcon(event, ${i})">
-
-        ${s.icon ? `<img src="${s.icon}" class="social-preview">` : ""}
-
-        <button onclick="window.socials.splice(${i},1);renderSocials()">❌</button>
-      </div>
-    `;
+    const div = document.createElement("div");
+    div.className = "card";
+    div.style.padding = "15px";
+    div.style.marginBottom = "10px";
+    div.innerHTML = `
+            <div class="social-row">
+                <input value="${s.name}" placeholder="Platform Name (e.g. Facebook)" oninput="window.socials[${i}].name=this.value">
+                <input value="${s.url}" placeholder="URL" oninput="window.socials[${i}].url=this.value">
+                <button class="btn btn-danger" onclick="window.socials.splice(${i},1);renderSocials()"><i class="fas fa-trash"></i></button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 15px; margin-top: 10px;">
+                <input type="file" onchange="uploadSocialIcon(event, ${i})" style="flex: 1;">
+                ${s.icon ? `<img src="${s.icon}" class="social-preview" style="height:32px; width:32px; object-fit:contain;">` : ""}
+            </div>
+        `;
+    box.appendChild(div);
   });
 };
 
-
-/* ================= BASE64 UPLOAD ================= */
 window.uploadSocialIcon = (e, index) => {
   const file = e.target.files[0];
   if (!file) return;
-
   const reader = new FileReader();
   reader.onload = () => {
     window.socials[index].icon = reader.result;
@@ -198,115 +186,4 @@ window.uploadSocialIcon = (e, index) => {
   reader.readAsDataURL(file);
 };
 
-/* ================= SECTIONS ================= */
-
-let sections = [];
-let editingSectionId = null;
-
-// LOAD sections
-async function loadSections() {
-  sections = await api("/api/sections") || [];
-  renderSections();
-}
-
-// RENDER
-function renderSections() {
-  const box = document.getElementById("sectionsList");
-  box.innerHTML = "";
-
-  sections
-    .sort((a, b) => a.position - b.position)
-    .forEach(sec => {
-      box.innerHTML += `
-        <div class="drag-item" draggable="true" data-id="${sec._id}">
-          <div>
-            <strong>${sec.title}</strong>
-            <div class="section-meta">
-              ${sec.type} • ${sec.isActive ? "Active" : "Inactive"}
-            </div>
-          </div>
-          <div>
-            <button onclick="editSection('${sec._id}')">✏️</button>
-            <button onclick="deleteSection('${sec._id}')">🗑</button>
-          </div>
-        </div>
-      `;
-    });
-
-  enableDrag();
-}
-
-// ADD / UPDATE
-document.getElementById("sectionForm").onsubmit = async e => {
-  e.preventDefault();
-
-  const payload = {
-    title: sectionTitle.value,
-    type: sectionType.value,
-    content: sectionContent.value.split("\n"),
-    isActive: sectionActive.checked
-  };
-
-  if (editingSectionId) {
-    await api(`/api/sections/${editingSectionId}`, {
-      method: "PUT",
-      body: JSON.stringify(payload)
-    });
-  } else {
-    await api("/api/sections", {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-  }
-
-  editingSectionId = null;
-  sectionForm.reset();
-  loadSections();
-};
-
-// EDIT
-window.editSection = id => {
-  const s = sections.find(x => x._id === id);
-  if (!s) return;
-
-  sectionTitle.value = s.title;
-  sectionType.value = s.type;
-  sectionContent.value = s.content.join("\n");
-  sectionActive.checked = s.isActive;
-  editingSectionId = id;
-};
-
-// DELETE
-window.deleteSection = async id => {
-  if (!confirm("Delete section?")) return;
-  await api(`/api/sections/${id}`, { method: "DELETE" });
-  loadSections();
-};
-
-// DRAG REORDER
-function enableDrag() {
-  let dragged;
-
-  document.querySelectorAll(".drag-item").forEach(item => {
-    item.ondragstart = () => dragged = item;
-    item.ondragover = e => e.preventDefault();
-    item.ondrop = () => {
-      if (dragged === item) return;
-      item.before(dragged);
-
-      const ids = [...document.querySelectorAll(".drag-item")]
-        .map((el, i) => ({ id: el.dataset.id, position: i }));
-
-      api("/api/sections/reorder", {
-        method: "POST",
-        body: JSON.stringify(ids)
-      });
-    };
-  });
-}
-
-// INIT
-loadSections();
-
-/* INIT */
-loadHome();
+init();

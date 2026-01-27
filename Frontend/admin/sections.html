@@ -2,83 +2,87 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8" />
-  <title>Manage Sections | Admin Panel</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-  <link rel="stylesheet" href="admin.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Sections | Gyanodaya Admin</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-
   <div class="layout">
-
-    <!-- SIDEBAR -->
     <aside class="sidebar">
-      <h3>Admin</h3>
+      <h3>Gyanodaya Admin</h3>
       <a href="dashboard.html">Dashboard</a>
-      <a href="home.html">Home</a>
-      <a href="sections.html" class="active">Sections</a>
+      <a href="home.html">Home Management</a>
+      <a href="sections.html">Sections</a>
       <a href="notices.html">Notices</a>
       <a href="admissions.html">Admissions</a>
       <a href="gallery.html">Gallery</a>
       <a href="tc.html">TC Issued</a>
-      <a href="disclosure.html">Disclosure</a>
-      <a href="settings.html">Settings</a>
-      <button id="logoutBtn">Logout</button>
+      <a href="disclosure.html">Disclosures</a>
+      <div class="sidebar-bottom">
+        <a href="settings.html">Settings</a>
+        <button id="logoutBtn">Logout</button>
+      </div>
     </aside>
 
-    <!-- MAIN CONTENT -->
     <main class="content">
-      <h1>Homepage Sections</h1>
-      <p>Add and manage dynamic sections shown on the homepage.</p>
+      <h1>Dynamic Sections</h1>
+      <p class="page-desc">Create and reorder custom sections for your home page.</p>
 
-      <!-- ADD SECTION FORM -->
-      <form id="sectionForm">
-        <h3>Add New Section</h3>
+      <div class="grid" style="display: grid; grid-template-columns: 1fr 1.5fr; gap: 30px; align-items: start;">
+        <!-- FORM -->
+        <div class="card">
+          <h3 id="formTitle">Add New Section</h3>
+          <form id="sectionForm" style="box-shadow: none; padding: 0; max-width: 100%;">
+            <div class="form-group">
+              <label>Section Title</label>
+              <input id="title" type="text" required placeholder="e.g. Our Awards">
+            </div>
+            <div class="form-group">
+              <label>Display Type</label>
+              <select id="type">
+                <option value="list">List of Cards (Grid)</option>
+                <option value="text">Single Text Block</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Content (One item per line for List)</label>
+              <textarea id="content" rows="6" required placeholder="Item 1&#10;Item 2..."></textarea>
+            </div>
+            <div class="form-group">
+              <label>
+                <input type="checkbox" id="isActive" checked style="width: auto; margin-right: 8px;">
+                Is Active
+              </label>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+              <i class="fas fa-save"></i> Save Section
+            </button>
+            <button type="button" id="cancelEdit" class="btn btn-secondary hidden"
+              style="width: 100%; margin-top: 10px;">
+              Cancel Edit
+            </button>
+          </form>
+        </div>
 
-        <label>
-          Section Title
-          <input type="text" id="title" placeholder="e.g. Why Choose Us" required />
-        </label>
-
-        <label>
-          Section Type
-          <select id="type" required>
-            <option value="list">List</option>
-            <option value="text">Text</option>
-          </select>
-        </label>
-
-        <label>
-          Content
-          <small>(For list: one item per line)</small>
-          <textarea id="content" rows="5" placeholder="Enter content here" required></textarea>
-        </label>
-
-        <label style="display:flex;align-items:center;gap:8px;">
-          <input type="checkbox" id="isActive" checked />
-          Active (show on website)
-        </label>
-
-        <button type="submit">Add Section</button>
-      </form>
-
-      <hr style="margin:30px 0;" />
-
-      <!-- SECTIONS LIST -->
-      <h3>Existing Sections</h3>
-      <div id="sectionsList">
-        <!-- Sections will load here via JS -->
+        <!-- LIST -->
+        <div>
+          <h3>Current Sections</h3>
+          <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 15px;">
+            <i class="fas fa-info-circle"></i> Drag ☰ to reorder.
+          </p>
+          <div id="sectionsList" class="sections-grid">
+            <!-- Dynamic -->
+            <p>Loading sections...</p>
+          </div>
+        </div>
       </div>
     </main>
-
   </div>
 
-  <!-- SCRIPTS -->
-  <script type="module" src="admin.js"></script>
   <script type="module" src="sections.js"></script>
-
 </body>
 
 </html>

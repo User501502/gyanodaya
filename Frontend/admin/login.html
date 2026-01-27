@@ -1,44 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Admin Login | Gyanodaya Public School</title>
+  <!-- Use Inter Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="admin.css">
 </head>
+
 <body class="auth-page">
 
-  <form id="loginForm" class="auth-card">
-    <h2>Admin Login</h2>
+  <div class="auth-card">
+    <div style="text-align:center; margin-bottom: 20px;">
+      <img src="../logo.png" alt="Logo" style="height: 60px; margin-bottom: 10px;">
+      <h2>Gyanodaya Admin</h2>
+      <p style="color: var(--text-muted); font-size: 14px;">Please login to continue</p>
+    </div>
 
-    <input type="email" id="email" placeholder="Email" required>
-    <input type="password" id="password" placeholder="Password" required>
+    <form id="loginForm">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="email" placeholder="admin@example.com" required>
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+      </div>
 
-    <button type="submit">Login</button>
-    <p id="error" class="error"></p>
-  </form>
+      <button type="submit" id="loginBtn">Sign In</button>
+      <p id="error" class="error"></p>
+    </form>
 
-<script type="module">
-import { auth, signInWithEmailAndPassword } from "./firebase.js";
+    <div style="margin-top: 24px; text-align: center;">
+      <a href="../index.html" style="font-size: 13px; color: var(--primary); text-decoration: none;">&larr; Back to
+        Website</a>
+    </div>
+  </div>
 
-const form = document.getElementById("loginForm");
-const error = document.getElementById("error");
+  <script type="module">
+    import { auth, signInWithEmailAndPassword, onAuthStateChanged } from "./firebase.js";
 
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-  error.textContent = "";
+    const form = document.getElementById("loginForm");
+    const error = document.getElementById("error");
+    const btn = document.getElementById("loginBtn");
 
-  try {
-    await signInWithEmailAndPassword(
-      auth,
-      email.value,
-      password.value
-    );
-    location.href = "/admin/dashboard.html";
-  } catch (err) {
-    error.textContent = "Invalid email or password";
-  }
-});
-</script>
+    // Check if already logged in
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "dashboard.html";
+      }
+    });
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      error.textContent = "";
+      btn.disabled = true;
+      btn.textContent = "Authenticating...";
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        window.location.href = "dashboard.html";
+      } catch (err) {
+        console.error(err);
+        error.textContent = "Invalid credentials. Please try again.";
+        btn.disabled = false;
+        btn.textContent = "Sign In";
+      }
+    });
+  </script>
 
 </body>
+
 </html>

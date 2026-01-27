@@ -1,47 +1,79 @@
-import { api } from "./admin.js";
+import { protectPage, initSidebar, api } from "./admin.js";
 
 const form = document.getElementById("disclosureForm");
-const list = document.getElementById("disclosureList");
+const container = document.getElementById("disclosureList");
 
-async function load() {
-    const items = await api("/api/disclosure");
-    list.innerHTML = "";
-
-    items.forEach(n => {
-        const li = document.createElement("li");
-        li.style = "display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; align-items: center;";
-        li.innerHTML = `
-      <span>
-        <strong>${n.title}</strong><br>
-        <small><a href="${n.fileUrl}" target="_blank">${n.fileUrl}</a></small>
-      </span>
-      <button onclick="del('${n._id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
-    `;
-        list.appendChild(li);
-    });
+async function init() {
+    await protectPage();
+    initSidebar();
+    await loadDisclosures();
 }
 
-form.onsubmit = async e => {
+async function loadDisclosures() {
+    try {
+        const data = await api("/api/disclosure");
+        container.innerHTML = "";
+
+        if (data.length === 0) {
+            container.innerHTML = "<p>No documents listed.</p>";
+            return;
+        }
+
+        data.forEach(item => {
+            const div = document.createElement("div");
+            div.className = "card";
+            div.style.padding = "15px";
+            div.style.marginBottom = "10px";
+            div.style.display = "flex";
+            div.style.justifyContent = "space-between";
+            div.style.alignItems = "center";
+            div.style.borderLeft = "4px solid var(--success)";
+
+            div.innerHTML = `
+                <div>
+                    <div style="font-weight:600;">${item.title}</div>
+                    <div style="font-size:12px; color: var(--text-muted);">${item.fileUrl}</div>
+                </div>
+                <button class="btn btn-danger btn-sm" onclick="deleteItem('${item._id}')">
+                    <i class="fas fa-trash"></i>
+                </button>
+            `;
+            container.appendChild(div);
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+form.onsubmit = async (e) => {
     e.preventDefault();
-    const data = {
+    const btn = form.querySelector("button");
+    btn.disabled = true;
+
+    const payload = {
         title: document.getElementById("title").value,
         fileUrl: document.getElementById("fileUrl").value
     };
 
-    await api("/api/disclosure", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-    form.reset();
-    load();
-};
-
-window.del = async id => {
-    if (confirm("Are you sure you want to delete this document?")) {
-        await api(`/api/disclosure?id=${id}`, { method: "DELETE" });
-        load();
+    try {
+        await api("/api/disclosure", { method: "POST", body: JSON.stringify(payload) });
+        form.reset();
+        loadDisclosures();
+    } catch (err) {
+        alert(err.message);
+    } finally {
+        btn.disabled = false;
     }
 };
 
-load();
+window.deleteItem = async (id) => {
+    if (!confirm("Remove this document?")) return;
+    try {
+        await api(`/api/disclosure?id=${id}`, { method: "DELETE" });
+        loadDisclosures();
+    } catch (err) {
+        alert(err.message);
+    }
+};
+
+init();

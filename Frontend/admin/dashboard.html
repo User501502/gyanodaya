@@ -1,39 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-  <title>Dashboard</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | Gyanodaya Admin</title>
   <link rel="stylesheet" href="admin.css">
 </head>
 
 <body>
   <div class="layout">
     <aside class="sidebar">
-      <h3>Admin</h3>
+      <h3>Gyanodaya Admin</h3>
       <a href="dashboard.html">Dashboard</a>
-      <a href="home.html">Home</a>
+      <a href="home.html">Home Management</a>
       <a href="sections.html">Sections</a>
       <a href="notices.html">Notices</a>
       <a href="admissions.html">Admissions</a>
       <a href="gallery.html">Gallery</a>
       <a href="tc.html">TC Issued</a>
-      <a href="disclosure.html">Disclosure</a>
-      <a href="settings.html">Settings</a>
-      <button id="logoutBtn">Logout</button>
+      <a href="disclosure.html">Disclosures</a>
+      <div class="sidebar-bottom">
+        <a href="settings.html">Settings</a>
+        <button id="logoutBtn">Logout</button>
+      </div>
     </aside>
 
     <main class="content">
       <h1>Dashboard</h1>
-      <div class="cards">
-        <div class="card">Notices <span id="noticeCount"></span></div>
-        <div class="card">Sections <span id="sectionCount"></span></div>
-        <div class="card">Admissions <span id="admissionCount"></span></div>
-        <div class="card">TC Issued <span id="tcCount"></span></div>
-        <div class="card">Disclosures <span id="disclosureCount"></span></div>
+      <p class="page-desc">Overview of your school's website content.</p>
+
+      <div class="dashboard-grid">
+        <div class="stat-card">
+          <h4>Home Sections</h4>
+          <div class="value" id="sectionCount">0</div>
+        </div>
+        <div class="stat-card">
+          <h4>Active Notices</h4>
+          <div class="value" id="noticeCount">0</div>
+        </div>
+        <div class="stat-card">
+          <h4>Admissions</h4>
+          <div class="value" id="admissionCount">0</div>
+        </div>
+        <div class="stat-card">
+          <h4>TC Issued</h4>
+          <div class="value" id="tcCount">0</div>
+        </div>
+        <div class="stat-card">
+          <h4>Documents</h4>
+          <div class="value" id="disclosureCount">0</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Welcome to the Admin Panel</h3>
+        <p>Use the sidebar to manage different sections of your website. All changes made here will reflect instantly on
+          the public site.</p>
       </div>
     </main>
   </div>
-  <script type="module" src="dashboard.js"></script>
+
+  <script type="module">
+    import { protectPage, initSidebar, api } from "./admin.js";
+
+    async function init() {
+      await protectPage();
+      initSidebar();
+
+      try {
+        const [sections, notices, admissions, tcs, disclosures] = await Promise.all([
+          api("/api/sections"),
+          api("/api/notices"),
+          api("/api/admissions"),
+          api("/api/tc"),
+          api("/api/disclosure")
+        ]);
+
+        document.getElementById("sectionCount").textContent = sections.length;
+        document.getElementById("noticeCount").textContent = notices.length;
+        document.getElementById("admissionCount").textContent = admissions?.length || 0;
+        document.getElementById("tcCount").textContent = tcs.length;
+        document.getElementById("disclosureCount").textContent = disclosures.length;
+      } catch (err) {
+        console.error("Failed to load dashboard stats", err);
+      }
+    }
+
+    init();
+  </script>
 </body>
 
 </html>

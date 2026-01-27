@@ -1,50 +1,70 @@
-import { api } from "./admin.js";
+import { protectPage, initSidebar, api } from "./admin.js";
 
 const form = document.getElementById("tcForm");
-const tableBody = document.getElementById("tcTableBody");
+const tbody = document.getElementById("tcTableBody");
 
-async function load() {
-    const tcs = await api("/api/tc");
-    tableBody.innerHTML = "";
-
-    tcs.forEach(n => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-      <td style="padding: 10px; border: 1px solid #ddd;">${n.studentName}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${n.className}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${n.year}</td>
-      <td style="padding: 10px; border: 1px solid #ddd;">${n.tcNo}</td>
-      <td style="padding: 10px; border: 1px solid #ddd; text-align: center;">
-        <button onclick="del('${n._id}')" style="background: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Delete</button>
-      </td>
-    `;
-        tableBody.appendChild(tr);
-    });
+async function init() {
+    await protectPage();
+    initSidebar();
+    await loadTCs();
 }
 
-form.onsubmit = async e => {
+async function loadTCs() {
+    try {
+        const data = await api("/api/tc");
+        tbody.innerHTML = "";
+
+        data.forEach(tc => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td>${tc.studentName}</td>
+                <td>${tc.class}</td>
+                <td>${tc.year}</td>
+                <td>${tc.tcNumber}</td>
+                <td>
+                    <button class="btn btn-danger btn-sm" onclick="deleteTC('${tc._id}')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+form.onsubmit = async (e) => {
     e.preventDefault();
-    const data = {
+    const btn = form.querySelector("button");
+    btn.disabled = true;
+
+    const payload = {
         studentName: document.getElementById("studentName").value,
-        className: document.getElementById("className").value,
-        year: document.getElementById("year").value,
-        tcNo: document.getElementById("tcNo").value
+        class: document.getElementById("studentClass").value,
+        year: document.getElementById("tcYear").value,
+        tcNumber: document.getElementById("tcNumber").value
     };
 
-    await api("/api/tc", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-    form.reset();
-    load();
-};
-
-window.del = async id => {
-    if (confirm("Are you sure you want to delete this TC record?")) {
-        await api(`/api/tc?id=${id}`, { method: "DELETE" });
-        load();
+    try {
+        await api("/api/tc", { method: "POST", body: JSON.stringify(payload) });
+        form.reset();
+        loadTCs();
+    } catch (err) {
+        alert(err.message);
+    } finally {
+        btn.disabled = false;
     }
 };
 
-load();
+window.deleteTC = async (id) => {
+    if (!confirm("Delete this record?")) return;
+    try {
+        await api(`/api/tc?id=${id}`, { method: "DELETE" });
+        loadTCs();
+    } catch (err) {
+        alert(err.message);
+    }
+};
+
+init();

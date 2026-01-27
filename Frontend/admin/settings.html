@@ -1,23 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Settings</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Account Settings | Gyanodaya Admin</title>
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
-<div class="layout">
-  <aside class="sidebar">...</aside>
-  <main class="content">
-    <h1>Settings</h1>
-    <form id="settingsForm">
-      <input id="schoolName" required>
-      <input id="email" required>
-      <textarea id="address"></textarea>
-      <textarea id="footer"></textarea>
-      <button>Save</button>
-    </form>
-  </main>
-</div>
-<script type="module" src="settings.js"></script>
+  <div class="layout">
+    <aside class="sidebar">
+      <h3>Gyanodaya Admin</h3>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="home.html">Home Management</a>
+      <a href="sections.html">Sections</a>
+      <a href="notices.html">Notices</a>
+      <a href="admissions.html">Admissions</a>
+      <a href="gallery.html">Gallery</a>
+      <a href="tc.html">TC Issued</a>
+      <a href="disclosure.html">Disclosures</a>
+      <div class="sidebar-bottom">
+        <a href="settings.html">Settings</a>
+        <button id="logoutBtn">Logout</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <h1>Account Settings</h1>
+      <p class="page-desc">Manage your admin login credentials.</p>
+
+      <div class="card" style="max-width: 500px;">
+        <h3>Change Password</h3>
+        <form id="passwordForm" style="box-shadow:none; padding:0; margin-top:20px;">
+          <div class="form-group">
+            <label>New Password</label>
+            <input id="newPassword" type="password" required placeholder="Min 6 characters">
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input id="confirmPassword" type="password" required placeholder="Repeat password">
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%;">
+            Update Password
+          </button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script type="module">
+    import { protectPage, initSidebar } from "./admin.js";
+    import { auth } from "./firebase.js";
+    import { updatePassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    async function init() {
+      await protectPage();
+      initSidebar();
+    }
+
+    document.getElementById("passwordForm").onsubmit = async (e) => {
+      e.preventDefault();
+      const pass = document.getElementById("newPassword").value;
+      const confirm = document.getElementById("confirmPassword").value;
+
+      if (pass.length < 6) return alert("Password must be at least 6 characters.");
+      if (pass !== confirm) return alert("Passwords do not match.");
+
+      try {
+        const user = auth.currentUser;
+        await updatePassword(user, pass);
+        alert("Password updated successfully!");
+        e.target.reset();
+      } catch (err) {
+        alert("Error: " + err.message);
+      }
+    };
+
+    init();
+  </script>
 </body>
+
 </html>

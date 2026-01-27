@@ -20,18 +20,20 @@ body {
   line-height: 1.6;
 }
 
-/* ================= HEADER ================= */
+/* ================= HEADER & NAV ================= */
 header {
   position: sticky;
   top: 0;
   background: var(--primary);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   z-index: 1000;
 }
 
 .navbar {
   max-width: 1200px;
   margin: auto;
-  padding: 12px 16px;
+  padding: 0 20px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -41,37 +43,100 @@ header {
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 18px;
-  font-weight: bold;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
 }
 
 .logo img {
-  width: 36px;
+  height: 45px;
+  width: auto;
 }
 
-/* NAV */
 nav ul {
   list-style: none;
   display: flex;
-  gap: 16px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  position: relative;
 }
 
 nav ul li a {
-  padding: 6px 10px;
-  border-radius: 4px;
+  display: block;
+  padding: 24px 15px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 15px;
+  transition: all 0.3s ease;
 }
 
-nav ul li a:hover {
-  background: var(--accent);
-  color: black;
+nav ul li a:hover,
+nav ul li:hover>a {
+  color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* DROPDOWN */
+.dropdown-content {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: white;
+  min-width: 220px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: block;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-radius: 0 0 8px 8px;
+  overflow: hidden;
+  z-index: 1001;
+}
+
+nav ul li:hover .dropdown-content {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-content a {
+  color: #333 !important;
+  padding: 12px 20px !important;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px !important;
+  display: block;
+  background: none !important;
+}
+
+.dropdown-content a:last-child {
+  border-bottom: none;
+}
+
+.dropdown-content a:hover {
+  background: #f8f9fa !important;
+  color: var(--primary) !important;
+  padding-left: 25px !important;
+}
+
+.dropdown-toggle::after {
+  content: " \25BE";
+  font-size: 10px;
+  vertical-align: middle;
+  opacity: 0.7;
 }
 
 /* HAMBURGER */
 .menu-toggle {
   display: none;
-  font-size: 26px;
+  font-size: 28px;
   cursor: pointer;
+  padding: 10px;
 }
 
 /* ================= HERO ================= */
@@ -396,6 +461,33 @@ h2 {
 
   nav.active {
     display: block;
+  }
+
+  /* Mobile Dropdown */
+  .dropdown-content {
+    position: static;
+    display: none;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: none;
+    min-width: 100%;
+    border-radius: 0;
+  }
+
+  .dropdown-content a {
+    color: rgba(255, 255, 255, 0.8) !important;
+    padding-left: 30px !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .nav-item-active .dropdown-content {
+    display: block;
+  }
+
+  nav ul li a {
+    padding: 15px 20px;
   }
 }
 

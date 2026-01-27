@@ -1,38 +1,58 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Manage Mandatory Disclosure</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandatory Disclosures | Gyanodaya Admin</title>
     <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
     <div class="layout">
-        <aside class="sidebar" id="sidebar">
-            <h3>Admin</h3>
+        <aside class="sidebar">
+            <h3>Gyanodaya Admin</h3>
             <a href="dashboard.html">Dashboard</a>
-            <a href="home.html">Home</a>
+            <a href="home.html">Home Management</a>
+            <a href="sections.html">Sections</a>
             <a href="notices.html">Notices</a>
             <a href="admissions.html">Admissions</a>
+            <a href="gallery.html">Gallery</a>
             <a href="tc.html">TC Issued</a>
-            <a href="disclosure.html">Disclosure</a>
-            <a href="settings.html">Settings</a>
-            <button id="logoutBtn">Logout</button>
+            <a href="disclosure.html">Disclosures</a>
+            <div class="sidebar-bottom">
+                <a href="settings.html">Settings</a>
+                <button id="logoutBtn">Logout</button>
+            </div>
         </aside>
 
         <main class="content">
-            <h1>Manage Mandatory Disclosure</h1>
-            <form id="disclosureForm" style="display: grid; gap: 10px; max-width: 400px; margin-bottom: 20px;">
-                <input id="title" placeholder="Document Title (e.g. Fire Safety Certificate)" required>
-                <input id="fileUrl" placeholder="File URL (PDF Link)" required>
-                <button>Add Document</button>
-            </form>
+            <h1>Mandatory Disclosures</h1>
+            <p class="page-desc">Public documents and legal school information.</p>
 
             <div class="card">
-                <ul id="disclosureList" style="list-style: none; padding: 0;"></ul>
+                <h3>Add New Document</h3>
+                <form id="disclosureForm"
+                    style="display:grid; grid-template-columns: 2fr 2fr auto; gap:15px; box-shadow:none; padding:0; max-width:100%;">
+                    <input id="title" type="text" placeholder="Document Title (e.g. SMC List)" required
+                        style="margin-bottom:0;">
+                    <input id="fileUrl" type="text" placeholder="PDF or File URL" required style="margin-bottom:0;">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Add
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3>Active Documents</h3>
+                <div id="disclosureList" style="margin-top:20px;">
+                    <!-- Dynamic -->
+                </div>
             </div>
         </main>
     </div>
+
     <script type="module" src="disclosure.js"></script>
 </body>
 

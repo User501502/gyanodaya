@@ -3,23 +3,23 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Notice Board | Gyanodaya Public School</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notices | Gyanodaya Public School</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 
 <body>
-
   <header>
     <div class="navbar">
-      <div class="logo">
-        <img src="logo.png" alt="School Logo">
-        <span>Gyanodaya Public School</span>
-      </div>
-
-      <!-- Hamburger -->
+      <a href="index.html" class="logo">
+        <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
+        <span id="schoolName">Gyanodaya Public School</span>
+      </a>
       <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-
       <nav id="navMenu">
         <ul id="navLinks">
           <li><a href="index.html">Home</a></li>
@@ -28,25 +28,13 @@
             <div class="dropdown-content">
               <a href="about.html#vision">Vision & Mission</a>
               <a href="about.html#principal">Principal's Message</a>
-              <a href="about.html#management">Management</a>
-              <a href="about.html#infrastructure">Infrastructure</a>
             </div>
           </li>
           <li class="dropdown">
             <a href="academics.html" class="dropdown-toggle">Academics</a>
             <div class="dropdown-content">
               <a href="academics.html#curriculum">Curriculum</a>
-              <a href="academics.html#calendar">Academic Calendar</a>
               <a href="faculty.html">Our Faculty</a>
-              <a href="academics.html#books">List of Books</a>
-            </div>
-          </li>
-          <li class="dropdown">
-            <a href="admissions.html" class="dropdown-toggle">Admissions</a>
-            <div class="dropdown-content">
-              <a href="admissions.html#procedure">Admission Procedure</a>
-              <a href="admissions.html#fees">Fee Structure</a>
-              <a href="admissions.html#apply">Apply Online</a>
             </div>
           </li>
           <li class="dropdown">
@@ -57,41 +45,69 @@
               <a href="notice.html">Notices & News</a>
             </div>
           </li>
-          <li class="dropdown">
-            <a href="gallery.html" class="dropdown-toggle">Gallery</a>
-            <div class="dropdown-content">
-              <a href="gallery.html#photos">Photo Gallery</a>
-              <a href="gallery.html#videos">Video Gallery</a>
-            </div>
-          </li>
+          <li><a href="gallery.html">Gallery</a></li>
           <li><a href="contact.html">Contact Us</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <section class="section">
-    <h2>Notice Board</h2>
-    <ul class="notice-list">
-      <li>Admission Open for New Session</li>
-      <li>Parent Teacher Meeting Announcement</li>
-    </ul>
-  </section>
+  <main id="siteContent">
+    <section class="section">
+      <div style="text-align:center; margin-bottom:50px;">
+        <h1 style="font-family:'Outfit', sans-serif; color:var(--primary); font-size:42px;">Latest Notices</h1>
+        <p style="color:var(--text-muted); font-size:16px;">Stay updated with the latest announcements and circulars
+          from the school.</p>
+      </div>
 
-  <footer>
-    <p>📍 Sinhasa | 📞 9406613049 | ✉️ gyanodayapublicschool14@gmail.com</p>
-  </footer>
-  <a href="https://wa.me/919406613049" class="whatsapp-float">💬</a>
+      <div id="noticeContainer" style="max-width:800px; margin:0 auto;">
+        <!-- Dynamic -->
+        <div style="text-align:center; padding:50px; color:var(--text-muted);">
+          <i class="fas fa-spinner fa-spin fa-2x"></i>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="footer"></footer>
+
+  <script src="script.js"></script>
   <script>
-    fetch("http://localhost:5000/notice")
-      .then(res => res.json())
-      .then(data => {
-        const list = document.getElementById("noticeList");
-        list.innerHTML = "";
-        data.forEach(n => {
-          list.innerHTML += `<li>${n.title}</li>`;
+    async function fetchNotices() {
+      try {
+        const res = await fetch('/api/notices');
+        const data = await res.json();
+        const container = document.getElementById('noticeContainer');
+        container.innerHTML = '';
+
+        if (!data || data.length === 0) {
+          container.innerHTML = '<div class="card" style="text-align:center;">No notices at the moment.</div>';
+          return;
+        }
+
+        data.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.marginBottom = '20px';
+          card.style.padding = '30px';
+          card.style.borderLeft = '6px solid var(--primary)';
+          card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.05)';
+
+          card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px;">
+                            <span style="background:#e0f2fe; color:var(--primary); padding:4px 12px; border-radius:50px; font-size:12px; font-weight:bold; text-transform:uppercase;">Circular</span>
+                            <span style="font-size:13px; color:var(--text-muted);"><i class="far fa-calendar-alt"></i> ${new Date(item.createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <p style="font-size:17px; line-height:1.6; color:#1e293b; font-weight:500;">${item.text}</p>
+                    `;
+          container.appendChild(card);
         });
-      });
+      } catch (error) {
+        console.error(error);
+        document.getElementById('noticeContainer').innerHTML = '<div class="card" style="color:red;">Error loading notices.</div>';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', fetchNotices);
   </script>
 </body>
 
