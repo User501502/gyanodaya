@@ -100,7 +100,7 @@
         window.deleteAsset = async (id) => {
             if (!confirm("Are you sure? This cannot be undone.")) return;
             try {
-                await api(`/api/assets/${id}`, { method: "DELETE" });
+                await api(`/api/assets?id=${id}`, { method: "DELETE" });
                 loadAssets();
             } catch (err) { alert(err.message); }
         };

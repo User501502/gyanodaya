@@ -144,7 +144,7 @@
                 col3: document.getElementById('col3').value
             };
             try {
-                if (id) await api(`/api/records/${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                if (id) await api(`/api/records?id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
                 else await api("/api/records", { method: "POST", body: JSON.stringify(payload) });
                 closeModal();
                 loadRecords();
@@ -165,7 +165,7 @@
 
         window.deleteRecord = async (id) => {
             if (!confirm("Delete this?")) return;
-            await api(`/api/records/${id}`, { method: "DELETE" });
+            await api(`/api/records?id=${id}`, { method: "DELETE" });
             loadRecords();
         };
 
