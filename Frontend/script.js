@@ -351,7 +351,7 @@ window.loadPageRecords = async function (category) {
 
     // Default Table View for Fees, Books, etc.
     let headers = [];
-    if (category === 'fees') headers = ["Class", "Admission Fee", "Monthly Fee"];
+    if (category === 'fees') headers = ["Class", "Total Fee", "Monthly Fee"];
     if (category === 'books') headers = ["Class", "Subject", "Book & Publisher"];
 
     const tableHtml = `
