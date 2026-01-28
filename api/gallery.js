@@ -19,7 +19,25 @@ export default async function handler(req, res) {
     }
 
     if (req.method === "POST") {
-        const item = new Gallery(req.body);
+        const data = req.body;
+
+        // Auto convert YouTube URL to embed URL if it's a video
+        if (data.type === "video" && data.url) {
+            let videoId = "";
+            if (data.url.includes("v=")) {
+                videoId = data.url.split("v=")[1].split("&")[0];
+            } else if (data.url.includes("be/")) {
+                videoId = data.url.split("be/")[1].split("?")[0];
+            } else if (data.url.includes("embed/")) {
+                videoId = data.url.split("embed/")[1].split("?")[0];
+            }
+
+            if (videoId) {
+                data.url = `https://www.youtube.com/embed/${videoId}`;
+            }
+        }
+
+        const item = new Gallery(data);
         await item.save();
         return res.json(item);
     }

@@ -61,12 +61,11 @@
         if (item.type === 'photo') {
           card.innerHTML = `<img src="${item.url}" style="width:100%; height:200px; object-fit:cover; display:block;"><div style="padding:15px; font-weight:600; font-size:14px;">${item.title}</div>`;
         } else {
-          let videoId = "dQw4w9WgXcQ";
-          try {
-            if (item.url.includes('v=')) videoId = item.url.split('v=')[1].split('&')[0];
-            else videoId = item.url.split('/').pop();
-          } catch (e) { }
-          card.innerHTML = `<div style="position:relative; width:100%; height:200px; background:#000;"><img src="https://img.youtube.com/vi/${videoId}/hqdefault.jpg" style="width:100%; height:100%; object-fit:cover; opacity:0.7;"><a href="${item.url}" target="_blank" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; color:white; font-size:40px;"><i class="fab fa-youtube"></i></a></div><div style="padding:15px; font-weight:600; font-size:14px;">${item.title} (Video)</div>`;
+          card.innerHTML = `
+            <div style="position:relative; width:100%; height:200px; background:#000;">
+              <iframe width="100%" height="200" src="${item.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div style="padding:15px; font-weight:600; font-size:14px;">${item.title}</div>`;
         }
         container.appendChild(card);
       });

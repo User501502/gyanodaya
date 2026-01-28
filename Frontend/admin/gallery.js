@@ -14,13 +14,15 @@ async function init() {
 
 typeSelect.onchange = () => {
     if (typeSelect.value === "photo") {
-        fileGroup.classList.remove("hidden");
-        urlGroup.classList.add("hidden");
+        fileGroup.style.display = "block";
+        urlGroup.style.display = "none";
     } else {
-        fileGroup.classList.add("hidden");
-        urlGroup.classList.remove("hidden");
+        fileGroup.style.display = "none";
+        urlGroup.style.display = "block";
     }
 };
+
+window.onload = () => typeSelect.onchange();
 
 async function loadGallery() {
     try {
