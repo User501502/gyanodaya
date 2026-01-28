@@ -6,6 +6,129 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard | Gyanodaya Admin</title>
   <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    :root {
+      --dash-grad: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    }
+
+    .welcome-banner {
+      background: var(--dash-grad);
+      color: white;
+      padding: 40px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-banner::after {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .welcome-banner h1 {
+      font-size: 32px;
+      margin-bottom: 5px;
+    }
+
+    .welcome-banner p {
+      opacity: 0.8;
+      font-size: 16px;
+    }
+
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .dash-card {
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      border: 1px solid var(--border);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .dash-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .icon-box {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 30px;
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: #f1f5f9;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .action-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 50px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .status-new {
+      background: #dcfce7;
+      color: #15803d;
+    }
+
+    .status-pending {
+      background: #fefce8;
+      color: #a16207;
+    }
+
+    @media (max-width: 1024px) {
+      .activity-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 
 <body>
@@ -15,48 +138,124 @@
     </aside>
 
     <main class="content">
-      <h1>Dashboard</h1>
-      <p class="page-desc">Overview of your school's website content.</p>
+      <div class="welcome-banner">
+        <h1 id="greeting">Good Morning, Admin</h1>
+        <p>Gyanodaya Public School Management Portal • <span id="currentDate"></span></p>
+      </div>
 
-      <div class="dashboard-grid">
-        <div class="stat-card">
-          <h4>Page Sections</h4>
-          <div class="value" id="sectionCount">0</div>
+      <div class="stats-container">
+        <!-- OPERATIONAL STATS -->
+        <div class="dash-card">
+          <div class="icon-box" style="background: #eff6ff; color: #3b82f6;"><i class="fas fa-user-graduate"></i></div>
+          <div class="stat-label" style="font-size: 14px; color: var(--text-muted);">Enrollment</div>
+          <div class="value" id="studentCount" style="font-size: 28px; font-weight: 800;">0</div>
+          <div style="font-size: 12px; color: var(--success); margin-top: 5px;"><i class="fas fa-arrow-up"></i> Active
+            Students</div>
         </div>
-        <div class="stat-card">
-          <h4>Active Notices</h4>
-          <div class="value" id="noticeCount">0</div>
+
+        <div class="dash-card">
+          <div class="icon-box" style="background: #fef2f2; color: #ef4444;"><i class="fas fa-file-invoice-dollar"></i>
+          </div>
+          <div class="stat-label" style="font-size: 14px; color: var(--text-muted);">Enquiries</div>
+          <div class="value" id="admissionCount" style="font-size: 28px; font-weight: 800;">0</div>
+          <div style="font-size: 12px; color: var(--warning); margin-top: 5px;"><i class="fas fa-clock"></i> Conversion
+            Pending</div>
         </div>
-        <div class="stat-card">
-          <h4>Admission Enquiries</h4>
-          <div class="value" id="admissionCount">0</div>
+
+        <div class="dash-card">
+          <div class="icon-box" style="background: #ecfdf5; color: #10b981;"><i class="fas fa-chalkboard-teacher"></i>
+          </div>
+          <div class="stat-label" style="font-size: 14px; color: var(--text-muted);">Faculty</div>
+          <div class="value" id="facultyCount" style="font-size: 28px; font-weight: 800;">0</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Teaching Staff</div>
         </div>
-        <div class="stat-card">
-          <h4>Faculty & Staff</h4>
-          <div class="value" id="facultyCount">0</div>
-        </div>
-        <div class="stat-card">
-          <h4>Media Files</h4>
-          <div class="value" id="assetCount">0</div>
-        </div>
-        <div class="stat-card">
-          <h4>Special Records</h4>
-          <div class="value" id="recordCount">0</div>
-        </div>
-        <div class="stat-card">
-          <h4>Management</h4>
-          <div class="value" id="managementCount">0</div>
-        </div>
-        <div class="stat-card">
-          <h4>Students</h4>
-          <div class="value" id="studentCount">0</div>
+
+        <div class="dash-card">
+          <div class="icon-box" style="background: #fff7ed; color: #f59e0b;"><i class="fas fa-bullhorn"></i></div>
+          <div class="stat-label" style="font-size: 14px; color: var(--text-muted);">Latest Notices</div>
+          <div class="value" id="noticeCount" style="font-size: 28px; font-weight: 800;">0</div>
+          <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Active on Website</div>
         </div>
       </div>
 
-      <div class="card" style="margin-top: 30px; border-left: 5px solid var(--primary);">
-        <h3><i class="fas fa-rocket"></i> Welcome to Gyanodaya Admin</h3>
-        <p>Your website is now fully manageable. Every page has its own dedicated editor in the sidebar. You can upload
-          photos, manage fee tables, track admissions, and update the academic calendar instantly.</p>
+      <div class="activity-grid">
+        <div class="left-section">
+          <div class="card" style="padding: 0; overflow: hidden; border-radius: 16px;">
+            <div
+              style="padding: 20px 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;">
+              <h3 style="font-size: 16px;"><i class="fas fa-paper-plane"
+                  style="color: var(--primary); margin-right: 10px;"></i> Recent Enquiries</h3>
+              <a href="admissions.html"
+                style="font-size: 12px; color: var(--primary); text-decoration: none; font-weight: 600;">View All
+                Enquiries</a>
+            </div>
+            <table style="width: 100%;">
+              <thead>
+                <tr style="background: #f8fafc; text-align: left; font-size: 12px;">
+                  <th style="padding: 15px 25px;">STUDENT NAME</th>
+                  <th style="padding: 15px 25px;">CLASS</th>
+                  <th style="padding: 15px 25px;">PHONE</th>
+                  <th style="padding: 15px 25px;">STATUS</th>
+                </tr>
+              </thead>
+              <tbody id="recentEnquiries" style="font-size: 14px;">
+                <!-- Data -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card" style="padding: 25px; border-radius: 16px; margin-top: 30px;">
+            <h3 style="font-size: 16px; margin-bottom: 20px;"><i class="fas fa-info-circle"
+                style="color: var(--warning); margin-right: 10px;"></i> Database Overview</h3>
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+              <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+                  Media Files</div>
+                <div id="assetCount" style="font-size: 20px; font-weight: 800; margin-top: 5px;">0</div>
+              </div>
+              <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+                  Page Sections</div>
+                <div id="sectionCount" style="font-size: 20px; font-weight: 800; margin-top: 5px;">0</div>
+              </div>
+              <div style="background: #f8fafc; padding: 15px; border-radius: 10px;">
+                <div style="font-size: 11px; color: var(--text-muted); font-weight: 700; text-transform: uppercase;">
+                  Documents</div>
+                <div id="recordCount" style="font-size: 20px; font-weight: 800; margin-top: 5px;">0</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="right-section">
+          <div class="card" style="padding: 25px; border-radius: 16px;">
+            <h3 style="font-size: 16px; margin-bottom: 20px;">Quick Actions</h3>
+            <div class="quick-actions">
+              <a href="students.html" class="action-btn">
+                <i class="fas fa-plus-circle" style="color: #3b82f6;"></i> Add New Student
+              </a>
+              <a href="notices.html" class="action-btn">
+                <i class="fas fa-plus-circle" style="color: #10b981;"></i> Post New Notice
+              </a>
+              <a href="gallery.html" class="action-btn">
+                <i class="fas fa-camera" style="color: #f59e0b;"></i> Update Gallery
+              </a>
+              <a href="settings.html" class="action-btn">
+                <i class="fas fa-shield-alt" style="color: #ef4444;"></i> System Backup
+              </a>
+            </div>
+          </div>
+
+          <div class="card"
+            style="padding: 25px; border-radius: 16px; margin-top: 30px; background: #f0f9ff; border: 1px solid #bae6fd;">
+            <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+              <i class="fas fa-lightbulb" style="font-size: 24px; color: #0ea5e9;"></i>
+              <h3 style="font-size: 16px; color: #0369a1;">Pro Tip</h3>
+            </div>
+            <p style="font-size: 14px; color: #0c4a6e; line-height: 1.6;">You can update the Admissions Open year in the
+              <strong>Global Settings</strong> tab to change the recruitment badge on the homepage.</p>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -68,11 +267,26 @@
       await protectPage();
       initSidebar();
 
+      // Set greeting
+      const hour = new Date().getHours();
+      const greeting = document.getElementById("greeting");
+      if (hour < 12) greeting.textContent = "Good Morning, Admin";
+      else if (hour < 17) greeting.textContent = "Good Afternoon, Admin";
+      else greeting.textContent = "Good Evening, Admin";
+
+      // Set date
+      document.getElementById("currentDate").textContent = new Date().toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+
       try {
         const [sections, notices, admissions, assets, records, faculty, management, students] = await Promise.all([
           api("/api/sections"),
           api("/api/notices"),
-          api("/api/admissions"),
+          api("/api/docs?type=enquiry"),
           api("/api/assets"),
           api("/api/records"),
           api("/api/people?type=faculty"),
@@ -80,14 +294,41 @@
           api("/api/students")
         ]);
 
-        document.getElementById("sectionCount").textContent = sections.length;
-        document.getElementById("noticeCount").textContent = notices.length;
-        document.getElementById("admissionCount").textContent = admissions?.length || 0;
-        document.getElementById("assetCount").textContent = assets.length;
-        document.getElementById("recordCount").textContent = records.length;
-        document.getElementById("facultyCount").textContent = faculty.length;
-        document.getElementById("managementCount").textContent = management.length;
+        // Main Stats
         document.getElementById("studentCount").textContent = students.length;
+        document.getElementById("admissionCount").textContent = admissions.length;
+        document.getElementById("facultyCount").textContent = faculty.length;
+        document.getElementById("noticeCount").textContent = notices.length;
+
+        // Overview Stats
+        document.getElementById("assetCount").textContent = assets.length;
+        document.getElementById("sectionCount").textContent = sections.length;
+        document.getElementById("recordCount").textContent = (records.length || 0);
+
+        // Recent Enquiries Table
+        const recentTbody = document.getElementById("recentEnquiries");
+        const latestEnquiries = admissions.slice(0, 5);
+
+        if (latestEnquiries.length === 0) {
+          recentTbody.innerHTML = '<tr><td colspan="4" style="padding: 25px; text-align: center; color: var(--text-muted);">No recent enquiries</td></tr>';
+        } else {
+          latestEnquiries.forEach(enq => {
+            const tr = document.createElement("tr");
+            tr.style.borderBottom = "1px solid #f1f5f9";
+            tr.innerHTML = `
+              <td style="padding: 15px 25px; font-weight: 700;">${enq.name}</td>
+              <td style="padding: 15px 25px;">${enq.classLevel || 'N/A'}</td>
+              <td style="padding: 15px 25px;">${enq.phone}</td>
+              <td style="padding: 15px 25px;">
+                <span class="status-pill ${enq.contacted ? 'status-new' : 'status-pending'}">
+                  ${enq.contacted ? 'Viewed' : 'New'}
+                </span>
+              </td>
+            `;
+            recentTbody.appendChild(tr);
+          });
+        }
+
       } catch (err) {
         console.error("Failed to load dashboard stats", err);
       }

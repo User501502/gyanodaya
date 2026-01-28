@@ -81,8 +81,14 @@ export async function api(url, options = {}) {
     window.location.href = 'login.html';
   }
   if (!res.ok) {
-    const err = await res.json();
-    throw new Error(err.error || 'API Request Failed');
+    let errorMsg = 'API Request Failed';
+    try {
+      const err = await res.json();
+      errorMsg = err.error || errorMsg;
+    } catch (e) {
+      errorMsg = res.statusText || errorMsg;
+    }
+    throw new Error(errorMsg);
   }
   return res.json();
 }

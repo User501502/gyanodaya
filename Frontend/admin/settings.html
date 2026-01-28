@@ -138,7 +138,7 @@
 
     window.exportData = async () => {
       try {
-        const res = await fetch("/api/backup");
+        const res = await fetch("/api/home?backup=true");
         const blob = await res.blob();
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
