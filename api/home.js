@@ -28,6 +28,14 @@ const HomeSchema = new mongoose.Schema({
   diseCode: String,
   foundedYear: String,
 
+  // Homepage Stats
+  stats: {
+    students: Number,
+    teachers: Number,
+    facilities: Number,
+    successRate: Number
+  },
+
   footer: FooterSchema
 });
 

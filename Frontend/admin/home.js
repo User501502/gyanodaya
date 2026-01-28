@@ -25,6 +25,11 @@ const logoPreview = document.getElementById("logoPreview");
 const heroInput = document.getElementById("heroInput");
 const saveBtn = document.getElementById("saveHomeBtn");
 
+const statStudents = document.getElementById("statStudents");
+const statTeachers = document.getElementById("statTeachers");
+const statFacilities = document.getElementById("statFacilities");
+const statSuccessRate = document.getElementById("statSuccessRate");
+
 /* ================= INIT ================= */
 async function init() {
   await protectPage();
@@ -43,6 +48,13 @@ async function loadHome() {
     heroIntro.value = data.heroIntro || "";
     admissionOpen.checked = data.admissionOpen || false;
     admissionYear.value = data.admissionYear || "2024-25";
+
+    // Load stats
+    const stats = data.stats || {};
+    statStudents.value = stats.students || "";
+    statTeachers.value = stats.teachers || "";
+    statFacilities.value = stats.facilities || "";
+    statSuccessRate.value = stats.successRate || "";
 
     const f = data.footer || {};
     footerAbout.value = f.about || "";
@@ -124,6 +136,12 @@ saveBtn.onclick = async () => {
         heroImage: heroBase64,
         admissionOpen: admissionOpen.checked,
         admissionYear: admissionYear.value,
+        stats: {
+          students: parseInt(statStudents.value) || 0,
+          teachers: parseInt(statTeachers.value) || 0,
+          facilities: parseInt(statFacilities.value) || 0,
+          successRate: parseInt(statSuccessRate.value) || 0
+        },
         footer: {
           about: footerAbout.value,
           address: footerAddress.value,

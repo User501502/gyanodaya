@@ -200,6 +200,18 @@ async function loadGlobalSettings() {
     const mapFrame = document.getElementById("mapFrame");
     if (mapFrame && data.footer?.mapEmbed) mapFrame.src = data.footer.mapEmbed;
 
+    // Load Homepage Stats
+    const stats = data.stats || {};
+    const statStudents = document.getElementById("statStudents");
+    const statTeachers = document.getElementById("statTeachers");
+    const statFacilities = document.getElementById("statFacilities");
+    const statSuccessRate = document.getElementById("statSuccessRate");
+
+    if (statStudents && stats.students) statStudents.textContent = stats.students + "+";
+    if (statTeachers && stats.teachers) statTeachers.textContent = stats.teachers + "+";
+    if (statFacilities && stats.facilities) statFacilities.textContent = stats.facilities + "+";
+    if (statSuccessRate && stats.successRate) statSuccessRate.textContent = stats.successRate + "%";
+
   } catch (err) {
     console.error("Failed to load global settings", err);
   }
