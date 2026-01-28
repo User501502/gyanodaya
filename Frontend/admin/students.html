@@ -32,96 +32,97 @@
     <div class="layout">
         <div class="sidebar"></div>
         <main class="content">
-            <h1>Student Management</h1>
-            <div style="display: flex; gap: 10px;">
-                <button class="btn btn-secondary" onclick="toggleRecentAdmissions()"><i class="fas fa-history"></i>
-                    Recent Admissions</button>
-                <a href="#" class="btn btn-primary" onclick="showAddModal()">+ New Student</a>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h1>Student Management</h1>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="toggleRecentAdmissions()"><i class="fas fa-history"></i>
+                        Recent Admissions</button>
+                    <a href="#" class="btn btn-primary" onclick="showAddModal()">+ New Student</a>
+                </div>
             </div>
-    </div>
 
-    <!-- New Admissions Section -->
-    <div id="recentAdmissionsCard" class="card"
-        style="margin-bottom: 30px; display: none; border: 1px solid var(--primary);">
-        <h3 style="color: var(--primary); margin-bottom: 15px;">New Admissions (2024-25)</h3>
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-                <thead>
-                    <tr style="background: #f0f9ff; border-bottom: 2px solid #bae6fd;">
-                        <th style="padding: 10px;">Roll No</th>
-                        <th style="padding: 10px;">Name</th>
-                        <th style="padding: 10px;">Class</th>
-                        <th style="padding: 10px;">Father</th>
-                        <th style="padding: 10px;">Mobile</th>
-                        <th style="padding: 10px;">Adm. Date</th>
-                    </tr>
-                </thead>
-                <tbody id="recentAdmissionsBody">
-                    <!-- Injected via JS -->
-                </tbody>
-            </table>
-        </div>
-    </div>
+            <!-- New Admissions Section -->
+            <div id="recentAdmissionsCard" class="card"
+                style="margin-bottom: 30px; display: none; border: 1px solid var(--primary);">
+                <h3 style="color: var(--primary); margin-bottom: 15px;">New Admissions:-</h3>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+                        <thead>
+                            <tr style="background: #f0f9ff; border-bottom: 2px solid #bae6fd;">
+                                <th style="padding: 10px;">Roll No</th>
+                                <th style="padding: 10px;">Name</th>
+                                <th style="padding: 10px;">Class</th>
+                                <th style="padding: 10px;">Father</th>
+                                <th style="padding: 10px;">Mobile</th>
+                                <th style="padding: 10px;">Adm. Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentAdmissionsBody">
+                            <!-- Injected via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
-    <div class="card" style="margin-bottom: 30px;">
-        <div style="display: flex; gap: 20px; align-items: center;">
-            <div style="flex: 1;">
-                <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">FILTER BY
-                    CLASS</label>
-                <select id="classFilter" onchange="loadStudents()">
-                    <option value="">All Classes</option>
-                    <option value="Nursery">Nursery</option>
-                    <option value="LKG">LKG</option>
-                    <option value="UKG">UKG</option>
-                    <option value="Class 1">Class 1</option>
-                    <option value="Class 2">Class 2</option>
-                    <option value="Class 3">Class 3</option>
-                    <option value="Class 4">Class 4</option>
-                    <option value="Class 5">Class 5</option>
-                    <option value="Class 6">Class 6</option>
-                    <option value="Class 7">Class 7</option>
-                    <option value="Class 8">Class 8</option>
-                    <option value="Class 9">Class 9</option>
-                    <option value="Class 10">Class 10</option>
-                    <option value="Class 11">Class 11</option>
-                    <option value="Class 12">Class 12</option>
-                </select>
+            <div class="card" style="margin-bottom: 30px;">
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">FILTER BY
+                            CLASS</label>
+                        <select id="classFilter" onchange="loadStudents()">
+                            <option value="">All Classes</option>
+                            <option value="Nursery">Nursery</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">LATEST
+                            STATUS</label>
+                        <select id="statusFilter" onchange="loadStudents()">
+                            <option value="all">All Status</option>
+                            <option value="due">Due Fees Only</option>
+                            <option value="paid">Fully Paid</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2;">
+                        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">SEARCH
+                            NAME</label>
+                        <input type="text" id="nameSearch" placeholder="Type student name..." oninput="loadStudents()">
+                    </div>
+                </div>
             </div>
-            <div style="flex: 1;">
-                <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">LATEST
-                    STATUS</label>
-                <select id="statusFilter" onchange="loadStudents()">
-                    <option value="all">All Status</option>
-                    <option value="due">Due Fees Only</option>
-                    <option value="paid">Fully Paid</option>
-                </select>
-            </div>
-            <div style="flex: 2;">
-                <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">SEARCH
-                    NAME</label>
-                <input type="text" id="nameSearch" placeholder="Type student name..." oninput="loadStudents()">
-            </div>
-        </div>
-    </div>
 
-    <div class="card" style="padding: 0; overflow: hidden;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <thead>
-                <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; text-align: left;">
-                    <th style="padding: 15px;">Roll No</th>
-                    <th style="padding: 15px;">Student Name</th>
-                    <th style="padding: 15px;">Class</th>
-                    <th style="padding: 15px;">Fees (Total/Paid)</th>
-                    <th style="padding: 15px;">Status</th>
-                    <th style="padding: 15px;">Action</th>
-                </tr>
-            </thead>
-            <tbody id="studentTableBody">
-                <!-- Data injected here -->
-            </tbody>
-        </table>
-    </div>
-    </main>
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; text-align: left;">
+                            <th style="padding: 15px;">Roll No</th>
+                            <th style="padding: 15px;">Student Name</th>
+                            <th style="padding: 15px;">Class</th>
+                            <th style="padding: 15px;">Fees (Total/Paid)</th>
+                            <th style="padding: 15px;">Status</th>
+                            <th style="padding: 15px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
     </div>
 
     <!-- Student Modal -->
