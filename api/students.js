@@ -6,6 +6,7 @@ const StudentSchema = new mongoose.Schema({
     name: { type: String, required: true },
     className: String, // e.g. "Class 10-A"
     fatherName: String,
+    motherName: String,
     mobile: String,
     address: String,
 

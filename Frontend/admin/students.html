@@ -59,6 +59,8 @@
                             <option value="Class 8">Class 8</option>
                             <option value="Class 9">Class 9</option>
                             <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
                         </select>
                     </div>
                     <div style="flex: 1;">
@@ -132,11 +134,19 @@
                             <option value="Class 8">Class 8</option>
                             <option value="Class 9">Class 9</option>
                             <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label>Father's Name</label>
-                        <input id="studFather" type="text">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="form-group">
+                            <label>Father's Name</label>
+                            <input id="studFather" type="text">
+                        </div>
+                        <div class="form-group">
+                            <label>Mother's Name</label>
+                            <input id="studMother" type="text">
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
@@ -239,6 +249,7 @@
                 name: document.getElementById("studName").value,
                 className: document.getElementById("studClass").value,
                 fatherName: document.getElementById("studFather").value,
+                motherName: document.getElementById("studMother").value,
                 mobile: document.getElementById("studMobile").value,
                 totalFees: Number(document.getElementById("studTotalFees").value),
                 paidFees: Number(document.getElementById("studPaidFees").value)
@@ -259,6 +270,7 @@
             document.getElementById("studName").value = s.name;
             document.getElementById("studClass").value = s.className;
             document.getElementById("studFather").value = s.fatherName || "";
+            document.getElementById("studMother").value = s.motherName || "";
             document.getElementById("studMobile").value = s.mobile || "";
             document.getElementById("studTotalFees").value = s.totalFees || 0;
             document.getElementById("studPaidFees").value = s.paidFees || 0;
