@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Calendar | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #e2e8f0;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .calendar-day {
+            background: white;
+            min-height: 100px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .day-header {
+            font-size: 12px;
+            font-weight: 700;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .event-item {
+            font-size: 11px;
+            background: var(--bg);
+            border-left: 3px solid var(--primary);
+            padding: 4px 6px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            cursor: pointer;
+            word-break: break-all;
+        }
+
+        .event-item:hover {
+            background: #f1f5f9;
+        }
+
+        .calendar-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .weekday-header {
+            background: #f8fafc;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 12px;
+            color: var(--primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1>Academic Calendar</h1>
+                <button class="btn btn-primary" onclick="showAddModal()">+ Add Event</button>
+            </div>
+
+            <div class="calendar-nav">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <button class="btn btn-secondary btn-sm" onclick="changeMonth(-1)"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <h3 id="currentMonthYear" style="min-width: 150px; text-align: center;">Month Year</h3>
+                    <button class="btn btn-secondary btn-sm" onclick="changeMonth(1)"><i
+                            class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="page-desc">Add school events, holidays, and exam dates here.</div>
+            </div>
+
+            <div class="calendar-grid" id="calendarGrid">
+                <!-- Weekday headers -->
+                <div class="weekday-header">SUN</div>
+                <div class="weekday-header">MON</div>
+                <div class="weekday-header">TUE</div>
+                <div class="weekday-header">WED</div>
+                <div class="weekday-header">THU</div>
+                <div class="weekday-header">FRI</div>
+                <div class="weekday-header">SAT</div>
+                <!-- Days will be injected here -->
+            </div>
+
+            <hr style="margin: 40px 0; border: 0; border-top: 1px solid #e2e8f0;">
+            <h3>General Calendar Sections</h3>
+            <p class="page-desc">Manage text or list content for the Academic Calendar page.</p>
+            <a href="sections.html?page=calendar" class="btn btn-secondary">Manage Calendar Page Sections</a>
+        </main>
+    </div>
+
+    <!-- Event Modal -->
+    <div id="eventModal" class="modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="card" style="width:400px; padding:30px;">
+            <h3 id="modalTitle">Schedule Event</h3>
+            <form id="eventForm" style="margin-top:20px;">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Event Date</label>
+                    <input id="eventDate" type="date" required>
+                </div>
+                <div class="form-group">
+                    <label>Event Title</label>
+                    <input id="eventTitle" type="text" placeholder="e.g. Science Fair" required>
+                </div>
+                <div class="form-group">
+                    <label>Description (Optional)</label>
+                    <input id="eventDesc" type="text" placeholder="Short detail...">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;"
+                        onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Save Event</button>
+                </div>
+                <button type="button" id="deleteBtn" class="btn btn-danger"
+                    style="width: 100%; margin-top: 10px; display: none;" onclick="deleteEvent()">Delete Event</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        let currentDate = new Date();
+        let allEvents = [];
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            await loadEvents();
+            renderCalendar();
+        }
+
+        async function loadEvents() {
+            try {
+                allEvents = await api("/api/records?category=calendar");
+            } catch (err) { console.error(err); }
+        }
+
+        function renderCalendar() {
+            const grid = document.getElementById("calendarGrid");
+            // Keep headers
+            grid.innerHTML = `
+                <div class="weekday-header">SUN</div>
+                <div class="weekday-header">MON</div>
+                <div class="weekday-header">TUE</div>
+                <div class="weekday-header">WED</div>
+                <div class="weekday-header">THU</div>
+                <div class="weekday-header">FRI</div>
+                <div class="weekday-header">SAT</div>
+            `;
+
+            const month = currentDate.getMonth();
+            const year = currentDate.getFullYear();
+            document.getElementById("currentMonthYear").innerText = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentDate);
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Padding
+            for (let i = 0; i < firstDay; i++) {
+                const div = document.createElement("div");
+                div.className = "calendar-day";
+                div.style.background = "#f8fafc";
+                grid.appendChild(div);
+            }
+
+            // Actual days
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDiv = document.createElement("div");
+                dayDiv.className = "calendar-day";
+                dayDiv.innerHTML = `<div class="day-header">${i}</div>`;
+
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+
+                const dayEvents = allEvents.filter(e => e.col1 === dateStr);
+                dayEvents.forEach(e => {
+                    const ev = document.createElement("div");
+                    ev.className = "event-item";
+                    ev.innerText = e.col2;
+                    ev.onclick = (event) => {
+                        event.stopPropagation();
+                        editEvent(e._id);
+                    };
+                    dayDiv.appendChild(ev);
+                });
+
+                dayDiv.onclick = () => {
+                    showAddModal(dateStr);
+                };
+
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        window.changeMonth = (delta) => {
+            currentDate.setMonth(currentDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        window.showAddModal = (date = "") => {
+            document.getElementById("eventForm").reset();
+            document.getElementById("editId").value = "";
+            document.getElementById("deleteBtn").style.display = "none";
+            if (date) document.getElementById("eventDate").value = date;
+            document.getElementById("modalTitle").innerText = "Schedule Event";
+            document.getElementById("eventModal").style.display = "flex";
+        }
+
+        window.closeModal = () => document.getElementById("eventModal").style.display = "none";
+
+        document.getElementById("eventForm").onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById("editId").value;
+            const payload = {
+                category: "calendar",
+                col1: document.getElementById("eventDate").value, // Date
+                col2: document.getElementById("eventTitle").value, // Title
+                col3: document.getElementById("eventDesc").value // Description
+            };
+            try {
+                if (id) await api(`/api/records?id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                else await api("/api/records", { method: "POST", body: JSON.stringify(payload) });
+                closeModal();
+                await loadEvents();
+                renderCalendar();
+            } catch (err) { alert(err.message); }
+        }
+
+        window.editEvent = (id) => {
+            const e = allEvents.find(x => x._id === id);
+            if (!e) return;
+            document.getElementById("editId").value = e._id;
+            document.getElementById("eventDate").value = e.col1;
+            document.getElementById("eventTitle").value = e.col2;
+            document.getElementById("eventDesc").value = e.col3 || "";
+            document.getElementById("deleteBtn").style.display = "block";
+            document.getElementById("modalTitle").innerText = "Edit Event";
+            document.getElementById("eventModal").style.display = "flex";
+        }
+
+        window.deleteEvent = async () => {
+            const id = document.getElementById("editId").value;
+            if (!confirm("Delete this event?")) return;
+            await api(`/api/records?id=${id}`, { method: "DELETE" });
+            closeModal();
+            await loadEvents();
+            renderCalendar();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

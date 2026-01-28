@@ -61,29 +61,30 @@ export function initSidebar() {
                 <a href="home.html"><i class="fas fa-cog"></i> Global Settings</a>
                 <a href="assets.html"><i class="fas fa-folder-open"></i> File & Media Library</a>
                 
-                <div class="sidebar-group">PAGE CONTENT (TEXT/PHOTOS)</div>
-                <a href="sections.html?page=home"><i class="fas fa-file-alt"></i> Home Page</a>
+                <div class="sidebar-group">SPECIFIC PAGE WORK</div>
+                <a href="principal.html"><i class="fas fa-user-tie"></i> Principal's Message</a>
+                <a href="management.html"><i class="fas fa-users-cog"></i> Management Team</a>
+                <a href="calendar.html"><i class="fas fa-calendar-check"></i> Academic Calendar</a>
+                <a href="faculty.html"><i class="fas fa-graduation-cap"></i> Staff & Faculty</a>
+
+                <div class="sidebar-group">GENERAL PAGE SECTIONS</div>
+                <a href="sections.html?page=home"><i class="fas fa-home"></i> Home Sections</a>
                 <a href="sections.html?page=about"><i class="fas fa-info-circle"></i> About Us</a>
                 <a href="sections.html?page=vision"><i class="fas fa-eye"></i> Vision & Mission</a>
-                <a href="sections.html?page=principal"><i class="fas fa-user-tie"></i> Principal's Message</a>
-                <a href="sections.html?page=management"><i class="fas fa-users-cog"></i> Management</a>
                 <a href="sections.html?page=infrastructure"><i class="fas fa-building"></i> Infrastructure</a>
-                <a href="sections.html?page=academics"><i class="fas fa-graduation-cap"></i> Academics Landing</a>
+                <a href="sections.html?page=academics"><i class="fas fa-scroll"></i> Academics Landing</a>
+                <a href="sections.html?page=curriculum"><i class="fas fa-book"></i> Curriculum</a>
                 <a href="sections.html?page=contact"><i class="fas fa-envelope-open-text"></i> Contact Us</a>
-                <a href="sections.html?page=online-apply"><i class="fas fa-pen-to-square"></i> Apply Online</a>
 
                 <div class="sidebar-group">SPECIALIZED DATA (TABLES)</div>
-                <a href="records.html?category=calendar"><i class="fas fa-calendar-check"></i> Academic Calendar</a>
                 <a href="records.html?category=fees"><i class="fas fa-money-bill-wave"></i> Fee Structure</a>
                 <a href="records.html?category=books"><i class="fas fa-book-open"></i> List of Books</a>
-                <a href="sections.html?page=curriculum"><i class="fas fa-scroll"></i> Curriculum</a>
 
                 <div class="sidebar-group">DATABASE RECORDS</div>
                 <a href="notices.html"><i class="fas fa-list-ul"></i> All Notices</a>
-                <a href="faculty.html"><i class="fas fa-users"></i> Staff & Faculty</a>
                 <a href="admissions.html"><i class="fas fa-user-graduate"></i> Admission Enquiries</a>
                 <a href="gallery.html"><i class="fas fa-images"></i> Gallery Items</a>
-                <a href="tc.html"><i class="fas fa-file-contract"></i> TC Records</a>
+                <a href="tc.html"><i class="fas fa-file-signature"></i> TC Records</a>
                 <a href="disclosure.html"><i class="fas fa-shield-halved"></i> Disclosure Docs</a>
             </div>
             

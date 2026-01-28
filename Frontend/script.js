@@ -24,6 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
       await loadPageRecords(pageName);
     }
 
+    if (pageName === 'principal') {
+      await loadPrincipalPage();
+    }
+
+    if (pageName === 'management') {
+      await loadManagementPage();
+    }
+
     setupMobileDropdowns();
   };
   init();
@@ -258,42 +266,156 @@ window.loadNoticeTicker = async function () {
 
 // Function to load specialized records (Fees, Books, Calendar)
 window.loadPageRecords = async function (category) {
+  const container = document.getElementById("recordsContainer");
+  if (!container) return;
+
   try {
     const res = await fetch(`/api/records?category=${category}`);
-    const records = await res.json();
-    const container = document.getElementById("recordsContainer");
-    if (!container || records.length === 0) return;
+    const data = await res.json();
 
-    const titles = {
-      fees: ["Class", "Admission Fee", "Monthly Fee"],
-      books: ["Class", "Subject", "Book Name & Publisher"],
-      calendar: ["Date", "Event Title", "Description"]
-    };
-    const [h1, h2, h3] = titles[category];
+    if (category === 'calendar') {
+      renderVisualCalendar(data, container);
+      return;
+    }
 
-    let html = `
-      <div class="card" style="margin-top:20px; overflow-x:auto;">
-        <table style="width:100%; border-collapse:collapse;">
+    // Default Table View for Fees, Books, etc.
+    let headers = [];
+    if (category === 'fees') headers = ["Class", "Admission Fee", "Monthly Fee"];
+    if (category === 'books') headers = ["Class", "Subject", "Book & Publisher"];
+
+    const tableHtml = `
+      <div class="card" style="overflow-x:auto;">
+        <table style="width:100%; border-collapse:collapse; min-width:600px;">
           <thead>
-            <tr style="background:var(--bg); text-align:left;">
-              <th style="padding:15px; border-bottom:2px solid var(--primary);">${h1}</th>
-              <th style="padding:15px; border-bottom:2px solid var(--primary);">${h2}</th>
-              <th style="padding:15px; border-bottom:2px solid var(--primary);">${h3}</th>
+            <tr style="background:var(--primary); color:white;">
+              ${headers.map(h => `<th style="padding:15px; text-align:left;">${h}</th>`).join('')}
             </tr>
           </thead>
           <tbody>
-            ${records.map(r => `
+            ${data.map(r => `
               <tr style="border-bottom:1px solid #eee;">
                 <td style="padding:15px; font-weight:600;">${r.col1}</td>
                 <td style="padding:15px;">${r.col2}</td>
-                <td style="padding:15px;">${r.col3 || ""}</td>
+                <td style="padding:15px;">${r.col3 || ''}</td>
               </tr>
-            `).join("")}
+            `).join('')}
           </tbody>
         </table>
       </div>
     `;
-    container.innerHTML = html;
+    container.innerHTML = tableHtml;
+  } catch (err) { console.error(err); }
+}
+
+function renderVisualCalendar(events, container) {
+  let currentCalDate = new Date();
+
+  function draw() {
+    const month = currentCalDate.getMonth();
+    const year = currentCalDate.getFullYear();
+    const monthName = new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(currentCalDate);
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    container.innerHTML = `
+      <div class="calendar-wrapper card" style="padding: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+           <button class="btn btn-secondary btn-sm" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+           <h2 style="margin:0; font-family:'Outfit'; color:var(--primary);">${monthName}</h2>
+           <button class="btn btn-secondary btn-sm" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;">
+           ${['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'].map(d => `<div style="text-align:center; font-weight:bold; color:var(--primary); font-size:12px; padding:10px; background:#f8fafc;">${d}</div>`).join('')}
+           ${Array(firstDay).fill(0).map(() => `<div style="background:#f1f5f9; min-height:100px; border-radius:8px;"></div>`).join('')}
+           ${Array(daysInMonth).fill(0).map((_, i) => {
+      const day = i + 1;
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      const dayEvents = events.filter(e => e.col1 === dateStr);
+      return `
+                 <div style="background:white; border:1px solid #e2e8f0; min-height:100px; padding:10px; border-radius:8px; display:flex; flex-direction:column;">
+                    <span style="font-weight:bold; color:#64748b; font-size:12px;">${day}</span>
+                    <div style="margin-top:5px;">
+                       ${dayEvents.map(e => `
+                          <div style="font-size:10px; padding:4px 6px; background:var(--primary); color:white; border-radius:4px; margin-bottom:3px; line-height:1.2;">${e.col2}</div>
+                       `).join('')}
+                    </div>
+                 </div>
+               `;
+    }).join('')}
+        </div>
+      </div>
+    `;
+
+    document.getElementById("prevMonth").onclick = () => {
+      currentCalDate.setMonth(currentCalDate.getMonth() - 1);
+      draw();
+    };
+    document.getElementById("nextMonth").onclick = () => {
+      currentCalDate.setMonth(currentCalDate.getMonth() + 1);
+      draw();
+    };
+  }
+
+  draw();
+};
+
+// Principal Page Loader
+window.loadPrincipalPage = async function () {
+  try {
+    const res = await fetch("/api/principal");
+    const data = await res.json();
+    if (!data.name) return;
+
+    const sectionsContainer = document.getElementById("sectionsContainer");
+    const introHtml = `
+      <section class="section">
+        <div class="card" style="display: grid; grid-template-columns: 1fr 2fr; gap: 40px; align-items: start; padding: 40px;">
+          <div class="principal-portrait">
+            <img src="${data.photo || 'logo.png'}" alt="${data.name}" style="width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <div style="text-align: center; margin-top: 15px;">
+              <h3 style="color: var(--primary);">${data.name}</h3>
+              <p style="color: var(--text-muted); font-size: 14px; font-weight: 600;">${data.designation}</p>
+            </div>
+          </div>
+          <div class="principal-message">
+            <i class="fas fa-quote-left" style="font-size: 40px; color: var(--accent); opacity: 0.3; margin-bottom: 20px;"></i>
+            <div style="font-size: 17px; line-height: 1.8; color: #4b5563; white-space: pre-line;">${data.message}</div>
+          </div>
+        </div>
+      </section>
+    `;
+    sectionsContainer.insertAdjacentHTML('afterbegin', introHtml);
+  } catch (err) { console.error(err); }
+};
+
+// Management Page Loader
+window.loadManagementPage = async function () {
+  try {
+    const res = await fetch("/api/management");
+    const members = await res.json();
+    if (members.length === 0) return;
+
+    const sectionsContainer = document.getElementById("sectionsContainer");
+    const gridHtml = `
+      <section class="section">
+        <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+          ${members.map(m => `
+            <div class="card" style="padding: 30px; border-top: 5px solid var(--primary);">
+              <div style="display: flex; gap: 20px; align-items: start;">
+                <img src="${m.photo || 'logo.png'}" style="width: 70px; height: 70px; border-radius: 50%; object-fit: cover;">
+                <div>
+                  <h3 style="font-size: 18px; margin-bottom: 5px;">${m.name}</h3>
+                  <p style="color: var(--primary); font-weight: 700; font-size: 13px; text-transform: uppercase;">${m.designation}</p>
+                </div>
+              </div>
+              ${m.message ? `<p style="margin-top: 20px; font-size: 14px; line-height: 1.6; color: var(--text-muted); font-style: italic;">"${m.message}"</p>` : ''}
+            </div>
+          `).join("")}
+        </div>
+      </section>
+    `;
+    sectionsContainer.insertAdjacentHTML('afterbegin', gridHtml);
   } catch (err) { console.error(err); }
 };
 

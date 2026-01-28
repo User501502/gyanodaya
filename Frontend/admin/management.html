@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Management Members | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h1>Management Team</h1>
+                <button class="btn btn-primary" onclick="showAddModal()">+ Add Member</button>
+            </div>
+            <p class="page-desc">Manage the leaders and visionaries of the school.</p>
+
+            <div id="membersGrid" class="grid"
+                style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+                <!-- Members will be loaded here -->
+            </div>
+
+            <hr style="margin: 40px 0; border: 0; border-top: 1px solid #e2e8f0;">
+            <h3>Additional Page Sections</h3>
+            <p class="page-desc">Manage additional text or list sections on the Management page.</p>
+            <a href="sections.html?page=management" class="btn btn-secondary">Manage Management Page Sections</a>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="memberModal" class="modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="card" style="width:600px; max-width:90%; padding:30px; max-height: 90vh; overflow-y: auto;">
+            <h3 id="modalTitle">Add Management Member</h3>
+            <form id="memberForm" style="margin-top:20px;">
+                <input type="hidden" id="editId">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input id="memName" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Designation (e.g. Chairman, Secretary)</label>
+                    <input id="memDesignation" type="text" required>
+                </div>
+                <div class="form-group">
+                    <label>Message/Brief Intro</label>
+                    <textarea id="memMessage" rows="4"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Display Order</label>
+                    <input id="memOrder" type="number" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Photo</label>
+                    <input id="memPhotoInput" type="file" accept="image/*">
+                    <input type="hidden" id="memPhotoBase64">
+                    <img id="memPreview" src=""
+                        style="height:100px; width:100px; object-fit:cover; border-radius:10px; margin-top:10px; display:none;">
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;"
+                        onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Save Member</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        const grid = document.getElementById("membersGrid");
+        const modal = document.getElementById("memberModal");
+        const form = document.getElementById("memberForm");
+        const photoInput = document.getElementById("memPhotoInput");
+        const photoPreview = document.getElementById("memPreview");
+        const photoBase64 = document.getElementById("memPhotoBase64");
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            loadMembers();
+        }
+
+        async function loadMembers() {
+            try {
+                const data = await api("/api/management");
+                grid.innerHTML = "";
+                data.forEach(m => {
+                    const div = document.createElement("div");
+                    div.className = "card";
+                    div.style.padding = "20px";
+                    div.innerHTML = `
+                        <div style="display: flex; gap: 15px;">
+                            <img src="${m.photo || 'https://via.placeholder.com/150'}" style="width:80px; height:80px; border-radius:10px; object-fit:cover;">
+                            <div style="flex: 1;">
+                                <h3 style="font-size:18px;">${m.name}</h3>
+                                <p style="color:var(--primary); font-weight:600; font-size:14px;">${m.designation}</p>
+                                <p style="font-size:12px; color:var(--text-muted); margin-top:10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">${m.message || ""}</p>
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-top:20px;">
+                            <button class="btn btn-secondary btn-sm" onclick="editMember('${m._id}')" style="flex:1;"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMember('${m._id}')"><i class="fas fa-trash"></i></button>
+                        </div>
+                    `;
+                    grid.appendChild(div);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        photoInput.onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                photoBase64.value = reader.result;
+                photoPreview.src = reader.result;
+                photoPreview.style.display = "block";
+            };
+            reader.readAsDataURL(file);
+        }
+
+        window.showAddModal = () => {
+            form.reset();
+            document.getElementById("editId").value = "";
+            photoPreview.style.display = "none";
+            photoBase64.value = "";
+            modal.style.display = "flex";
+        }
+
+        window.closeModal = () => modal.style.display = "none";
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById("editId").value;
+            const payload = {
+                name: document.getElementById("memName").value,
+                designation: document.getElementById("memDesignation").value,
+                message: document.getElementById("memMessage").value,
+                order: parseInt(document.getElementById("memOrder").value) || 0,
+                photo: photoBase64.value
+            };
+
+            try {
+                if (id) {
+                    await api(`/api/management?id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                } else {
+                    await api("/api/management", { method: "POST", body: JSON.stringify(payload) });
+                }
+                closeModal();
+                loadMembers();
+            } catch (err) { alert(err.message); }
+        }
+
+        window.editMember = async (id) => {
+            const data = await api("/api/management");
+            const m = data.find(x => x._id === id);
+            if (!m) return;
+            document.getElementById("editId").value = m._id;
+            document.getElementById("memName").value = m.name;
+            document.getElementById("memDesignation").value = m.designation;
+            document.getElementById("memMessage").value = m.message || "";
+            document.getElementById("memOrder").value = m.order || 0;
+            photoBase64.value = m.photo || "";
+            if (m.photo) {
+                photoPreview.src = m.photo;
+                photoPreview.style.display = "block";
+            }
+            modal.style.display = "flex";
+        }
+
+        window.deleteMember = async (id) => {
+            if (!confirm("Delete member?")) return;
+            await api(`/api/management?id=${id}`, { method: "DELETE" });
+            loadMembers();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

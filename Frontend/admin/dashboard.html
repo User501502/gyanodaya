@@ -43,6 +43,10 @@
           <h4>Special Records</h4>
           <div class="value" id="recordCount">0</div>
         </div>
+        <div class="stat-card">
+          <h4>Management</h4>
+          <div class="value" id="managementCount">0</div>
+        </div>
       </div>
 
       <div class="card" style="margin-top: 30px; border-left: 5px solid var(--primary);">
@@ -61,13 +65,14 @@
       initSidebar();
 
       try {
-        const [sections, notices, admissions, assets, records, faculty] = await Promise.all([
+        const [sections, notices, admissions, assets, records, faculty, management] = await Promise.all([
           api("/api/sections"),
           api("/api/notices"),
           api("/api/admissions"),
           api("/api/assets"),
           api("/api/records"),
-          api("/api/faculty")
+          api("/api/faculty"),
+          api("/api/management")
         ]);
 
         document.getElementById("sectionCount").textContent = sections.length;
@@ -76,6 +81,7 @@
         document.getElementById("assetCount").textContent = assets.length;
         document.getElementById("recordCount").textContent = records.length;
         document.getElementById("facultyCount").textContent = faculty.length;
+        document.getElementById("managementCount").textContent = management.length;
       } catch (err) {
         console.error("Failed to load dashboard stats", err);
       }

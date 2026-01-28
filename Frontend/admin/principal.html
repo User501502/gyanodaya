@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Principal Message | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <h1>Principal's Message Management</h1>
+            <p class="page-desc">Manage the primary message, name, and portrait of the Principal.</p>
+
+            <div class="card" style="margin-top: 30px;">
+                <form id="principalForm">
+                    <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 30px;">
+                        <div>
+                            <div class="form-group">
+                                <label>Principal's Photo</label>
+                                <div style="margin-top: 10px; position: relative;">
+                                    <img id="photoPreview" src="https://via.placeholder.com/300"
+                                        style="width: 100%; aspect-ratio: 3/4; object-fit: cover; border-radius: 12px; border: 1px solid #e2e8f0;">
+                                    <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                                    <button type="button" class="btn btn-secondary btn-sm"
+                                        onclick="document.getElementById('photoInput').click()"
+                                        style="position: absolute; bottom: 10px; right: 10px;">
+                                        <i class="fas fa-camera"></i> Change Photo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="form-group">
+                                <label>Principal's Name</label>
+                                <input id="prinName" type="text" placeholder="Dr. XYZ" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Designation</label>
+                                <input id="prinDesignation" type="text" placeholder="Principal" value="Principal">
+                            </div>
+                            <div class="form-group">
+                                <label>The Principal's Message</label>
+                                <textarea id="prinMessage" rows="12" placeholder="Start typing the message here..."
+                                    required></textarea>
+                            </div>
+                            <input type="hidden" id="photoBase64">
+                            <div style="margin-top: 20px;">
+                                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                                    <i class="fas fa-save"></i> Save Principal's Information
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <hr style="margin: 40px 0; border: 0; border-top: 1px solid #e2e8f0;">
+            <h3>Additional Message Sections</h3>
+            <p class="page-desc">Add more sections (like quotes or specific initiatives) to the Principal page.</p>
+            <a href="sections.html?page=principal" class="btn btn-secondary">Manage Additional Sections</a>
+        </main>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        const form = document.getElementById("principalForm");
+        const photoInput = document.getElementById("photoInput");
+        const photoPreview = document.getElementById("photoPreview");
+        const photoBase64 = document.getElementById("photoBase64");
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            loadPrincipal();
+        }
+
+        async function loadPrincipal() {
+            try {
+                const data = await api("/api/principal");
+                if (data.name) {
+                    document.getElementById("prinName").value = data.name;
+                    document.getElementById("prinDesignation").value = data.designation || "Principal";
+                    document.getElementById("prinMessage").value = data.message || "";
+                    if (data.photo) {
+                        photoPreview.src = data.photo;
+                        photoBase64.value = data.photo;
+                    }
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        photoInput.onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = () => {
+                photoBase64.value = reader.result;
+                photoPreview.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            const payload = {
+                name: document.getElementById("prinName").value,
+                designation: document.getElementById("prinDesignation").value,
+                message: document.getElementById("prinMessage").value,
+                photo: photoBase64.value
+            };
+            try {
+                await api("/api/principal", { method: "POST", body: JSON.stringify(payload) });
+                alert("Principal information updated successfully!");
+            } catch (err) { alert(err.message); }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>
