@@ -155,9 +155,15 @@ export default async function handler(req, res) {
       }
 
       if (type === "passout") {
-        update = { status: "passout" };
-        history = { action: "passout", academicYear };
-      }
+  update = {
+    status: "passout",
+    className: "ALUMNI" // ❗ very important
+  };
+  history = {
+    action: "passout",
+    academicYear
+  };
+}
 
       return {
         updateOne: {

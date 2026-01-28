@@ -49,17 +49,26 @@ export default async function handler(req, res) {
 
     const passoutStudents = await Student.find(studentQuery).lean();
 
-    const formattedStudents = passoutStudents.map(s => {
-      const passout = s.history?.find(h => h.action === "passout");
-      return {
-        name: s.name,
-        lastClass: s.className,
-        fatherName: s.fatherName,
-        mobile: s.fatherMobile || s.mobile,
-        academicYear: passout?.academicYear || "",
-        source: "student"
-      };
-    });
+const formattedStudents = passoutStudents.map(s => {
+  const passout = s.history?.find(h => h.action === "passout");
+
+  return {
+    name: s.name,
+    rollNo: s.rollNo,
+    admissionYear: s.admissionYear,
+    lastClass: s.className,
+    fatherName: s.fatherName,
+    fatherMobile: s.fatherMobile,
+    motherName: s.motherName,
+    motherMobile: s.motherMobile,
+    aadhar: s.aadharNumber,
+    penNumber: s.penNumber,
+    bankStudent: s.bankDetails?.studentAccount,
+    bankParent: s.bankDetails?.parentAccount,
+    academicYear: passout?.academicYear,
+    source: "student"
+  };
+});
 
     /* Manual alumni */
     const alumniQuery = {};
