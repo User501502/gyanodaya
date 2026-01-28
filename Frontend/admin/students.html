@@ -825,6 +825,54 @@ window.downloadPDF = () => {
     printWindow.print();
 };
 
+    window.loadPromoteStudents = async () => {
+    const fromClass = document.getElementById("promoteFromClass").value;
+    const tbody = document.getElementById("promoteTableBody");
+
+    if (!fromClass) {
+        tbody.innerHTML = `
+          <tr>
+            <td style="padding:20px; text-align:center;">Select a class</td>
+          </tr>`;
+        return;
+    }
+
+    // Fetch students of that class
+    const students = await api(`/api/students?className=${encodeURIComponent(fromClass)}`);
+
+    if (!students.length) {
+        tbody.innerHTML = `
+          <tr>
+            <td style="padding:20px; text-align:center;">No students found</td>
+          </tr>`;
+        return;
+    }
+
+    tbody.innerHTML = "";
+
+    students.forEach(s => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td style="padding:10px;">
+            <label style="display:flex; align-items:center; gap:8px;">
+              <input type="checkbox"
+                     class="promoteCheck"
+                     value="${s._id}"
+                     checked>
+              <span>${s.name} (${s.rollNo || "-"})</span>
+            </label>
+          </td>
+        `;
+        tbody.appendChild(tr);
+    });
+};
+
+window.toggleAllPromote = (el) => {
+    document
+      .querySelectorAll(".promoteCheck")
+      .forEach(cb => cb.checked = el.checked);
+};
+
         init();
     </script>
 </body>
