@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Alumni / Passout Students</title>
+  <link rel="stylesheet" href="admin.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+<div class="layout">
+  <div class="sidebar"></div>
+
+  <main class="content">
+    <div style="display:flex; justify-content:space-between; align-items:center;">
+      <h1>Alumni / Passout Students</h1>
+      <button class="btn btn-primary" onclick="openAlumniModal()">+ Add Alumni</button>
+    </div>
+
+    <!-- Filters -->
+    <div class="card" style="margin:20px 0;">
+      <div style="display:flex; gap:15px; align-items:center;">
+        <select id="yearFilter" onchange="loadAlumni()">
+          <option value="">All Academic Years</option>
+        </select>
+
+        <input id="searchBox" placeholder="Search name..." oninput="loadAlumni()">
+
+        <button class="btn btn-secondary" onclick="downloadExcel()">
+          <i class="fas fa-file-excel"></i> Excel
+        </button>
+        <button class="btn btn-secondary" onclick="downloadPDF()">
+          <i class="fas fa-file-pdf"></i> PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="card" style="padding:0;">
+      <table style="width:100%; border-collapse:collapse;">
+        <thead>
+          <tr style="background:#f8fafc;">
+            <th>Name</th>
+            <th>Last Class</th>
+            <th>Father</th>
+            <th>Mobile</th>
+            <th>Academic Year</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody id="alumniBody"></tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Add Alumni Modal -->
+<div id="alumniModal" class="modal" style="display:none;">
+  <div class="card" style="max-width:500px; padding:25px;">
+    <h3>Add Alumni (Manual)</h3>
+
+    <input id="alName" placeholder="Student Name">
+    <input id="alClass" placeholder="Last Class">
+    <input id="alFather" placeholder="Father Name">
+    <input id="alMobile" placeholder="Mobile">
+    <input id="alYear" placeholder="Academic Year (e.g. 2020-21)">
+
+    <div style="display:flex; gap:10px; margin-top:20px;">
+      <button class="btn btn-secondary" onclick="closeAlumniModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveAlumni()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+import { protectPage, initSidebar, api } from "./admin.js";
+
+await protectPage();
+initSidebar();
+
+let alumniCache = [];
+
+/* Auto Academic Years */
+(function initYears(){
+  const y = new Date().getFullYear();
+  const sel = document.getElementById("yearFilter");
+  for(let i = 0; i < 10; i++){
+    const yr = `${y - i}-${String(y - i + 1).slice(2)}`;
+    const opt = document.createElement("option");
+    opt.value = yr;
+    opt.textContent = yr;
+    sel.appendChild(opt);
+  }
+})();
+
+window.loadAlumni = async () => {
+  const year = document.getElementById("yearFilter").value;
+  const q = document.getElementById("searchBox").value;
+
+  let url = "/api/alumni?";
+  if (year) url += `year=${year}&`;
+  if (q) url += `q=${q}`;
+
+  alumniCache = await api(url);
+
+  const tbody = document.getElementById("alumniBody");
+  tbody.innerHTML = "";
+
+  if (!alumniCache.length) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;">No records</td></tr>`;
+    return;
+  }
+
+  alumniCache.forEach(a => {
+    tbody.innerHTML += `
+      <tr>
+        <td>${a.name}</td>
+        <td>${a.lastClass || "-"}</td>
+        <td>${a.fatherName || "-"}</td>
+        <td>${a.mobile || "-"}</td>
+        <td>${a.academicYear}</td>
+        <td>${a.source === "student" ? "Passout Student" : "Manual Entry"}</td>
+      </tr>
+    `;
+  });
+};
+
+window.openAlumniModal = () =>
+  document.getElementById("alumniModal").style.display = "flex";
+
+window.closeAlumniModal = () =>
+  document.getElementById("alumniModal").style.display = "none";
+
+window.saveAlumni = async () => {
+  const payload = {
+    name: alName.value,
+    lastClass: alClass.value,
+    fatherName: alFather.value,
+    mobile: alMobile.value,
+    academicYear: alYear.value
+  };
+
+  await api("/api/alumni", {
+    method: "POST",
+    body: JSON.stringify(payload)
+  });
+
+  closeAlumniModal();
+  loadAlumni();
+};
+
+window.downloadExcel = () => {
+  let csv = "Name,Class,Father,Mobile,Academic Year,Source\n";
+  alumniCache.forEach(a => {
+    csv += `"${a.name}","${a.lastClass || ""}","${a.fatherName || ""}",
+"${a.mobile || ""}","${a.academicYear}","${a.source}"\n`;
+  });
+
+  const blob = new Blob([csv], { type: "text/csv" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "alumni.csv";
+  a.click();
+};
+
+window.downloadPDF = () => window.print();
+
+loadAlumni();
+</script>
+</body>
+</html>
