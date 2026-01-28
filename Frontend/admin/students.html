@@ -140,21 +140,20 @@
                             <option value="Class 12">Class 12</option>
                         </select>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div class="form-group">
-                            <label>Father's Name</label>
-                            <input id="studFather" type="text">
-                        </div>
-                        <div class="form-group">
-                            <label>Mother's Name</label>
-                            <input id="studMother" type="text">
-                        </div>
+                </div>
+
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="margin: 0 0 10px; font-size: 13px; color: var(--primary);">Parents Details</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input id="studFather" type="text" placeholder="Father's Name">
+                        <input id="studFatherMobile" type="text" placeholder="Father's Mobile">
+                        <input id="studMother" type="text" placeholder="Mother's Name">
+                        <input id="studMotherMobile" type="text" placeholder="Mother's Mobile">
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Mobile Number</label>
-                    <input id="studMobile" type="text" placeholder="Primary Contact">
-                </div>
+
+                <!-- Hidden legacy field if needed, but handled in JS -->
+                <input type="hidden" id="studMobile">
 
                 <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
                     <h4 style="margin: 0 0 10px; font-size: 13px; color: var(--primary);">Third Contact (Guardian/Other)
@@ -274,8 +273,10 @@
                 name: document.getElementById("studName").value,
                 className: document.getElementById("studClass").value,
                 fatherName: document.getElementById("studFather").value,
+                fatherMobile: document.getElementById("studFatherMobile").value,
                 motherName: document.getElementById("studMother").value,
-                mobile: document.getElementById("studMobile").value,
+                motherMobile: document.getElementById("studMotherMobile").value,
+                mobile: document.getElementById("studFatherMobile").value, // Sync primary
                 contactPerson: {
                     title: document.getElementById("studContactTitle").value,
                     name: document.getElementById("studContactName").value,
@@ -305,8 +306,9 @@
             document.getElementById("studName").value = s.name;
             document.getElementById("studClass").value = s.className;
             document.getElementById("studFather").value = s.fatherName || "";
+            document.getElementById("studFatherMobile").value = s.fatherMobile || s.mobile || "";
             document.getElementById("studMother").value = s.motherName || "";
-            document.getElementById("studMobile").value = s.mobile || "";
+            document.getElementById("studMotherMobile").value = s.motherMobile || "";
 
             // New Fields
             const cp = s.contactPerson || {};

@@ -6,8 +6,10 @@ const StudentSchema = new mongoose.Schema({
     name: { type: String, required: true },
     className: String, // e.g. "Class 10-A"
     fatherName: String,
+    fatherMobile: String,
     motherName: String,
-    mobile: String,
+    motherMobile: String,
+    mobile: String, // Primary/Fallback
     address: String,
 
     // Additional Identifiers
