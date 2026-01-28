@@ -302,6 +302,18 @@
                     </div>
                 </div>
 
+                <div
+                    style="background: #fff1f2; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #fecdd3;">
+                    <h4 style="margin: 0 0 10px; font-size: 13px; color: #be123c;">Status Management</h4>
+                    <p style="font-size:11px; color:#881337; margin-bottom:10px;">Select 'Active' for current students.
+                        'TC Issued' or 'Passout' will move them to the Former Students archive.</p>
+                    <select id="studStatus" style="width:100%; border-color:#e11d48;">
+                        <option value="active">Active Student</option>
+                        <option value="tc_issued">TC Issued (Student Left)</option>
+                        <option value="passout">Passout (Alumni)</option>
+                    </select>
+                </div>
+
                 <h4 style="margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Fees Configuration
                 </h4>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
@@ -528,6 +540,7 @@
                 aadharNumber: document.getElementById("studAadhar").value,
                 sssmId: document.getElementById("studSSSMID").value,
                 penNumber: document.getElementById("studPEN").value,
+                status: document.getElementById("studStatus").value,
                 totalFees: Number(document.getElementById("studTotalFees").value),
                 paidFees: Number(document.getElementById("studPaidFees").value)
             };
@@ -576,6 +589,9 @@
             document.getElementById("studAadhar").value = s.aadharNumber || "";
             document.getElementById("studSSSMID").value = s.sssmId || "";
             document.getElementById("studPEN").value = s.penNumber || "";
+
+            // Status
+            document.getElementById("studStatus").value = s.status || "active";
 
             document.getElementById("studTotalFees").value = s.totalFees || 0;
             document.getElementById("studPaidFees").value = s.paidFees || 0;

@@ -51,7 +51,7 @@ export function initSidebar() {
                 <a href="notices.html"><i class="fas fa-list-ul"></i> All Notices</a>
                 <a href="admissions.html"><i class="fas fa-reply-all"></i> Enquiries</a>
                 <a href="gallery.html"><i class="fas fa-images"></i> Gallery</a>
-                <a href="tc.html"><i class="fas fa-file-signature"></i> TC Records</a>
+                <a href="tc.html"><i class="fas fa-user-clock"></i> Former Students & TC</a>
                 <a href="disclosure.html"><i class="fas fa-shield-halved"></i> Disclosure Docs</a>
             </div>
             

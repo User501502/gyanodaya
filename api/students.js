@@ -34,6 +34,9 @@ const StudentSchema = new mongoose.Schema({
     paidFees: { type: Number, default: 0 },
     feesStatus: { type: String, default: "pending" }, // "paid", "pending", "overdue"
 
+    // Status: active, tc, passout
+    status: { type: String, default: "active" },
+
     createdAt: { type: Date, default: Date.now }
 });
 
@@ -41,10 +44,20 @@ const Student = mongoose.models.Student || mongoose.model("Student", StudentSche
 
 export default async function handler(req, res) {
     await connectDB();
-    const { id, className, dueOnly } = req.query;
+    const { id, className, dueOnly, status } = req.query;
 
     if (req.method === "GET") {
         let query = {};
+
+        // Default to active unless specified or if fetching by specific ID
+        if (!id) {
+            if (status && status !== "all") {
+                query.status = status;
+            } else if (!status) {
+                query.$or = [{ status: "active" }, { status: { $exists: false } }];
+            }
+        }
+
         if (className) query.className = className;
         if (dueOnly === "true") {
             // Find students where totalFees > paidFees

@@ -28,54 +28,102 @@
         </aside>
 
         <main class="content">
-            <h1>TC Issued Management</h1>
-            <p class="page-desc">Add records and upload PDF links for Transfer Certificates.</p>
+            <h1 style="margin-bottom: 5px;">Former Students & TC Management</h1>
+            <p class="page-desc">Manage Passouts, TC Issued students, and archive records.</p>
 
-            <div class="card">
-                <h3>Add New TC Entry</h3>
-                <form id="tcForm"
-                    style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; box-shadow:none; padding:0; max-width:100%;">
-                    <div>
-                        <label>Student Name</label>
-                        <input id="studentName" type="text" placeholder="Student Name" required>
-                    </div>
-                    <div>
-                        <label>Class</label>
-                        <input id="studentClass" type="text" placeholder="Class" required>
-                    </div>
-                    <div>
-                        <label>Academic Year</label>
-                        <input id="tcYear" type="text" placeholder="e.g. 2024-25" required>
-                    </div>
-                    <div>
-                        <label>TC Number</label>
-                        <input id="tcNumber" type="text" placeholder="TC No" required>
-                    </div>
-                    <div style="grid-column: 1 / -1;">
-                        <label>Document URL (PDF Link from Google Drive/Dropbox)</label>
-                        <input id="tcFileUrl" type="text" placeholder="https://...">
-                    </div>
-                    <button class="btn btn-primary" style="grid-column: 1 / -1;">
-                        <i class="fas fa-plus"></i> Save TC Record
-                    </button>
-                </form>
+            <div class="tabs" style="margin: 20px 0; border-bottom: 2px solid #e2e8f0; display:flex; gap:20px;">
+                <button class="tab-btn active" onclick="switchTab('archive')"
+                    style="background:none; border:none; border-bottom: 3px solid var(--primary); padding: 10px 5px; font-weight:700; color:var(--primary); cursor:pointer;">
+                    Student Archive
+                </button>
+                <button class="tab-btn" onclick="switchTab('legacy')"
+                    style="background:none; border:none; border-bottom: 3px solid transparent; padding: 10px 5px; font-weight:600; color:#64748b; cursor:pointer;">
+                    TC Documents (Legacy)
+                </button>
             </div>
 
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Class</th>
-                            <th>Year</th>
-                            <th>TC No</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tcTableBody">
-                        <!-- Dynamic -->
-                    </tbody>
-                </table>
+            <!-- Tab 1: Student Archive -->
+            <div id="tab-archive">
+                <div class="card" style="padding:15px; margin-bottom:20px; display:flex; gap:15px; align-items:center;">
+                    <select id="archiveFilter" onchange="loadArchive()"
+                        style="padding:8px; border:1px solid #ddd; border-radius:5px;">
+                        <option value="all">All Inactive Students</option>
+                        <option value="tc_issued">TC Issued Only</option>
+                        <option value="passout">Passouts Only</option>
+                    </select>
+                    <input type="text" id="archiveSearch" placeholder="Search name..." oninput="loadArchive()"
+                        style="padding:8px; border:1px solid #ddd; border-radius:5px; flex:1;">
+                    <button class="btn btn-secondary" onclick="loadArchive()"><i class="fas fa-sync"></i>
+                        Refresh</button>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Result Class</th>
+                                <th>Status</th>
+                                <th>Father's Name</th>
+                                <th>Contact</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="archiveTableBody">
+                            <!-- Dynamic -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tab 2: Legacy TC Docs -->
+            <div id="tab-legacy" style="display:none;">
+                <div class="card">
+                    <h3>Add New TC Document</h3>
+                    <form id="tcForm"
+                        style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:15px; box-shadow:none; padding:0; max-width:100%;">
+                        <div>
+                            <label>Student Name</label>
+                            <input id="studentName" type="text" placeholder="Student Name" required>
+                        </div>
+                        <div>
+                            <label>Class</label>
+                            <input id="studentClass" type="text" placeholder="Class" required>
+                        </div>
+                        <div>
+                            <label>Academic Year</label>
+                            <input id="tcYear" type="text" placeholder="e.g. 2024-25" required>
+                        </div>
+                        <div>
+                            <label>TC Number</label>
+                            <input id="tcNumber" type="text" placeholder="TC No" required>
+                        </div>
+                        <div style="grid-column: 1 / -1;">
+                            <label>Document URL (PDF Link from Google Drive/Dropbox)</label>
+                            <input id="tcFileUrl" type="text" placeholder="https://...">
+                        </div>
+                        <button class="btn btn-primary" style="grid-column: 1 / -1;">
+                            <i class="fas fa-plus"></i> Save TC Record
+                        </button>
+                    </form>
+                </div>
+
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Class</th>
+                                <th>Year</th>
+                                <th>TC No</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tcTableBody">
+                            <!-- Dynamic -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
     </div>
