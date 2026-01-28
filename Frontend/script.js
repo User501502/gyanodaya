@@ -124,6 +124,7 @@ async function loadNavbar() {
             <div class="menu-toggle" onclick="toggleMobileMenu(event)">☰</div>
             <nav id="navMenu">
                 <ul id="navLinks">
+                    <li class="mobile-close" onclick="toggleMobileMenu(event)">&times;</li>
                     <li><a href="index.html">Home</a></li>
                     <li class="dropdown">
                         <a href="about.html" class="dropdown-toggle">About Us</a>

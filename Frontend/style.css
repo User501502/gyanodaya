@@ -62,6 +62,10 @@ nav ul {
   padding: 0;
 }
 
+.mobile-close {
+  display: none;
+}
+
 nav ul li {
   position: relative;
 }
@@ -727,32 +731,53 @@ footer {
 
   nav ul {
     position: fixed;
-    top: 60px;
-    right: -100%;
-    width: 280px;
-    height: calc(100vh - 60px);
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: var(--primary);
+    /* or a darker shade for menu */
     flex-direction: column;
-    align-items: flex-start;
-    padding: 20px 0;
-    transition: right 0.3s ease;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 60px;
+    /* Space for close button */
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transform: translateX(100%);
     overflow-y: auto;
-    box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
   }
 
   nav ul.active {
+    transform: translateX(0);
     right: 0;
+    /* Fallback */
+  }
+
+  /* Close Button */
+  .mobile-close {
+    display: block;
+    position: absolute;
+    top: 20px;
+    right: 25px;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    line-height: 1;
   }
 
   nav ul li {
     width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   nav ul li a {
-    padding: 15px 20px;
+    padding: 15px;
     width: 100%;
-    font-size: 14px;
+    font-size: 18px;
+    /* Larger font for mobile */
+    font-weight: 500;
   }
 
   .dropdown-content {
@@ -761,18 +786,14 @@ footer {
     visibility: visible;
     transform: none;
     box-shadow: none;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.2);
     display: none;
     border-radius: 0;
   }
 
   nav ul li:hover .dropdown-content {
-    display: block;
-  }
-
-  .dropdown-content a {
-    padding: 10px 20px 10px 40px !important;
-    font-size: 13px !important;
+    display: none;
+    /* Disable hover on mobile */
   }
 
   /* Mobile dropdown active state */
@@ -780,16 +801,11 @@ footer {
     display: block !important;
   }
 
-  /* Backdrop overlay when menu is open */
-  nav ul.active::before {
-    content: '';
-    position: fixed;
-    top: 60px;
-    left: 0;
-    right: 280px;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: -1;
+  .dropdown-content a {
+    padding: 12px 20px !important;
+    font-size: 15px !important;
+    background: transparent !important;
+    color: rgba(255, 255, 255, 0.8) !important;
   }
 
   /* HERO SECTION */
