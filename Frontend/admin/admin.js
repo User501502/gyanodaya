@@ -29,6 +29,7 @@ export function initSidebar() {
                 
                 <div class="sidebar-group">STUDENT & FEES</div>
                 <a href="students.html"><i class="fas fa-user-graduate"></i> Student Database</a>
+                <a href="new-students.html"><i class="fas fa-user-plus"></i> New Admissions</a>
                 <a href="due-fees.html"><i class="fas fa-file-invoice-dollar"></i> Due Fees Tracker</a>
 
                 <div class="sidebar-group">SPECIFIC PAGE WORK</div>
