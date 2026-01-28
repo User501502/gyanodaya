@@ -143,6 +143,9 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                 <h1>Student Management</h1>
                 <div style="display: flex; gap: 10px;">
+                    <a href="#" class="btn btn-secondary" style="background:#f59e0b;" onclick="openPromoteModal()">
+                        <i class="fas fa-level-up-alt"></i> Promote Students
+                    </a>
                     <a href="new-students.html" class="btn btn-secondary"><i class="fas fa-history"></i> Recent
                         Admissions</a>
                     <a href="#" class="btn btn-primary" onclick="showAddModal()">+ New Student</a>
@@ -302,6 +305,25 @@
                     </div>
                 </div>
 
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="margin: 0 0 10px; font-size: 13px; color: var(--primary);">Documents & IDs</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input id="studFatherAadhar" type="text" placeholder="Father's Aadhar">
+                        <input id="studMotherAadhar" type="text" placeholder="Mother's Aadhar">
+                        <input id="studParentPan" type="text" placeholder="Parent PAN Card">
+                    </div>
+                </div>
+
+                <div style="background: #f8fafc; padding: 15px; border-radius: 8px; margin-top: 15px;">
+                    <h4 style="margin: 0 0 10px; font-size: 13px; color: var(--primary);">Bank Account Details</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                        <input id="studBankAc" type="text" placeholder="Student Account No">
+                        <input id="parentBankAc" type="text" placeholder="Parent Account No">
+                        <input id="bankIfsc" type="text" placeholder="IFSC Code">
+                        <input id="bankName" type="text" placeholder="Bank Name">
+                    </div>
+                </div>
+
                 <div
                     style="background: #fff1f2; padding: 15px; border-radius: 8px; margin-top: 15px; border: 1px solid #fecdd3;">
                     <h4 style="margin: 0 0 10px; font-size: 13px; color: #be123c;">Status Management</h4>
@@ -333,6 +355,92 @@
                     <button type="submit" class="btn btn-primary" style="flex:1;">Save Student</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Promote Modal -->
+    <div id="promoteModal" class="modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="card" style="width:90%; max-width:800px; max-height:90vh; overflow-y:auto; padding:30px;">
+            <h3>Bulk Promote Students</h3>
+            <p style="font-size:13px; color:#64748b; margin-bottom:20px;">Move students to next class or mark as
+                passout.</p>
+
+            <div
+                style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; background:#f8fafc; padding:15px; border-radius:8px; align-items:end;">
+                <div>
+                    <label>From Class</label>
+                    <select id="promoteFromClass" onchange="loadPromoteStudents()">
+                        <option value="">Select Class</option>
+                        <option value="Nursery">Nursery</option>
+                        <option value="LKG">LKG</option>
+                        <option value="UKG">UKG</option>
+                        <option value="Class 1">Class 1</option>
+                        <option value="Class 2">Class 2</option>
+                        <option value="Class 3">Class 3</option>
+                        <option value="Class 4">Class 4</option>
+                        <option value="Class 5">Class 5</option>
+                        <option value="Class 6">Class 6</option>
+                        <option value="Class 7">Class 7</option>
+                        <option value="Class 8">Class 8</option>
+                        <option value="Class 9">Class 9</option>
+                        <option value="Class 10">Class 10</option>
+                        <option value="Class 11">Class 11</option>
+                        <option value="Class 12">Class 12</option>
+                    </select>
+                </div>
+                <div style="text-align:center; padding-bottom:10px;">
+                    <i class="fas fa-arrow-right fa-2x" style="color:#cbd5e1;"></i>
+                </div>
+                <div>
+                    <label>To Class (Target)</label>
+                    <select id="promoteToClass">
+                        <option value="">Select Target</option>
+                        <option value="LKG">LKG</option>
+                        <option value="UKG">UKG</option>
+                        <option value="Class 1">Class 1</option>
+                        <option value="Class 2">Class 2</option>
+                        <option value="Class 3">Class 3</option>
+                        <option value="Class 4">Class 4</option>
+                        <option value="Class 5">Class 5</option>
+                        <option value="Class 6">Class 6</option>
+                        <option value="Class 7">Class 7</option>
+                        <option value="Class 8">Class 8</option>
+                        <option value="Class 9">Class 9</option>
+                        <option value="Class 10">Class 10</option>
+                        <option value="Class 11">Class 11</option>
+                        <option value="Class 12">Class 12</option>
+                        <option value="PASSOUT">Passout (Alumni)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div style="margin-top:20px;">
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <label>Select Students to Promote</label>
+                    <div style="font-size:12px;">
+                        <label style="display:inline; cursor:pointer;"><input type="checkbox"
+                                onchange="toggleAllPromote(this)" checked> Select All</label>
+                    </div>
+                </div>
+                <div style="max-height:300px; overflow-y:auto; border:1px solid #e2e8f0; border-radius:8px;">
+                    <table style="width:100%; border-collapse:collapse;">
+                        <tbody id="promoteTableBody">
+                            <tr>
+                                <td style="padding:20px; text-align:center; color:#94a3b8;">Select 'From Class' to load
+                                    students</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 30px;">
+                <button type="button" class="btn btn-secondary" style="flex:1;"
+                    onclick="document.getElementById('promoteModal').style.display='none'">Cancel</button>
+                <button type="button" class="btn btn-primary" style="flex:1;" onclick="executePromotion()">Confirm
+                    Promotion</button>
+            </div>
         </div>
     </div>
 
@@ -612,7 +720,51 @@
                 loadDashboard();
             }
         }
+         
+        function getAcademicYear() {
+    const d = new Date();
+    const y = d.getFullYear();
+    const m = d.getMonth(); // 0 = Jan
 
+    // April se new academic year
+    return m >= 3
+        ? `${y}-${String(y + 1).slice(2)}`
+        : `${y - 1}-${String(y).slice(2)}`;
+}
+
+window.executePromotion = async () => {
+    const fromClass = document.getElementById("promoteFromClass").value;
+    const toClass = document.getElementById("promoteToClass").value;
+
+    const checked = [...document.querySelectorAll(".promoteCheck:checked")]
+        .map(cb => cb.value);
+
+    if (!fromClass) return alert("Select FROM class");
+    if (!toClass) return alert("Select TARGET class");
+    if (!checked.length) return alert("No students selected");
+
+    let type = "promote";
+    if (toClass === "PASSOUT") type = "passout";
+
+    const academicYear = getAcademicYear();
+
+    await api("/api/students?action=bulk", {
+        method: "POST",
+        body: JSON.stringify({
+            studentIds: checked,
+            type,
+            targetClass: toClass,
+            academicYear
+        })
+    });
+
+    alert(`Action completed for Academic Year ${academicYear}`);
+    document.getElementById("promoteModal").style.display = "none";
+
+    // Refresh everything
+    allStudentsCache = null;
+    loadDashboard();
+};
         init();
     </script>
 </body>

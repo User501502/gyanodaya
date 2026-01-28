@@ -1,100 +1,184 @@
 import connectDB from "./_db.js";
 import mongoose from "mongoose";
 
-const StudentSchema = new mongoose.Schema({
-    rollNo: String,
-    name: { type: String, required: true },
-    className: String, // e.g. "Class 10-A"
-    fatherName: String,
-    fatherMobile: String,
-    motherName: String,
-    motherMobile: String,
-    mobile: String, // Primary/Fallback
-    address: String,
+/* ================= SCHEMA ================= */
 
-    // Additional Identifiers
-    penNumber: String,
-    sssmId: String,
-    aadharNumber: String,
-    scholarNumber: String,
-
-    // Admission Details
-    admissionYear: String, // e.g. "2024-25"
-    admissionDate: { type: Date, default: Date.now },
-
-    // Third Contact
-    contactPerson: {
-        title: String, // e.g. Guardian, Uncle
-        name: String,
-        number: String
-    },
-
-    // Fees management
-    totalFees: { type: Number, default: 0 },
-    paidFees: { type: Number, default: 0 },
-    feesStatus: { type: String, default: "pending" }, // "paid", "pending", "overdue"
-
-    // Status: active, tc, passout
-    status: { type: String, default: "active" },
-
-    createdAt: { type: Date, default: Date.now }
+const PromotionSchema = new mongoose.Schema({
+  fromClass: String,
+  toClass: String,
+  academicYear: String,
+  action: String, // promote | tc | passout
+  date: { type: Date, default: Date.now }
 });
 
-const Student = mongoose.models.Student || mongoose.model("Student", StudentSchema);
+const StudentSchema = new mongoose.Schema({
+  rollNo: String,
+  name: { type: String, required: true },
+  className: String,
+
+  // FAMILY
+  fatherName: String,
+  fatherMobile: String,
+  motherName: String,
+  motherMobile: String,
+  guardianName: String,
+  guardianMobile: String,
+
+  // IDS (DUPLICATE SAFE)
+  aadharNumber: { type: String, index: true, sparse: true },
+  fatherAadhar: String,
+  motherAadhar: String,
+  parentPan: String,
+  penNumber: { type: String, index: true, sparse: true },
+
+  // BANK
+  bankDetails: {
+    studentAccount: String,
+    parentAccount: String,
+    ifsc: String,
+    bankName: String
+  },
+
+  // ADMISSION
+  admissionYear: String,
+  admissionDate: { type: Date, default: Date.now },
+
+  // FEES
+  totalFees: { type: Number, default: 0 },
+  paidFees: { type: Number, default: 0 },
+
+  // STATUS
+  status: { type: String, default: "active" },
+
+  // HISTORY
+  history: [PromotionSchema],
+
+  createdAt: { type: Date, default: Date.now }
+});
+
+const Student =
+  mongoose.models.Student || mongoose.model("Student", StudentSchema);
+
+/* ================= HANDLER ================= */
 
 export default async function handler(req, res) {
-    await connectDB();
-    const { id, className, dueOnly, status } = req.query;
+  await connectDB();
+  const { id, action } = req.query;
 
-    if (req.method === "GET") {
-        let query = {};
-
-        // Default to active unless specified or if fetching by specific ID
-        if (!id) {
-            if (status && status !== "all") {
-                query.status = status;
-            } else if (!status) {
-                query.$or = [{ status: "active" }, { status: { $exists: false } }];
-            }
-        }
-
-        if (className) query.className = className;
-        if (dueOnly === "true") {
-            // Find students where totalFees > paidFees
-            query = { ...query, $expr: { $gt: ["$totalFees", "$paidFees"] } };
-        }
-
-        if (id) {
-            const student = await Student.findById(id);
-            return res.json(student);
-        }
-
-        const { recent } = req.query;
-        let sort = { className: 1, name: 1 };
-
-        if (recent === "true") {
-            sort = { admissionDate: -1, createdAt: -1 };
-        }
-
-        const students = await Student.find(query).sort(sort);
-        return res.json(students);
+  /* ---------- GET ---------- */
+  if (req.method === "GET") {
+    if (id) {
+      const student = await Student.findById(id);
+      return res.json(student);
     }
 
-    if (req.method === "POST") {
-        const student = new Student(req.body);
-        await student.save();
-        return res.json(student);
+    const { className, status } = req.query;
+    const query = {};
+
+    if (className) query.className = className;
+    if (status && status !== "all") query.status = status;
+
+    const students = await Student.find(query).sort({
+      className: 1,
+      name: 1
+    });
+
+    return res.json(students);
+  }
+
+  /* ---------- CREATE ---------- */
+  if (req.method === "POST" && !action) {
+    const { aadharNumber, penNumber } = req.body;
+
+    if (aadharNumber) {
+      const dup = await Student.findOne({ aadharNumber });
+      if (dup)
+        return res.status(400).json({ error: "Student Aadhar already exists" });
     }
 
-    if (req.method === "PUT") {
-        const updated = await Student.findByIdAndUpdate(id, req.body, { new: true });
-        return res.json(updated);
+    if (penNumber) {
+      const dup = await Student.findOne({ penNumber });
+      if (dup)
+        return res.status(400).json({ error: "PEN already exists" });
     }
 
-    if (req.method === "DELETE") {
-        await Student.findByIdAndDelete(id);
-        return res.json({ success: true });
-    }
+    const student = new Student(req.body);
+    await student.save();
+    return res.json(student);
+  }
 
-    res.status(405).json({ error: "Method not allowed" });
+  /* ---------- UPDATE (MANUAL PROMOTE / TC / PASSOUT) ---------- */
+  if (req.method === "PUT" && id) {
+    const existing = await Student.findById(id);
+
+    // Merge – empty field overwrite nahi karega
+    const payload = {};
+    Object.keys(req.body).forEach(k => {
+      if (req.body[k] !== "" && req.body[k] !== null) {
+        payload[k] = req.body[k];
+      }
+    });
+
+    const updated = await Student.findByIdAndUpdate(
+      id,
+      { $set: payload },
+      { new: true }
+    );
+
+    return res.json(updated);
+  }
+
+  /* ---------- BULK ACTIONS ---------- */
+  if (req.method === "POST" && action === "bulk") {
+    const { studentIds, type, targetClass, academicYear } = req.body;
+
+    if (!studentIds || !studentIds.length)
+      return res.status(400).json({ error: "No students selected" });
+
+    const bulkOps = studentIds.map(id => {
+      let update = {};
+      let history = {};
+
+      if (type === "promote") {
+        update = { className: targetClass, status: "active" };
+        history = {
+          fromClass: "",
+          toClass: targetClass,
+          academicYear,
+          action: "promote"
+        };
+      }
+
+      if (type === "tc") {
+        update = { status: "tc_issued" };
+        history = { action: "tc", academicYear };
+      }
+
+      if (type === "passout") {
+        update = { status: "passout" };
+        history = { action: "passout", academicYear };
+      }
+
+      return {
+        updateOne: {
+          filter: { _id: id },
+          update: {
+            $set: update,
+            $push: { history }
+          }
+        }
+      };
+    });
+
+    await Student.bulkWrite(bulkOps);
+    return res.json({ success: true, count: studentIds.length });
+  }
+
+  /* ---------- DELETE ---------- */
+  if (req.method === "DELETE" && id) {
+    await Student.findByIdAndDelete(id);
+    return res.json({ success: true });
+  }
+
+  res.status(405).json({ error: "Method not allowed" });
 }
