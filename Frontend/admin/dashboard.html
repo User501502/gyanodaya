@@ -318,7 +318,7 @@
             tr.style.borderBottom = "1px solid #f1f5f9";
             tr.innerHTML = `
               <td style="padding: 15px 25px; font-weight: 700;">${enq.name}</td>
-              <td style="padding: 15px 25px;">${enq.classLevel || 'N/A'}</td>
+              <td style="padding: 15px 25px;">${enq.classLevel && enq.classLevel.trim() ? enq.classLevel : 'Not Specified'}</td>
               <td style="padding: 15px 25px;">${enq.phone}</td>
               <td style="padding: 15px 25px;">
                 <span class="status-pill ${enq.contacted ? 'status-new' : 'status-pending'}">

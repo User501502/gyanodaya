@@ -23,7 +23,7 @@ async function loadAdmissions() {
       tr.innerHTML = `
                 <td><strong>${a.name}</strong></td>
                 <td>${a.phone}</td>
-                <td>${a.classLevel || 'N/A'}</td>
+                <td>${a.classLevel && a.classLevel.trim() ? a.classLevel : 'Not Specified'}</td>
                 <td>${new Date(a.createdAt).toLocaleDateString()}</td>
                 <td>
                     <label class="switch">
