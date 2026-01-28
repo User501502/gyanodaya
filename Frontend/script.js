@@ -1,10 +1,14 @@
 /* ================= SHARED SITE LOGIC ================= */
 
 // Mobile menu toggle
-window.toggleMenu = function () {
+window.toggleMobileMenu = function (event) {
+  if (event) event.stopPropagation();
   const navLinks = document.getElementById("navLinks");
   if (navLinks) {
     navLinks.classList.toggle("active");
+
+    // Log for debugging
+    console.log("Menu toggled", navLinks.classList.contains("active"));
   }
 };
 
@@ -79,17 +83,8 @@ function setupMobileDropdowns() {
 
 function setupMobileMenuListeners() {
   const navLinks = document.getElementById("navLinks");
-  const menuToggle = document.querySelector('.menu-toggle');
 
   if (!navLinks) return;
-
-  // Toggle Menu
-  if (menuToggle) {
-    menuToggle.addEventListener('click', (e) => {
-      e.stopPropagation(); // Prevent immediate closing by document click
-      navLinks.classList.toggle('active');
-    });
-  }
 
   // Close menu when clicking a navigation link (not dropdown toggles)
   const links = navLinks.querySelectorAll('a:not(.dropdown-toggle)');
@@ -126,7 +121,7 @@ async function loadNavbar() {
                 <img id="schoolLogo" src="logo.png" alt="Logo" style="display:none;">
                 <span id="schoolName">Gyanodaya Public School</span>
             </a>
-            <div class="menu-toggle">☰</div>
+            <div class="menu-toggle" onclick="toggleMobileMenu(event)">☰</div>
             <nav id="navMenu">
                 <ul id="navLinks">
                     <li><a href="index.html">Home</a></li>
