@@ -10,6 +10,23 @@ const StudentSchema = new mongoose.Schema({
     mobile: String,
     address: String,
 
+    // Additional Identifiers
+    penNumber: String,
+    sssmId: String,
+    aadharNumber: String,
+    scholarNumber: String,
+
+    // Admission Details
+    admissionYear: String, // e.g. "2024-25"
+    admissionDate: { type: Date, default: Date.now },
+
+    // Third Contact
+    contactPerson: {
+        title: String, // e.g. Guardian, Uncle
+        name: String,
+        number: String
+    },
+
     // Fees management
     totalFees: { type: Number, default: 0 },
     paidFees: { type: Number, default: 0 },
@@ -37,7 +54,14 @@ export default async function handler(req, res) {
             return res.json(student);
         }
 
-        const students = await Student.find(query).sort({ className: 1, name: 1 });
+        const { recent } = req.query;
+        let sort = { className: 1, name: 1 };
+
+        if (recent === "true") {
+            sort = { admissionDate: -1, createdAt: -1 };
+        }
+
+        const students = await Student.find(query).sort(sort);
         return res.json(students);
     }
 

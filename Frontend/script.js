@@ -2,8 +2,18 @@
 
 // Mobile menu toggle
 window.toggleMenu = function () {
-  const nav = document.getElementById("navMenu");
-  if (nav) nav.classList.toggle("active");
+  const navLinks = document.getElementById("navLinks");
+  if (navLinks) {
+    navLinks.classList.toggle("active");
+  }
+};
+
+// Close menu when clicking a link (mobile)
+window.closeMenuOnClick = function () {
+  if (window.innerWidth <= 768) {
+    const navLinks = document.getElementById("navLinks");
+    if (navLinks) navLinks.classList.remove("active");
+  }
 };
 
 // Handle mobile dropdowns
@@ -33,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     setupMobileDropdowns();
+    setupMobileMenuListeners();
   };
   init();
 });
@@ -50,9 +61,47 @@ function setupMobileDropdowns() {
     toggle.addEventListener("click", (e) => {
       if (window.innerWidth <= 768) {
         e.preventDefault();
-        toggle.parentElement.classList.toggle("nav-item-active");
+        const parent = toggle.parentElement;
+        const dropdown = parent.querySelector('.dropdown-content');
+
+        // Close other dropdowns
+        document.querySelectorAll('.dropdown').forEach(d => {
+          if (d !== parent) {
+            d.classList.remove('nav-item-active');
+          }
+        });
+
+        parent.classList.toggle("nav-item-active");
       }
     });
+  });
+}
+
+function setupMobileMenuListeners() {
+  const navLinks = document.getElementById("navLinks");
+  if (!navLinks) return;
+
+  // Close menu when clicking a navigation link (not dropdown toggles)
+  const links = navLinks.querySelectorAll('a:not(.dropdown-toggle)');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      if (window.innerWidth <= 768) {
+        navLinks.classList.remove('active');
+      }
+    });
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768) {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const isClickInsideNav = navLinks.contains(e.target);
+      const isClickOnToggle = menuToggle && menuToggle.contains(e.target);
+
+      if (!isClickInsideNav && !isClickOnToggle && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
+    }
   });
 }
 
@@ -375,6 +424,37 @@ function renderVisualCalendar(events, container) {
   }
 
   draw();
+  draw();
+};
+
+// Auto-load Notice Ticker
+window.loadNoticeTicker = async function () {
+  try {
+    const res = await fetch("/api/notices");
+    const notices = await res.json();
+    const activeNotices = notices.filter(n => n.isActive);
+
+    if (activeNotices.length > 0) {
+      const tickerContainer = document.getElementById("noticeTicker");
+      const tickerText = document.getElementById("noticeText");
+
+      if (tickerContainer && tickerText) {
+        tickerContainer.style.display = "flex";
+
+        // Combine notices with a separator
+        const textToScroll = activeNotices
+          .map(n => `<span style="margin-right: 50px;">★ ${n.title}</span>`)
+          .join("");
+
+        tickerText.innerHTML = textToScroll;
+
+        // Ensure marquee is running
+        if (tickerText.start) tickerText.start();
+      }
+    }
+  } catch (err) {
+    console.error("Failed to load notice ticker", err);
+  }
 };
 
 // Principal Page Loader
