@@ -36,7 +36,7 @@
     <script>
         async function fetchDisclosures() {
             try {
-                const res = await fetch('/api/disclosure');
+                const res = await fetch('/api/docs?type=disclosure');
                 const data = await res.json();
                 const container = document.getElementById('disclosureGrid');
                 container.innerHTML = '';

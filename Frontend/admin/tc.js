@@ -11,7 +11,7 @@ async function init() {
 
 async function loadTCs() {
     try {
-        const data = await api("/api/tc");
+        const data = await api("/api/docs?type=tc");
         tbody.innerHTML = "";
 
         data.forEach(tc => {
@@ -51,7 +51,7 @@ form.onsubmit = async (e) => {
     };
 
     try {
-        await api("/api/tc", { method: "POST", body: JSON.stringify(payload) });
+        await api("/api/docs?type=tc", { method: "POST", body: JSON.stringify(payload) });
         form.reset();
         loadTCs();
     } catch (err) {
@@ -65,7 +65,7 @@ form.onsubmit = async (e) => {
 window.deleteTC = async (id) => {
     if (!confirm("Delete this record?")) return;
     try {
-        await api(`/api/tc?id=${id}`, { method: "DELETE" });
+        await api(`/api/docs?type=tc&id=${id}`, { method: "DELETE" });
         loadTCs();
     } catch (err) {
         alert(err.message);

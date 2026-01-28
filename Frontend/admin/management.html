@@ -88,7 +88,7 @@
 
         async function loadMembers() {
             try {
-                const data = await api("/api/management");
+                const data = await api("/api/people?type=management");
                 grid.innerHTML = "";
                 data.forEach(m => {
                     const div = document.createElement("div");
@@ -105,7 +105,7 @@
                         </div>
                         <div style="display:flex; gap:10px; margin-top:20px;">
                             <button class="btn btn-secondary btn-sm" onclick="editMember('${m._id}')" style="flex:1;"><i class="fas fa-edit"></i> Edit</button>
-                            <button class="btn btn-danger btn-sm" onclick="deleteMember('${m._id}')"><i class="fas fa-trash"></i></button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteMember('${m._id}')" style="flex:1;"><i class="fas fa-trash"></i></button>
                         </div>
                     `;
                     grid.appendChild(div);
@@ -148,9 +148,9 @@
 
             try {
                 if (id) {
-                    await api(`/api/management?id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                    await api(`/api/people?type=management&id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
                 } else {
-                    await api("/api/management", { method: "POST", body: JSON.stringify(payload) });
+                    await api("/api/people?type=management", { method: "POST", body: JSON.stringify(payload) });
                 }
                 closeModal();
                 loadMembers();
@@ -158,7 +158,7 @@
         }
 
         window.editMember = async (id) => {
-            const data = await api("/api/management");
+            const data = await api("/api/people?type=management");
             const m = data.find(x => x._id === id);
             if (!m) return;
             document.getElementById("editId").value = m._id;
@@ -176,7 +176,7 @@
 
         window.deleteMember = async (id) => {
             if (!confirm("Delete member?")) return;
-            await api(`/api/management?id=${id}`, { method: "DELETE" });
+            await api(`/api/people?type=management&id=${id}`, { method: "DELETE" });
             loadMembers();
         }
 

@@ -16,7 +16,7 @@ async function init() {
 
 async function loadFaculty() {
     try {
-        const data = await api("/api/faculty");
+        const data = await api("/api/people?type=faculty");
         grid.innerHTML = "";
         data.forEach(item => {
             const div = document.createElement("div");
@@ -79,12 +79,12 @@ form.onsubmit = async (e) => {
 
     try {
         if (id) {
-            await api("/api/faculty", {
+            await api(`/api/people?type=faculty&id=${id}`, {
                 method: "PUT",
-                body: JSON.stringify({ id, ...payload })
+                body: JSON.stringify(payload)
             });
         } else {
-            await api("/api/faculty", {
+            await api("/api/people?type=faculty", {
                 method: "POST",
                 body: JSON.stringify(payload)
             });
@@ -98,7 +98,7 @@ form.onsubmit = async (e) => {
 
 window.editMember = async (id) => {
     try {
-        const data = await api("/api/faculty");
+        const data = await api("/api/people?type=faculty");
         const member = data.find(m => m._id === id);
         if (!member) return;
 
@@ -125,7 +125,7 @@ window.editMember = async (id) => {
 window.deleteMember = async (id) => {
     if (!confirm("Delete this member?")) return;
     try {
-        await api(`/api/faculty?id=${id}`, { method: "DELETE" });
+        await api(`/api/people?type=faculty&id=${id}`, { method: "DELETE" });
         loadFaculty();
     } catch (err) { alert(err.message); }
 }

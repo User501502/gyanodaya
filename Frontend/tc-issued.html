@@ -59,7 +59,7 @@
         let allTCs = [];
         async function fetchTC() {
             try {
-                const res = await fetch('/api/tc');
+                const res = await fetch('/api/docs?type=tc');
                 allTCs = await res.json();
                 renderTC(allTCs);
             } catch (error) { console.error(error); }

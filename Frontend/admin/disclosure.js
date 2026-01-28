@@ -11,7 +11,7 @@ async function init() {
 
 async function loadDisclosures() {
     try {
-        const data = await api("/api/disclosure");
+        const data = await api("/api/docs?type=disclosure");
         container.innerHTML = "";
 
         if (data.length === 0) {
@@ -56,7 +56,7 @@ form.onsubmit = async (e) => {
     };
 
     try {
-        await api("/api/disclosure", { method: "POST", body: JSON.stringify(payload) });
+        await api("/api/docs?type=disclosure", { method: "POST", body: JSON.stringify(payload) });
         form.reset();
         loadDisclosures();
     } catch (err) {
@@ -69,7 +69,7 @@ form.onsubmit = async (e) => {
 window.deleteItem = async (id) => {
     if (!confirm("Remove this document?")) return;
     try {
-        await api(`/api/disclosure?id=${id}`, { method: "DELETE" });
+        await api(`/api/docs?type=disclosure&id=${id}`, { method: "DELETE" });
         loadDisclosures();
     } catch (err) {
         alert(err.message);

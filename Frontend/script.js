@@ -363,7 +363,7 @@ function renderVisualCalendar(events, container) {
 // Principal Page Loader
 window.loadPrincipalPage = async function () {
   try {
-    const res = await fetch("/api/principal");
+    const res = await fetch("/api/people?type=principal");
     const data = await res.json();
     if (!data.name) return;
 
@@ -392,7 +392,7 @@ window.loadPrincipalPage = async function () {
 // Management Page Loader
 window.loadManagementPage = async function () {
   try {
-    const res = await fetch("/api/management");
+    const res = await fetch("/api/people?type=management");
     const members = await res.json();
     if (members.length === 0) return;
 

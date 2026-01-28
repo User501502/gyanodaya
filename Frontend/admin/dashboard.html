@@ -71,8 +71,8 @@
           api("/api/admissions"),
           api("/api/assets"),
           api("/api/records"),
-          api("/api/faculty"),
-          api("/api/management")
+          api("/api/people?type=faculty"),
+          api("/api/people?type=management")
         ]);
 
         document.getElementById("sectionCount").textContent = sections.length;

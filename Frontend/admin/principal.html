@@ -82,7 +82,7 @@
 
         async function loadPrincipal() {
             try {
-                const data = await api("/api/principal");
+                const data = await api("/api/people?type=principal");
                 if (data.name) {
                     document.getElementById("prinName").value = data.name;
                     document.getElementById("prinDesignation").value = data.designation || "Principal";
@@ -115,7 +115,7 @@
                 photo: photoBase64.value
             };
             try {
-                await api("/api/principal", { method: "POST", body: JSON.stringify(payload) });
+                await api("/api/people?type=principal", { method: "POST", body: JSON.stringify(payload) });
                 alert("Principal information updated successfully!");
             } catch (err) { alert(err.message); }
         }
