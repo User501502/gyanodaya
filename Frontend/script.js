@@ -3,14 +3,13 @@
 // Mobile menu toggle
 window.toggleMobileMenu = function (event) {
   if (event) event.stopPropagation();
+
   const navLinks = document.getElementById("navLinks");
   if (navLinks) {
     navLinks.classList.toggle("active");
-
-    // Log for debugging
-    console.log("Menu toggled", navLinks.classList.contains("active"));
   }
 };
+
 
 // Close menu when clicking a link (mobile)
 window.closeMenuOnClick = function () {

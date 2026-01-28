@@ -551,14 +551,14 @@ h2 {
     display: block;
   }
 
-  nav {
+/*  nav {
     position: absolute;
     top: 64px;
     left: 0;
     width: 100%;
     background: var(--primary);
     display: none;
-  }
+  } */
 
   nav ul {
     flex-direction: column;
