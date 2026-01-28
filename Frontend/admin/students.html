@@ -143,7 +143,7 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
                 <h1>Student Management</h1>
                 <div style="display: flex; gap: 10px;">
-                    <a href="#" class="btn btn-secondary" style="background:#f59e0b;" onclick="openPromoteModal()">
+                    <a class="btn btn-secondary" style="background:#f59e0b;" onclick="openPromoteModal()">
                         <i class="fas fa-level-up-alt"></i> Promote Students
                     </a>
                     <a href="new-students.html" class="btn btn-secondary"><i class="fas fa-history"></i> Recent
@@ -871,6 +871,10 @@ window.toggleAllPromote = (el) => {
     document
       .querySelectorAll(".promoteCheck")
       .forEach(cb => cb.checked = el.checked);
+};
+
+window.openPromoteModal = () => {
+    document.getElementById("promoteModal").style.display = "flex";
 };
 
         init();
