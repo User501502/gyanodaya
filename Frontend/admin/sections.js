@@ -54,15 +54,18 @@ async function loadSections() {
 
     sections.forEach((s) => {
       const card = document.createElement("div");
-      card.className = "card";
+      card.className = "card section-item";
+      card.setAttribute("data-id", s._id);
       card.style.marginBottom = "15px";
       card.style.display = "flex";
       card.style.justifyContent = "space-between";
       card.style.alignItems = "center";
       card.style.borderLeft = s.isActive ? "5px solid var(--primary)" : "5px solid #ccc";
+      card.style.cursor = "move";
 
       card.innerHTML = `
                 <div style="display: flex; gap: 15px; align-items: center;">
+                    <i class="fas fa-grip-vertical" style="color: #cbd5e1; font-size: 18px; cursor: grab;"></i>
                     ${s.image ? `<img src="${s.image}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">` : `<div style="width: 50px; height: 50px; background: #f8fafc; border: 1px dashed #ddd; display: flex; align-items: center; justify-content: center; font-size: 20px; color: #cbd5e1;"><i class="fas fa-image"></i></div>`}
                     <div>
                         <h4 style="margin-bottom:5px;">${s.title}</h4>
@@ -78,6 +81,35 @@ async function loadSections() {
                 </div>
             `;
       listContainer.appendChild(card);
+    });
+
+    // Initialize SortableJS for drag-and-drop
+    if (window.sortableInstance) {
+      window.sortableInstance.destroy();
+    }
+
+    window.sortableInstance = Sortable.create(listContainer, {
+      animation: 150,
+      handle: '.fa-grip-vertical',
+      ghostClass: 'sortable-ghost',
+      onEnd: async function (evt) {
+        const items = Array.from(listContainer.querySelectorAll('.section-item'));
+        const orders = items.map((item, index) => ({
+          id: item.getAttribute('data-id'),
+          position: index + 1
+        }));
+
+        try {
+          await api('/api/sections?reorder=true', {
+            method: 'PUT',
+            body: JSON.stringify({ orders })
+          });
+        } catch (err) {
+          console.error('Failed to reorder sections:', err);
+          alert('Failed to save new order. Please try again.');
+          loadSections(); // Reload to restore original order
+        }
+      }
     });
   } catch (err) {
     console.error(err);
