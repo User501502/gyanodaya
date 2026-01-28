@@ -63,6 +63,10 @@
               <input type="text" value="51314" id="schoolCode">
             </div>
             <div class="form-group">
+              <label>DISE Code</label>
+              <input type="text" id="diseCode">
+            </div>
+            <div class="form-group">
               <label>Founded Year</label>
               <input type="text" value="2010" id="foundedYear">
             </div>
@@ -86,25 +90,64 @@
   </div>
 
   <script type="module">
-    import { protectPage, initSidebar } from "./admin.js";
+    import { protectPage, initSidebar, api } from "./admin.js";
     import { auth } from "./firebase.js";
     import { updatePassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
     async function init() {
       await protectPage();
       initSidebar();
+      loadProfileData();
     }
 
-    window.saveProfile = () => {
-      alert('Profile information saved locally for this session.');
+    async function loadProfileData() {
+      try {
+        const data = await api("/api/home");
+        if (data) {
+          document.getElementById("affiliationNo").value = data.affiliationNo || "";
+          document.getElementById("schoolCode").value = data.schoolCode || "";
+          document.getElementById("diseCode").value = data.diseCode || "";
+          document.getElementById("foundedYear").value = data.foundedYear || "";
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    window.saveProfile = async () => {
+      const payload = {
+        affiliationNo: document.getElementById("affiliationNo").value,
+        schoolCode: document.getElementById("schoolCode").value,
+        diseCode: document.getElementById("diseCode").value,
+        foundedYear: document.getElementById("foundedYear").value
+      };
+
+      try {
+        // Fetch existing home data first to merge
+        const existing = await api("/api/home") || {};
+        await api("/api/home", {
+          method: "POST",
+          body: JSON.stringify({ ...existing, ...payload })
+        });
+        alert('School profile updated successfully!');
+      } catch (err) { alert(err.message); }
     }
 
     window.clearCache = () => {
-      alert('System cache cleared successfully!');
+      localStorage.clear();
+      alert('Local system cache cleared successfully!');
     }
 
-    window.exportData = () => {
-      alert('Preparing JSON backup... Download will start automatically.');
+    window.exportData = async () => {
+      try {
+        const res = await fetch("/api/backup");
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `gyanodaya_backup_${new Date().toISOString().split('T')[0]}.json`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      } catch (err) { alert("Backup failed: " + err.message); }
     }
 
     document.getElementById("passwordForm").onsubmit = async (e) => {

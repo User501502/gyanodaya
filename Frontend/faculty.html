@@ -33,7 +33,7 @@
   <script>
     async function fetchFaculty() {
       try {
-        const res = await fetch('/api/faculty');
+        const res = await fetch('/api/people?type=faculty');
         const data = await res.json();
         const container = document.getElementById('facultyList');
         container.innerHTML = '';

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Due Fees Tracker | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <h1>Due Fees Tracker</h1>
+            <p class="page-desc">List of students with outstanding fee balances.</p>
+
+            <div class="dashboard-grid" style="margin-top:20px;">
+                <div class="stat-card" style="border-left: 5px solid #ef4444;">
+                    <h4>Total Outstanding</h4>
+                    <div class="value" id="totalDueText">₹0</div>
+                </div>
+                <div class="stat-card" style="border-left: 5px solid #f59e0b;">
+                    <h4>Defaulter Students</h4>
+                    <div class="value" id="defaulterCount">0</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 30px; padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #fef2f2; border-bottom: 2px solid #fee2e2; text-align: left;">
+                            <th style="padding: 15px;">Student Name</th>
+                            <th style="padding: 15px;">Class</th>
+                            <th style="padding: 15px;">Parent Name</th>
+                            <th style="padding: 15px;">Mobile</th>
+                            <th style="padding: 15px;">Balance Due</th>
+                            <th style="padding: 15px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dueTableBody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            loadDueStudents();
+        }
+
+        async function loadDueStudents() {
+            try {
+                const data = await api("/api/students?dueOnly=true");
+                const tbody = document.getElementById("dueTableBody");
+                tbody.innerHTML = "";
+
+                let totalDue = 0;
+                data.forEach(s => {
+                    const due = s.totalFees - s.paidFees;
+                    totalDue += due;
+
+                    const tr = document.createElement("tr");
+                    tr.style.borderBottom = "1px solid #fee2e2";
+                    tr.innerHTML = `
+                        <td style="padding: 15px; font-weight:700;">${s.name}</td>
+                        <td style="padding: 15px;">${s.className}</td>
+                        <td style="padding: 15px;">${s.fatherName || '-'}</td>
+                        <td style="padding: 15px;">${s.mobile || '-'}</td>
+                        <td style="padding: 15px; color:#ef4444; font-weight:800;">₹${due}</td>
+                        <td style="padding: 15px;">
+                            <a href="students.html" class="btn btn-secondary btn-sm">Update Fees</a>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById("totalDueText").innerText = "₹" + totalDue;
+                document.getElementById("defaulterCount").innerText = data.length;
+
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:50px;">Hurray! All students have cleared their fees.</td></tr>';
+                }
+            } catch (err) { console.error(err); }
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

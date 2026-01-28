@@ -23,6 +23,17 @@ const DisclosureSchema = new mongoose.Schema({
 
 const Disclosure = mongoose.models.Disclosure || mongoose.model("Disclosure", DisclosureSchema);
 
+// Admission Enquiry Schema
+const AdmissionSchema = new mongoose.Schema({
+    name: String,
+    phone: String,
+    classLevel: String,
+    contacted: { type: Boolean, default: false },
+    createdAt: { type: Date, default: Date.now }
+});
+
+const Admission = mongoose.models.Admission || mongoose.model("Admission", AdmissionSchema);
+
 export default async function handler(req, res) {
     await connectDB();
     const { type, id } = req.query;
@@ -57,6 +68,27 @@ export default async function handler(req, res) {
         }
         if (req.method === "DELETE") {
             await Disclosure.findByIdAndDelete(id);
+            return res.json({ success: true });
+        }
+    }
+
+    // Handle Admission Enquiries (Type: enquiry)
+    if (type === "enquiry") {
+        if (req.method === "GET") {
+            const data = await Admission.find().sort({ createdAt: -1 });
+            return res.json(data);
+        }
+        if (req.method === "POST") {
+            const admission = new Admission(req.body);
+            await admission.save();
+            return res.json({ success: true });
+        }
+        if (req.method === "PATCH") {
+            const updated = await Admission.findByIdAndUpdate(id, { contacted: req.body.contacted }, { new: true });
+            return res.json(updated);
+        }
+        if (req.method === "DELETE") {
+            await Admission.findByIdAndDelete(id);
             return res.json({ success: true });
         }
     }

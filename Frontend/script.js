@@ -189,7 +189,12 @@ async function loadGlobalSettings() {
 
     const admissionBadge = document.getElementById("admissionBadge");
     if (admissionBadge) {
-      admissionBadge.style.display = "inline-block";
+      if (data.admissionOpen) {
+        admissionBadge.style.display = "inline-block";
+        admissionBadge.innerText = `Admissions Open ${data.admissionYear || "2024-25"}`;
+      } else {
+        admissionBadge.style.display = "none";
+      }
     }
 
     const mapFrame = document.getElementById("mapFrame");
@@ -419,15 +424,28 @@ window.loadManagementPage = async function () {
   } catch (err) { console.error(err); }
 };
 
-// Page Loader
+// Page Loader & Content Visibility Fix
+window.addEventListener("DOMContentLoaded", () => {
+  // Ensure site content is visible if no loader exists
+  const loader = document.getElementById("pageLoader");
+  const content = document.getElementById("siteContent");
+
+  if (!loader && content) {
+    content.style.display = "block";
+  }
+});
+
 window.addEventListener("load", () => {
   const loader = document.getElementById("pageLoader");
+  const content = document.getElementById("siteContent");
+
   if (loader) {
     loader.style.opacity = "0";
     setTimeout(() => {
       loader.style.display = "none";
-      const content = document.getElementById("siteContent");
       if (content) content.style.display = "block";
     }, 500);
+  } else if (content) {
+    content.style.display = "block";
   }
 });

@@ -10,7 +10,7 @@ async function init() {
 
 async function loadAdmissions() {
   try {
-    const data = await api("/api/admissions");
+    const data = await api("/api/docs?type=enquiry");
     admissionTable.innerHTML = "";
 
     if (data.length === 0) {
@@ -46,7 +46,7 @@ async function loadAdmissions() {
 
 window.markContacted = async (id, val) => {
   try {
-    await api(`/api/admissions?id=${id}`, {
+    await api(`/api/docs?type=enquiry&id=${id}`, {
       method: "PATCH",
       body: JSON.stringify({ contacted: val })
     });
@@ -58,7 +58,7 @@ window.markContacted = async (id, val) => {
 window.deleteAdmission = async (id) => {
   if (!confirm("Delete this enquiry?")) return;
   try {
-    await api(`/api/admissions?id=${id}`, { method: "DELETE" });
+    await api(`/api/docs?type=enquiry&id=${id}`, { method: "DELETE" });
     loadAdmissions();
   } catch (err) {
     alert(err.message);

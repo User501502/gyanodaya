@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management | Admin</title>
+    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .due-badge {
+            background: #fee2e2;
+            color: #ef4444;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .paid-badge {
+            background: #dcfce7;
+            color: #22c55e;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="layout">
+        <div class="sidebar"></div>
+        <main class="content">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                <h1>Student Management</h1>
+                <div style="display: flex; gap: 10px;">
+                    <a href="#" class="btn btn-primary" onclick="showAddModal()">+ New Student</a>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 30px;">
+                <div style="display: flex; gap: 20px; align-items: center;">
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">FILTER BY
+                            CLASS</label>
+                        <select id="classFilter" onchange="loadStudents()">
+                            <option value="">All Classes</option>
+                            <option value="Nursery">Nursery</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">LATEST
+                            STATUS</label>
+                        <select id="statusFilter" onchange="loadStudents()">
+                            <option value="all">All Status</option>
+                            <option value="due">Due Fees Only</option>
+                            <option value="paid">Fully Paid</option>
+                        </select>
+                    </div>
+                    <div style="flex: 2;">
+                        <label style="font-size: 12px; font-weight: 700; display: block; margin-bottom: 5px;">SEARCH
+                            NAME</label>
+                        <input type="text" id="nameSearch" placeholder="Type student name..." oninput="loadStudents()">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 0; overflow: hidden;">
+                <table style="width: 100%; border-collapse: collapse;">
+                    <thead>
+                        <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0; text-align: left;">
+                            <th style="padding: 15px;">Roll No</th>
+                            <th style="padding: 15px;">Student Name</th>
+                            <th style="padding: 15px;">Class</th>
+                            <th style="padding: 15px;">Fees (Total/Paid)</th>
+                            <th style="padding: 15px;">Status</th>
+                            <th style="padding: 15px;">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="studentTableBody">
+                        <!-- Data injected here -->
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Student Modal -->
+    <div id="studentModal" class="modal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+        <div class="card" style="width:500px; padding:30px;">
+            <h3 id="modalTitle">Student Details</h3>
+            <form id="studentForm" style="margin-top:20px;">
+                <input type="hidden" id="studentId">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Roll Number</label>
+                        <input id="studRoll" type="text" placeholder="e.g. 101">
+                    </div>
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <input id="studName" type="text" required>
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Class</label>
+                        <select id="studClass" required>
+                            <option value="Nursery">Nursery</option>
+                            <option value="LKG">LKG</option>
+                            <option value="UKG">UKG</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Father's Name</label>
+                        <input id="studFather" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Mobile Number</label>
+                    <input id="studMobile" type="text">
+                </div>
+
+                <h4 style="margin: 20px 0 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">Fees Configuration
+                </h4>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="form-group">
+                        <label>Total Annual Fees</label>
+                        <input id="studTotalFees" type="number" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label>Fees Paid</label>
+                        <input id="studPaidFees" type="number" value="0">
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 10px; margin-top: 30px;">
+                    <button type="button" class="btn btn-secondary" style="flex:1;"
+                        onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1;">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { protectPage, initSidebar, api } from "./admin.js";
+
+        async function init() {
+            await protectPage();
+            initSidebar();
+            loadStudents();
+        }
+
+        window.loadStudents = async () => {
+            const className = document.getElementById("classFilter").value;
+            const status = document.getElementById("statusFilter").value;
+            const search = document.getElementById("nameSearch").value.toLowerCase();
+
+            let url = "/api/students";
+            const params = new URLSearchParams();
+            if (className) params.append("className", className);
+            if (status === "due") params.append("dueOnly", "true");
+
+            const queryString = params.toString();
+            if (queryString) url += "?" + queryString;
+
+            try {
+                let data = await api(url);
+                if (search) {
+                    data = data.filter(s => s.name.toLowerCase().includes(search));
+                }
+
+                const tbody = document.getElementById("studentTableBody");
+                tbody.innerHTML = "";
+
+                data.forEach(s => {
+                    const due = (s.totalFees || 0) - (s.paidFees || 0);
+                    const tr = document.createElement("tr");
+                    tr.style.borderBottom = "1px solid #e2e8f0";
+                    tr.innerHTML = `
+                        <td style="padding: 15px;">${s.rollNo || '-'}</td>
+                        <td style="padding: 15px; font-weight: 700;">${s.name}</td>
+                        <td style="padding: 15px;">${s.className}</td>
+                        <td style="padding: 15px;">
+                            <div style="font-weight:600;">₹${s.paidFees} / ₹${s.totalFees}</div>
+                            ${due > 0 ? `<div style="font-size:11px; color:#ef4444;">Due: ₹${due}</div>` : ''}
+                        </td>
+                        <td style="padding: 15px;">
+                            ${due > 0 ? `<span class="due-badge">DUE</span>` : `<span class="paid-badge">FULLY PAID</span>`}
+                        </td>
+                        <td style="padding: 15px;">
+                            <button class="btn btn-secondary btn-sm" onclick="editStudent('${s._id}')"><i class="fas fa-edit"></i></button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteStudent('${s._id}')"><i class="fas fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch (err) { console.error(err); }
+        }
+
+        window.showAddModal = () => {
+            document.getElementById("studentForm").reset();
+            document.getElementById("studentId").value = "";
+            document.getElementById("modalTitle").innerText = "Add New Student";
+            document.getElementById("studentModal").style.display = "flex";
+        }
+
+        window.closeModal = () => document.getElementById("studentModal").style.display = "none";
+
+        document.getElementById("studentForm").onsubmit = async (e) => {
+            e.preventDefault();
+            const id = document.getElementById("studentId").value;
+            const payload = {
+                rollNo: document.getElementById("studRoll").value,
+                name: document.getElementById("studName").value,
+                className: document.getElementById("studClass").value,
+                fatherName: document.getElementById("studFather").value,
+                mobile: document.getElementById("studMobile").value,
+                totalFees: Number(document.getElementById("studTotalFees").value),
+                paidFees: Number(document.getElementById("studPaidFees").value)
+            };
+
+            try {
+                if (id) await api(`/api/students?id=${id}`, { method: "PUT", body: JSON.stringify(payload) });
+                else await api("/api/students", { method: "POST", body: JSON.stringify(payload) });
+                closeModal();
+                loadStudents();
+            } catch (err) { alert(err.message); }
+        }
+
+        window.editStudent = async (id) => {
+            const s = await api(`/api/students?id=${id}`);
+            document.getElementById("studentId").value = s._id;
+            document.getElementById("studRoll").value = s.rollNo || "";
+            document.getElementById("studName").value = s.name;
+            document.getElementById("studClass").value = s.className;
+            document.getElementById("studFather").value = s.fatherName || "";
+            document.getElementById("studMobile").value = s.mobile || "";
+            document.getElementById("studTotalFees").value = s.totalFees || 0;
+            document.getElementById("studPaidFees").value = s.paidFees || 0;
+            document.getElementById("modalTitle").innerText = "Edit Student Info";
+            document.getElementById("studentModal").style.display = "flex";
+        }
+
+        window.deleteStudent = async (id) => {
+            if (!confirm("Delete this student record?")) return;
+            await api(`/api/students?id=${id}`, { method: "DELETE" });
+            loadStudents();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

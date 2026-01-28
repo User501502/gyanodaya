@@ -93,7 +93,7 @@
                 message: document.getElementById('message').value
             };
             try {
-                const res = await fetch('/api/admissions', {
+                const res = await fetch('/api/docs?type=enquiry', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)

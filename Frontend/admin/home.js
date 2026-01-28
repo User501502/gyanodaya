@@ -11,6 +11,7 @@ const schoolName = document.getElementById("schoolName");
 const heroTitle = document.getElementById("heroTitle");
 const heroIntro = document.getElementById("heroIntro");
 const admissionOpen = document.getElementById("admissionOpen");
+const admissionYear = document.getElementById("admissionYear");
 
 const footerAbout = document.getElementById("footerAbout");
 const footerAddress = document.getElementById("footerAddress");
@@ -41,6 +42,7 @@ async function loadHome() {
     heroTitle.value = data.heroTitle || "";
     heroIntro.value = data.heroIntro || "";
     admissionOpen.checked = data.admissionOpen || false;
+    admissionYear.value = data.admissionYear || "2024-25";
 
     const f = data.footer || {};
     footerAbout.value = f.about || "";
@@ -121,6 +123,7 @@ saveBtn.onclick = async () => {
         heroIntro: heroIntro.value,
         heroImage: heroBase64,
         admissionOpen: admissionOpen.checked,
+        admissionYear: admissionYear.value,
         footer: {
           about: footerAbout.value,
           address: footerAddress.value,
