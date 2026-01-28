@@ -40,9 +40,19 @@ export default async function handler(req, res) {
     return res.json(section);
   }
 
-  // PUT → edit section (title/content/type/isActive/position)
+  // PUT → edit section or bulk reorder
   if (req.method === "PUT") {
-    const { id } = req.query;
+    const { id, reorder } = req.query;
+
+    if (reorder === "true") {
+      const { orders } = req.body; // Expects [{ id: "...", position: 1 }, ...]
+      const updates = orders.map(o =>
+        Section.findByIdAndUpdate(o.id, { position: o.position })
+      );
+      await Promise.all(updates);
+      return res.json({ success: true });
+    }
+
     const updated = await Section.findByIdAndUpdate(
       id,
       req.body,
