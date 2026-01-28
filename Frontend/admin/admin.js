@@ -1,9 +1,15 @@
+import { auth, onAuthStateChanged, signOut } from "./firebase.js";
+
 export async function protectPage() {
-  const token = localStorage.getItem('adminToken');
-  if (!token && !window.location.href.includes('login.html')) {
-    window.location.href = 'login.html';
-  }
-  return token;
+  return new Promise((resolve) => {
+    onAuthStateChanged(auth, (user) => {
+      if (!user && !window.location.href.includes('login.html')) {
+        window.location.href = 'login.html';
+      } else {
+        resolve(user);
+      }
+    });
+  });
 }
 
 export function initSidebar() {
@@ -54,14 +60,16 @@ export function initSidebar() {
             </div>
         `;
 
-  document.getElementById('logoutBtn')?.addEventListener('click', () => {
-    localStorage.removeItem('adminToken');
+  document.getElementById('logoutBtn')?.addEventListener('click', async () => {
+    await signOut(auth);
     window.location.href = 'login.html';
   });
 }
 
 export async function api(url, options = {}) {
-  const token = localStorage.getItem('adminToken');
+  const user = auth.currentUser;
+  const token = user ? await user.getIdToken() : null;
+
   const headers = {
     'Content-Type': 'application/json',
     ...options.headers
@@ -70,7 +78,6 @@ export async function api(url, options = {}) {
 
   const res = await fetch(url, { ...options, headers });
   if (res.status === 401) {
-    localStorage.removeItem('adminToken');
     window.location.href = 'login.html';
   }
   if (!res.ok) {
